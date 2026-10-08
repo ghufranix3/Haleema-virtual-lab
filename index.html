@@ -1,0 +1,3979 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>إعداد أ. غفران هاني | V32.2 تصحيح عضيات وتسميات الخلية النباتية</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;font-family:Arial,Tahoma,sans-serif;background:#020711;color:#eef8ff}
+#app{height:100%;position:relative;background:radial-gradient(circle at 50% 40%,#0d2b3d 0,#06101c 48%,#02050a 100%)}
+#scene{position:absolute;inset:0}canvas{display:block;width:100%;height:100%}
+.card{background:rgba(4,13,27,.82);border:1px solid rgba(114,215,255,.28);backdrop-filter:blur(12px);box-shadow:0 14px 42px #0008;border-radius:18px}
+.top{position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;pointer-events:none}
+.brand{padding:13px 16px;max-width:680px}.brand b{font-size:20px}.brand small{display:block;color:#a8ddf3;margin-top:6px;line-height:1.55}
+.badge{padding:10px 13px;color:#c8f0ff;font-weight:bold}
+.steps{position:absolute;top:94px;left:50%;transform:translateX(-50%);display:flex;gap:6px;background:#020812d0;padding:7px;border-radius:18px;border:1px solid #ffffff16;max-width:96vw;overflow:auto;z-index:10}
+.step{white-space:nowrap;border:0;border-radius:13px;padding:8px 11px;background:#0c1a29;color:#9db5c8;cursor:pointer}.step.active{background:#edfaff;color:#05101a;font-weight:bold}
+.panel{position:absolute;right:16px;bottom:16px;width:min(430px,calc(100vw - 32px));padding:15px;z-index:12}.panel h2{margin:0 0 7px;font-size:21px}.panel p{margin:0;color:#bfd0dc;line-height:1.62;font-size:14px}
+.controls{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.controls button,.organPicker button{border:1px solid #63d8ff55;background:#0b2237;color:#eafaff;padding:9px 12px;border-radius:12px;cursor:pointer}
+.controls button:hover,.organPicker button:hover{background:#123653}
+.organPicker{position:absolute;left:16px;top:158px;padding:13px;width:210px;z-index:12}.organPicker b{font-size:14px}.organPicker button{width:100%;margin-top:7px;text-align:right}.organPicker button.on{background:#eafaff;color:#06111c;font-weight:bold}
+.hint{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);font-size:12px;color:#9fc1d4;background:#020812b5;padding:8px 12px;border-radius:20px;pointer-events:none;z-index:11}
+.tooltip{position:absolute;display:none;padding:8px 10px;background:#02101de8;border:1px solid #6dd8ff55;border-radius:10px;font-size:12px;color:#dff7ff;pointer-events:none;z-index:20}
+.flash{position:absolute;inset:0;background:white;opacity:0;pointer-events:none;transition:opacity .22s;z-index:30}
+.vignette{position:absolute;inset:0;pointer-events:none;z-index:9;background:radial-gradient(circle at center,transparent 30%,rgba(0,0,0,.60) 100%);opacity:.14;transition:opacity .2s}
+.tunnel{position:absolute;inset:0;pointer-events:none;z-index:25;opacity:0;background:
+radial-gradient(circle at center,transparent 0 11%,rgba(238,106,133,.12) 13%,rgba(156,38,70,.24) 30%,rgba(42,5,20,.8) 72%,#010205 100%);
+transition:opacity .25s}
+.tunnel.on{opacity:1;animation:pulse 1.1s ease-in-out infinite alternate}
+@keyframes pulse{from{filter:blur(0px) brightness(1)}to{filter:blur(1.5px) brightness(1.18)}}
+.tunnelLabel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:26;opacity:0;pointer-events:none;background:#050814d9;border:1px solid #ffffff20;border-radius:16px;padding:12px 18px;color:#f0fbff;font-weight:bold;transition:opacity .2s}
+.tunnelLabel.on{opacity:1}
+.atlasBox{position:absolute;inset:142px 18px 105px 250px;border-radius:22px;overflow:hidden;border:1px solid #78dfff44;background:#07131f;box-shadow:0 20px 60px #0009;z-index:2}
+.atlasBox iframe{width:100%;height:100%;border:0;background:#fff}
+.atlasOpen{position:absolute;left:14px;bottom:14px;z-index:5}.atlasOpen a{background:#eafaff;color:#04101a;text-decoration:none;padding:9px 12px;border-radius:12px;font-weight:bold}
+@media(max-width:800px){.brand{max-width:74vw}.brand b{font-size:16px}.steps{top:110px}.organPicker{top:174px;width:170px}.atlasBox{left:190px;top:166px;bottom:150px}.hint{display:none}}
+
+.choice{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);z-index:40;width:min(760px,92vw);padding:22px;text-align:center}
+.choice h1{margin:0 0 10px;font-size:28px}.choice p{color:#bdd1df;line-height:1.7}
+.choiceBtns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.choiceBtns button{border:1px solid #79dfff66;background:#0a2238;color:white;padding:18px;border-radius:18px;font-size:20px;cursor:pointer}
+.choiceBtns button:hover{background:#123954}
+.choiceBtns small{display:block;color:#acd5e7;margin-top:6px;font-size:12px}
+@media(max-width:650px){.choiceBtns{grid-template-columns:1fr}.choice{top:52%}}
+
+:root{
+  --bh-red:#b5162e;
+  --bh-deep:#7d0e22;
+  --bh-white:#fffdfd;
+  --bh-gold:#d9b36c;
+}
+body:before{
+  content:"";
+  position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.07;
+  background:
+    linear-gradient(135deg,transparent 0 46%,rgba(255,255,255,.12) 46% 49%,transparent 49% 100%),
+    linear-gradient(45deg,transparent 0 46%,rgba(181,22,46,.18) 46% 49%,transparent 49% 100%);
+  background-size:46px 46px;
+}
+.brand{border-top:3px solid var(--bh-red)!important}
+.brand b:before{content:"🇧🇭 ";font-size:.95em}
+.badge{border-color:rgba(217,179,108,.35)!important}
+.card{box-shadow:0 16px 44px #0009, inset 0 0 0 1px rgba(255,255,255,.02)}
+.choice{
+  border:1px solid rgba(255,255,255,.20)!important;
+  background:
+   linear-gradient(135deg,rgba(181,22,46,.88),rgba(68,8,20,.86) 45%,rgba(5,17,29,.94) 100%)!important;
+}
+.choice h1{color:white;text-shadow:0 2px 14px #0008}
+.choice h1:after{
+  content:" • البحرين";
+  color:#ffd9de;
+  font-size:.7em;
+  font-weight:normal;
+}
+.choiceBtns button{
+  background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05))!important;
+  border-color:rgba(255,255,255,.28)!important;
+}
+.choiceBtns button:hover{background:rgba(255,255,255,.16)!important}
+.bahrain-mark{
+  position:absolute;left:18px;bottom:92px;z-index:8;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(61,7,18,.60);border:1px solid rgba(255,255,255,.14);
+  padding:8px 11px;border-radius:14px;color:#ffeef1;font-size:12px;
+  backdrop-filter:blur(10px);pointer-events:none
+}
+.bahrain-map{
+ width:28px;height:36px;position:relative;display:inline-block;
+ filter:drop-shadow(0 2px 4px #0007)
+}
+.bahrain-map:before{
+ content:"";position:absolute;inset:2px 7px 2px 7px;background:var(--bh-red);
+ clip-path:polygon(46% 0,69% 12%,63% 25%,79% 38%,66% 51%,75% 64%,60% 77%,58% 100%,39% 92%,31% 72%,21% 56%,34% 41%,27% 24%);
+ border-radius:40% 45% 46% 40%;
+}
+.pearl{
+  width:12px;height:12px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff,#e7e7e7 55%,#b9b9b9 100%);
+  display:inline-block;box-shadow:0 0 10px #fff5;
+}
+.bh-ribbon{
+ position:absolute;top:0;right:0;z-index:7;width:100%;height:5px;
+ background:linear-gradient(90deg,var(--bh-red) 0 72%,white 72% 100%);
+}
+.bh-ribbon:after{
+ content:"";position:absolute;right:28%;top:0;height:5px;width:48px;
+ background:repeating-linear-gradient(135deg,white 0 8px,var(--bh-red) 8px 16px);
+}
+
+.plantPicker{
+ position:absolute;left:16px;top:158px;padding:13px;width:220px;z-index:12;display:none
+}
+.plantPicker b{font-size:14px}
+.plantPicker button{
+ width:100%;margin-top:7px;text-align:right;border:1px solid #ffffff25;
+ background:#30101a;color:#fff;padding:9px 11px;border-radius:12px;cursor:pointer
+}
+.plantPicker button.on{background:#fff;color:#8f1027;font-weight:bold}
+.plantPicker small{display:block;color:#d9c3c8;margin-top:7px;line-height:1.45}
+
+.labLobby{
+ position:absolute;inset:0;z-index:40;overflow:hidden;
+ background:
+ radial-gradient(circle at 50% 34%,rgba(255,255,255,.12),transparent 20%),
+ linear-gradient(180deg,#142331 0 12%,#0c1824 12% 65%,#11151a 65% 100%);
+ perspective:900px;
+}
+.labCeiling{position:absolute;left:0;right:0;top:0;height:18%;background:linear-gradient(#1e2d38,#101a23);transform-origin:top;transform:rotateX(-12deg)}
+.labCeiling span{position:absolute;top:45%;width:22%;height:5px;background:#fff;box-shadow:0 0 20px #dffaff,0 0 45px #8ddfff}
+.labCeiling span:nth-child(1){left:8%}.labCeiling span:nth-child(2){left:39%}.labCeiling span:nth-child(3){right:8%}
+.labBack{position:absolute;left:9%;right:9%;top:15%;height:48%;border:1px solid #ffffff18;background:linear-gradient(90deg,#142532,#1c2d38 50%,#142532);box-shadow:inset 0 0 60px #0007}
+.labBack:before,.labBack:after{content:"";position:absolute;top:0;bottom:0;width:12px;background:#b5162e}
+.labBack:before{left:18%}.labBack:after{right:18%}
+.labSign{position:absolute;left:50%;top:9%;transform:translateX(-50%);width:min(520px,68vw);text-align:center;padding:14px 20px;border-radius:14px;background:linear-gradient(90deg,#8e1025,#c51c35,#8e1025);border:1px solid #ffffff35;box-shadow:0 8px 30px #0007}
+.labSign b{display:block;font-size:clamp(20px,3vw,31px);color:white}.labSign small{display:block;margin-top:6px;color:#ffe8ec}
+.pearlDisplay{position:absolute;left:50%;bottom:7%;transform:translateX(-50%);display:flex;align-items:center;gap:9px;color:#d9b36c;font-size:12px}
+.bigPearl{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff,#e9eef1 52%,#9ba7ae 100%);box-shadow:0 0 20px #fff7}
+.labFloor{position:absolute;left:-15%;right:-15%;bottom:-14%;height:52%;transform:rotateX(61deg);transform-origin:bottom;background:
+ linear-gradient(90deg,transparent 49.5%,#ffffff10 50%,transparent 50.5%),
+ linear-gradient(0deg,transparent 49.5%,#ffffff10 50%,transparent 50.5%),
+ linear-gradient(#252b30,#11161a);background-size:90px 90px,90px 90px,auto}
+.station{position:absolute;top:38%;width:min(300px,36vw);height:300px;border-radius:24px;padding:20px;text-align:center;cursor:pointer;background:linear-gradient(180deg,rgba(15,39,52,.94),rgba(5,13,20,.96));border:1px solid #ffffff2a;box-shadow:0 22px 50px #0009;transition:.25s;overflow:hidden}
+.station:hover{transform:translateY(-9px) scale(1.025);border-color:#ffffff70}
+.stationHuman{left:14%}.stationPlant{right:14%}
+.stationGlow{position:absolute;width:190px;height:90px;border-radius:50%;left:50%;top:25px;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(99,216,255,.30),transparent 68%);filter:blur(5px)}
+.stationPlant .stationGlow{background:radial-gradient(ellipse,rgba(95,220,118,.32),transparent 68%)}
+.holo{position:relative;font-size:82px;line-height:105px;filter:drop-shadow(0 0 16px #6fdcff)}
+.stationPlant .holo{filter:drop-shadow(0 0 16px #71dc83)}
+.station b{display:block;font-size:19px;color:white}.station small{display:block;color:#bcd1dc;line-height:1.55;margin:9px auto 12px;max-width:240px}
+.station button{border:0;background:#b5162e;color:white;padding:9px 17px;border-radius:20px;font-weight:bold;cursor:pointer}
+.stationPlant button{background:#397f49}
+.lobbyHelp{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);background:#050b10c9;border:1px solid #ffffff20;padding:9px 15px;border-radius:20px;color:#d7e8f1;font-size:13px}
+@media(max-width:720px){
+ .station{top:34%;width:40vw;height:290px}.stationHuman{left:7%}.stationPlant{right:7%}.holo{font-size:65px}
+ .station b{font-size:15px}.station small{font-size:11px}.labSign{width:80vw}
+}
+
+.station .humanModel,.station .palmModel{height:108px;width:110px;margin:0 auto 4px;position:relative;filter:drop-shadow(0 0 13px #6fdcff)}
+.hmHead{position:absolute;width:25px;height:25px;border-radius:50%;background:linear-gradient(135deg,#f1c6a6,#a96e55);left:42px;top:3px}
+.hmBody{position:absolute;width:38px;height:52px;border-radius:18px 18px 10px 10px;background:linear-gradient(135deg,#e9f5fa,#72b7cf);left:35px;top:28px}
+.hmArm,.hmLeg{position:absolute;display:block;background:linear-gradient(#dbeef5,#69a9c0);border-radius:10px;transform-origin:top}
+.hmArm{width:10px;height:48px;top:34px}.hmArm.a1{left:29px;transform:rotate(20deg)}.hmArm.a2{right:29px;transform:rotate(-20deg)}
+.hmLeg{width:12px;height:45px;top:74px}.hmLeg.l1{left:40px;transform:rotate(6deg)}.hmLeg.l2{right:40px;transform:rotate(-6deg)}
+.palmModel{filter:drop-shadow(0 0 13px #71dc83)!important}
+.pmTrunk{position:absolute;left:49px;top:38px;width:14px;height:76px;background:repeating-linear-gradient(0deg,#8b623e 0 8px,#b1804e 8px 12px);clip-path:polygon(25% 0,75% 0,100% 100%,0 100%)}
+.pmCrown{position:absolute;left:43px;top:25px;width:27px;height:25px;border-radius:50%;background:#3b8e49}
+.fr{position:absolute;left:52px;top:31px;width:58px;height:11px;background:linear-gradient(90deg,#3d9a4c,#6fc270);border-radius:100% 0 100% 0;transform-origin:left center}
+.fr.f1{transform:rotate(-8deg)}.fr.f2{transform:rotate(28deg)}.fr.f3{transform:rotate(60deg)}.fr.f4{transform:rotate(172deg)}.fr.f5{transform:rotate(140deg)}.fr.f6{transform:rotate(110deg)}
+.station:hover .humanModel,.station:hover .palmModel{animation:modelFloat 1.4s ease-in-out infinite alternate}
+@keyframes modelFloat{to{transform:translateY(-7px) rotateY(8deg)}}
+.labDoor{position:absolute;right:3%;top:22%;width:88px;height:185px;background:linear-gradient(90deg,#6d0b1c,#b5162e 55%,#710c20);border:4px solid #d9b36c;border-bottom:0;box-shadow:0 8px 25px #0008;z-index:2}
+.labDoor:before{content:"ادخلي المختبر";position:absolute;top:18px;left:8px;right:8px;padding:6px 2px;text-align:center;font-size:11px;background:#fff;color:#9d1127;border-radius:6px;font-weight:bold}
+.labDoor:after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:#d9b36c;left:10px;top:96px;box-shadow:0 0 8px #ffe4a3}
+.leafName3d{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:8;color:white;background:#061019c7;border:1px solid #ffffff25;padding:7px 11px;border-radius:12px;font-size:12px;pointer-events:none;display:none}
+
+#tunnel{background:radial-gradient(circle at center,transparent 0 7%,rgba(122,194,93,.20) 14%,rgba(21,67,38,.90) 58%,rgba(3,10,7,.99) 100%)!important;backdrop-filter:blur(2px)}
+#tunnel:before{content:"";position:absolute;inset:-30%;background:repeating-radial-gradient(ellipse at center,transparent 0 18px,rgba(168,224,120,.13) 20px 23px,transparent 26px 44px);animation:microRush 1.15s linear infinite;transform-origin:center}
+#tunnel b,#tunnel strong,#tunnel span{position:relative;z-index:2}
+@keyframes microRush{from{transform:scale(.5);opacity:.18}to{transform:scale(1.9);opacity:.88}}
+
+.scienceLabels{position:absolute;inset:0;z-index:14;pointer-events:none}
+.scienceTag{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;border:1px solid #ffffff4d;background:#07131cdd;color:#fff;padding:6px 10px;border-radius:18px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 4px 18px #0007;white-space:nowrap;transition:.18s}
+.scienceTag:hover{transform:translate(-50%,-50%) scale(1.08);background:#b5162e}
+.scienceTag:after{display:none!important}
+.scienceCard{position:absolute;z-index:25;left:50%;bottom:78px;transform:translateX(-50%) translateY(18px);width:min(430px,86vw);padding:15px 42px 15px 18px;border-radius:17px;background:#06121aee;border:1px solid #ffffff32;box-shadow:0 15px 40px #0009;backdrop-filter:blur(9px);display:none;color:white;text-align:right}
+.scienceCard.show{display:block;animation:sciencePop .25s ease forwards}
+.scienceCard #sciencePart{font-size:18px;font-weight:800;margin-bottom:5px;color:#fff}
+.scienceCard small{font-size:13px;line-height:1.7;color:#d4e5ed}
+#scienceClose{position:absolute;right:10px;top:9px;border:0;background:#ffffff12;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:18px}
+@keyframes sciencePop{from{opacity:0;transform:translateX(-50%) translateY(18px) scale(.96)}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
+@media(max-width:650px){.scienceTag{font-size:10px;padding:5px 7px}.scienceCard{bottom:66px}}
+
+.quizBtn{position:absolute;z-index:18;left:18px;bottom:18px;border:1px solid #ffffff38;background:linear-gradient(135deg,#9b1228,#d5293f);color:white;padding:10px 15px;border-radius:22px;font-family:inherit;font-weight:800;cursor:pointer;box-shadow:0 8px 24px #0007;display:none}
+.quizModal{position:absolute;inset:0;z-index:60;background:#03080dbd;backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center}
+.quizModal.show{display:flex}
+.quizBox{width:min(540px,88vw);background:linear-gradient(180deg,#102330,#07131b);border:1px solid #ffffff2e;border-radius:22px;padding:24px;box-shadow:0 22px 65px #000b;color:white;position:relative;text-align:right}
+.quizClose{position:absolute;right:12px;top:10px;border:0;background:#ffffff12;color:white;width:30px;height:30px;border-radius:50%;font-size:20px;cursor:pointer}
+.quizTitle{font-size:24px;font-weight:900;margin-bottom:8px;color:#fff}
+.quizProgress{font-size:12px;color:#a9c1cd;margin-bottom:14px}
+.quizQuestion{font-size:18px;font-weight:800;line-height:1.7;margin-bottom:15px}
+.quizAnswers{display:grid;gap:10px}
+.quizAnswer{border:1px solid #ffffff22;background:#ffffff0c;color:white;padding:11px 13px;border-radius:13px;text-align:right;font-family:inherit;cursor:pointer;transition:.18s}
+.quizAnswer:hover{background:#ffffff18;transform:translateY(-1px)}
+.quizAnswer.correct{background:#1c6d3e;border-color:#52c783}
+.quizAnswer.wrong{background:#7b2431;border-color:#e66777}
+.quizResult{font-size:21px;font-weight:900;line-height:1.8;text-align:center;padding:18px 0 5px}
+@media(max-width:650px){.quizBtn{left:10px;bottom:10px;font-size:12px}.quizQuestion{font-size:16px}}
+
+.humanSexSelector{position:absolute;z-index:17;top:92px;left:50%;transform:translateX(-50%);display:none;gap:8px;background:#07131cdb;border:1px solid #ffffff25;padding:6px;border-radius:24px}
+.humanSexSelector button{border:0;background:#ffffff0e;color:#fff;padding:8px 16px;border-radius:18px;font-family:inherit;font-weight:800;cursor:pointer}
+.humanSexSelector button.active{background:#b5162e}
+.chromosomeCompare{position:absolute;z-index:17;right:18px;bottom:85px;width:min(310px,88vw);background:#07131ce8;border:1px solid #ffffff2b;border-radius:18px;padding:13px;color:white;display:none;box-shadow:0 12px 36px #0009}
+.compareTitle{font-weight:900;margin-bottom:9px}
+.compareCards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.compareCards button{border:1px solid #ffffff20;background:#ffffff0a;color:white;border-radius:13px;padding:9px;font-family:inherit;cursor:pointer}
+.compareCards button.active{border-color:#d9b36c;background:#8f1427}
+.compareCards b,.compareCards small{display:block}.compareCards strong{display:block;font-size:28px;color:#fff;margin:4px}
+#chromosomeExplain{font-size:12px;line-height:1.6;color:#cfe0e8;margin-top:9px}
+.humanBadge{position:absolute;z-index:16;top:145px;left:50%;transform:translateX(-50%);background:#06121acc;color:#fff;border:1px solid #ffffff25;padding:7px 12px;border-radius:16px;font-size:12px;display:none}
+@media(max-width:650px){.chromosomeCompare{right:6%;bottom:70px;width:82vw}.humanSexSelector{top:82px}}
+
+.journeyBanner{position:absolute;z-index:16;left:50%;top:145px;transform:translateX(-50%);width:min(660px,84vw);display:none;text-align:center;background:#06121ad9;border:1px solid #ffffff25;border-radius:16px;padding:8px 14px;color:white;box-shadow:0 8px 26px #0006;backdrop-filter:blur(8px)}
+.journeyBanner b{display:block;font-size:14px;margin-bottom:3px}
+.journeyBanner span{font-size:11px;color:#c9dce5}
+@media(max-width:650px){.journeyBanner{top:130px}.journeyBanner span{font-size:10px}}
+
+.leaderLines{position:absolute;inset:0;width:100%;height:100%;z-index:13;pointer-events:none;overflow:visible}
+.leaderLines line{stroke:#f4e7c3;stroke-width:1.2;stroke-opacity:.72}
+.leaderLines circle{fill:#f4e7c3;fill-opacity:.9}
+.voicePanel{position:absolute;z-index:22;right:18px;top:18px;display:flex;gap:7px}
+.voicePanel button{border:1px solid #ffffff2b;background:#07131cdd;color:white;padding:8px 11px;border-radius:18px;font-family:inherit;font-weight:800;cursor:pointer;backdrop-filter:blur(7px)}
+.voicePanel button.active{background:#a8172c;border-color:#e8b9c0}
+.narrationStatus{position:absolute;z-index:21;right:22px;top:60px;color:#d4e5ed;background:#06121aaa;border-radius:12px;padding:5px 9px;font-size:10px;display:none}
+#tunnel:before{content:"";position:absolute;inset:-20%;background:repeating-radial-gradient(ellipse at center,transparent 0 7%,#ffffff08 8%,transparent 10% 15%);animation:microPulse .7s linear infinite}
+#tunnel:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at center,transparent 0 12%,#02070a35 42%,#02070acc 100%);animation:microBreathe 1.15s ease-in-out infinite alternate}
+@keyframes microPulse{from{transform:scale(.7) rotate(0deg);opacity:.35}to{transform:scale(1.25) rotate(8deg);opacity:.85}}
+@keyframes microBreathe{from{transform:scale(.95)}to{transform:scale(1.06)}}
+@media(max-width:650px){.voicePanel{right:8px;top:8px;flex-direction:column}.voicePanel button{font-size:10px;padding:6px 8px}.narrationStatus{right:8px;top:74px}}
+
+.teacherModeBtn{position:absolute;z-index:24;left:18px;top:18px;border:1px solid #ffffff35;background:#8f1427;color:#fff;padding:9px 13px;border-radius:19px;font-family:inherit;font-weight:900;cursor:pointer;box-shadow:0 8px 24px #0006}
+.teacherBar{position:absolute;z-index:45;left:50%;bottom:16px;transform:translateX(-50%);display:none;gap:7px;padding:8px;background:#06121aeb;border:1px solid #ffffff2b;border-radius:22px;box-shadow:0 14px 45px #000a;backdrop-filter:blur(10px)}
+.teacherBar button{border:1px solid #ffffff22;background:#ffffff0d;color:#fff;padding:8px 12px;border-radius:15px;font-family:inherit;font-weight:800;cursor:pointer;white-space:nowrap}
+.teacherBar button:first-child{background:#a8172c}
+.lessonProgress{position:absolute;z-index:44;left:50%;top:16px;transform:translateX(-50%);width:min(560px,65vw);height:27px;border:1px solid #ffffff2a;border-radius:15px;background:#07131cdd;display:none;overflow:hidden;color:white;text-align:center;font-size:11px;line-height:27px}
+#lessonProgressFill{position:absolute;inset:0 auto 0 0;width:0;background:#9d1730;transition:width .35s ease}
+#lessonProgressText{position:relative;z-index:2}
+.classQuestionModal{position:absolute;inset:0;z-index:80;background:#02070bd9;display:none;align-items:center;justify-content:center;backdrop-filter:blur(10px)}
+.classQuestionModal.show{display:flex}
+.classQuestionBox{width:min(680px,88vw);background:linear-gradient(180deg,#112936,#07131b);border:1px solid #ffffff32;border-radius:26px;padding:30px;color:#fff;text-align:center;box-shadow:0 24px 75px #000c}
+.classQuestionBadge{display:inline-block;background:#a8172c;border-radius:18px;padding:6px 13px;font-weight:900;margin-bottom:18px}
+#classQuestionText{font-size:clamp(21px,3vw,34px);font-weight:900;line-height:1.6;margin-bottom:20px}
+#classQuestionChoices{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.classChoice{border:1px solid #ffffff25;background:#ffffff0b;color:#fff;border-radius:15px;padding:14px;font-family:inherit;font-size:16px;cursor:pointer}
+.classChoice.correct{background:#1e7143}.classChoice.wrong{background:#802638}
+#classQuestionFeedback{min-height:35px;font-weight:900;font-size:18px;padding-top:14px}
+#classQuestionContinue,.summaryBox button{border:0;background:#a8172c;color:white;border-radius:17px;padding:10px 18px;font-family:inherit;font-weight:900;cursor:pointer;margin-top:12px}
+#lessonScoreBig{font-size:64px;font-weight:1000;margin:10px}
+#lessonScoreText{font-size:20px;line-height:1.8}
+body.teacherMode .teacherBar{display:flex}
+body.teacherMode .lessonProgress{display:block}
+body.teacherMode .teacherModeBtn{display:none}
+body.teacherMode .voicePanel{top:55px}
+body.teacherMode .scienceTag{font-size:15px;padding:8px 12px}
+body.teacherMode .scienceCard{font-size:17px;width:min(600px,80vw)}
+body.teacherMode .journeyBanner{top:58px;width:min(760px,78vw)}
+body.teacherMode #info{font-size:1.12em}
+@media(max-width:700px){.teacherBar{max-width:94vw;overflow-x:auto}.teacherBar button{font-size:10px;padding:7px 8px}.lessonProgress{width:55vw;left:55%}#classQuestionChoices{grid-template-columns:1fr}.teacherModeBtn{left:8px;top:8px;font-size:11px}}
+
+.schoolIdentity{position:absolute;z-index:26;left:50%;top:12px;transform:translateX(-50%);display:flex;align-items:center;gap:9px;padding:7px 15px;border-radius:18px;background:#07131cd9;border:1px solid #ffffff2b;color:#fff;box-shadow:0 8px 26px #0005;backdrop-filter:blur(8px);text-align:right}
+.schoolIdentity .schoolIcon{font-size:20px}
+.schoolIdentity small{display:block;font-size:9px;color:#d7e4ea;line-height:1}
+.schoolIdentity strong{display:block;font-size:13px;white-space:nowrap;margin-top:3px}
+body.teacherMode .schoolIdentity{top:52px;background:#8f1427e8;border-color:#ffffff3d}
+@media(max-width:700px){.schoolIdentity{top:8px;padding:5px 9px}.schoolIdentity .schoolIcon{font-size:15px}.schoolIdentity strong{font-size:10px}body.teacherMode .schoolIdentity{top:44px}}
+
+.schoolWelcome{position:fixed;inset:0;z-index:200;background:radial-gradient(circle at 50% 35%,#173444 0,#081821 42%,#03090d 100%);display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
+.schoolWelcome.hide{animation:welcomeOut .55s ease forwards;pointer-events:none}
+.welcomePattern{position:absolute;inset:0;opacity:.12;background-image:linear-gradient(30deg,#fff 1px,transparent 1px),linear-gradient(150deg,#fff 1px,transparent 1px);background-size:42px 72px}
+.welcomeCard{position:relative;width:min(760px,92vw);border:1px solid #ffffff2e;background:linear-gradient(180deg,#0c202bdd,#07131aee);border-radius:30px;padding:28px 32px 24px;color:white;text-align:center;box-shadow:0 30px 100px #000c;overflow:hidden;backdrop-filter:blur(12px)}
+.bahrainRibbon{position:absolute;top:0;left:0;right:0;height:10px;background:#fff}
+.bahrainRibbon:before{content:"";position:absolute;left:0;top:0;width:43%;height:10px;background:#b5162e}
+.bahrainRibbon span{position:relative}
+.welcomeSchool{display:flex;align-items:center;justify-content:center;gap:11px;margin-top:4px}
+.welcomeSchoolIcon{font-size:30px}
+.welcomeSchool small{display:block;color:#cbdde5;font-size:12px;margin-bottom:3px}
+.welcomeSchool strong{display:block;font-size:22px;letter-spacing:.2px}
+.welcomeDivider{width:110px;height:1px;background:linear-gradient(90deg,transparent,#d7b76e,transparent);margin:16px auto 10px}
+.welcomePearl{width:36px;height:36px;border-radius:50%;margin:0 auto 5px;background:radial-gradient(circle at 35% 30%,#fff,#d9e7eb 45%,#8ba4ae);color:#8f1427;display:flex;align-items:center;justify-content:center;box-shadow:0 0 24px #d9e7eb55}
+.welcomeCard h1{font-size:clamp(27px,4vw,43px);margin:8px 0 4px;font-weight:1000}
+.welcomeSubtitle{font-size:17px;margin:0;color:#d8e8ee}
+.welcomeIdentity{font-size:12px;color:#d7b76e;margin:7px 0 20px}
+.welcomeChoices{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.welcomeChoices button{min-height:132px;border:1px solid #ffffff28;background:#ffffff08;color:white;border-radius:21px;padding:16px;font-family:inherit;cursor:pointer;transition:.22s;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.welcomeChoices button:hover{transform:translateY(-4px);background:#ffffff12;border-color:#d7b76e80}
+.welcomeChoices b{font-size:18px;margin:8px 0 3px}.welcomeChoices small{color:#bfd1d9}
+.welcomeModel{display:block;width:52px;height:52px;position:relative}
+.humanMini:before{content:"";position:absolute;width:15px;height:15px;border-radius:50%;background:#e7c7b6;left:19px;top:0}
+.humanMini:after{content:"";position:absolute;width:24px;height:34px;border-radius:12px 12px 8px 8px;background:linear-gradient(#b5162e,#7e1020);left:14px;top:17px;box-shadow:-13px 5px 0 -8px #e7c7b6,13px 5px 0 -8px #e7c7b6}
+.plantMini:before{content:"";position:absolute;width:5px;height:42px;background:#9b744a;left:24px;top:10px;border-radius:4px}
+.plantMini:after{content:"";position:absolute;width:42px;height:28px;left:5px;top:0;border-radius:50%;background:radial-gradient(ellipse at center,#76b66a 0 22%,transparent 24%),conic-gradient(from 0deg,#438f53,#74b75c,#347f49,#69aa54,#438f53);clip-path:polygon(50% 50%,100% 0,70% 48%,100% 80%,58% 62%,50% 100%,42% 62%,0 82%,30% 48%,0 5%)}
+.mainEnter{margin-top:16px;border:0;background:linear-gradient(135deg,#b5162e,#8c1023);color:white;border-radius:22px;padding:12px 32px;font-family:inherit;font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 9px 25px #0006}
+.welcomeFooter{margin-top:13px;font-size:10px;color:#9fb5bf}
+@keyframes welcomeOut{to{opacity:0;transform:scale(1.04);visibility:hidden}}
+@media(max-width:620px){.welcomeCard{padding:24px 16px 18px}.welcomeChoices{grid-template-columns:1fr}.welcomeChoices button{min-height:105px}.welcomeSchool strong{font-size:18px}}
+
+.homeBtn{position:absolute;z-index:48;left:18px;top:62px;border:1px solid #ffffff30;background:#07131cdd;color:white;padding:8px 12px;border-radius:18px;font-family:inherit;font-weight:800;cursor:pointer;box-shadow:0 7px 20px #0005}
+.studentGreeting{max-width:560px;margin:12px auto 16px;padding:10px 14px;border-radius:14px;background:#ffffff08;border:1px solid #ffffff15;color:#d7e7ed;font-size:13px;line-height:1.8}
+.studentTrail{position:absolute;z-index:42;left:50%;bottom:68px;transform:translateX(-50%);width:min(720px,76vw);padding:7px 12px;background:#06121ad8;border:1px solid #ffffff22;border-radius:18px;backdrop-filter:blur(8px);display:none;text-align:center;color:white}
+#studentTrailDots{display:flex;justify-content:center;align-items:center;gap:5px;margin-bottom:4px}
+.trailDot{width:8px;height:8px;border-radius:50%;background:#ffffff2b;transition:.25s}
+.trailDot.done{background:#d6b56c}.trailDot.current{background:#fff;transform:scale(1.35);box-shadow:0 0 10px #fff8}
+#studentTrailLabel{font-size:10px;color:#cbdce4}
+body.inJourney .studentTrail{display:block}
+body.teacherMode .studentTrail{bottom:70px}
+body.teacherMode .homeBtn{top:94px}
+@media(max-width:700px){.homeBtn{left:7px;top:48px;font-size:10px;padding:6px 8px}.studentTrail{bottom:57px;width:82vw}.studentGreeting{font-size:11px}}
+
+/* V28.1 — Mobile layout: prevent top controls/text from overlapping */
+@media (max-width:700px){
+  /* 1) School identity gets its own first row */
+  .schoolIdentity{
+    top:8px!important;
+    left:50%!important;
+    transform:translateX(-50%)!important;
+    padding:5px 10px!important;
+    min-width:145px;
+    justify-content:center;
+  }
+
+  /* 2) Teacher + home controls form a left column below school name */
+  .teacherModeBtn{
+    top:50px!important;
+    left:8px!important;
+    font-size:10px!important;
+    padding:7px 9px!important;
+  }
+  .homeBtn{
+    top:88px!important;
+    left:8px!important;
+    font-size:10px!important;
+    padding:7px 9px!important;
+  }
+
+  /* 3) Audio controls are kept on the right, in one compact column */
+  .voicePanel{
+    top:50px!important;
+    right:8px!important;
+    left:auto!important;
+    flex-direction:column!important;
+    gap:5px!important;
+    width:auto!important;
+  }
+  .voicePanel button{
+    font-size:10px!important;
+    padding:6px 9px!important;
+    min-width:118px;
+  }
+  .narrationStatus{
+    top:119px!important;
+    right:8px!important;
+    font-size:9px!important;
+  }
+
+  /* 4) Lab title receives an independent row */
+  .top{
+    top:138px!important;
+    left:10px!important;
+    right:10px!important;
+    display:block!important;
+    z-index:14!important;
+  }
+  .brand{
+    max-width:none!important;
+    width:auto!important;
+    padding:9px 12px!important;
+    text-align:center!important;
+  }
+  .brand b{
+    font-size:15px!important;
+    line-height:1.4!important;
+  }
+  .brand small{
+    font-size:10px!important;
+    line-height:1.45!important;
+    margin-top:3px!important;
+  }
+
+  /* 5) Sex selector, journey steps and route banner each get a separate line */
+  .humanSexSelector{
+    top:218px!important;
+    max-width:92vw!important;
+    white-space:nowrap!important;
+  }
+  .humanBadge{
+    top:260px!important;
+  }
+  .steps{
+    top:300px!important;
+    left:8px!important;
+    right:8px!important;
+    transform:none!important;
+    max-width:none!important;
+    width:auto!important;
+    padding:6px!important;
+  }
+  .steps button{
+    white-space:nowrap!important;
+    font-size:10px!important;
+    padding:7px 10px!important;
+  }
+  .journeyBanner{
+    top:350px!important;
+    width:calc(100vw - 24px)!important;
+    max-width:none!important;
+    padding:7px 10px!important;
+  }
+  .journeyBanner b{font-size:12px!important}
+  .journeyBanner span{font-size:9px!important;line-height:1.5!important}
+
+  /* 6) Main interactive content starts below the entire mobile header */
+  .organPicker{
+    top:420px!important;
+    left:10px!important;
+    width:42vw!important;
+    max-width:190px!important;
+    padding:10px!important;
+  }
+  .plantPicker{
+    top:420px!important;
+    left:10px!important;
+    width:42vw!important;
+    max-width:190px!important;
+    padding:10px!important;
+  }
+  .atlasBox{
+    top:420px!important;
+    left:calc(42vw + 22px)!important;
+    right:10px!important;
+    bottom:180px!important;
+  }
+
+  /* 7) Information card sits under 3D/atlas area without touching progress bar */
+  #info{
+    left:10px!important;
+    right:10px!important;
+    bottom:112px!important;
+    width:auto!important;
+    max-width:none!important;
+    padding:14px!important;
+  }
+  #info h2,#info h3{font-size:22px!important;line-height:1.35!important}
+  #info p{font-size:13px!important;line-height:1.75!important}
+
+  /* 8) Student progress is separated from the info card */
+  .studentTrail{
+    bottom:54px!important;
+    width:calc(100vw - 28px)!important;
+    max-width:none!important;
+    padding:7px 9px!important;
+  }
+
+  /* Teacher mode uses the same non-overlapping grid */
+  body.teacherMode .schoolIdentity{top:8px!important}
+  body.teacherMode .voicePanel{top:50px!important}
+  body.teacherMode .homeBtn{top:88px!important}
+  body.teacherMode .top{top:138px!important}
+  body.teacherMode .humanSexSelector{top:218px!important}
+  body.teacherMode .steps{top:300px!important}
+  body.teacherMode .journeyBanner{top:350px!important}
+
+  /* Keep the classroom toolbar away from the student progress line */
+  .teacherBar{
+    bottom:8px!important;
+    max-width:96vw!important;
+  }
+  body.teacherMode .studentTrail{
+    bottom:58px!important;
+  }
+  .lessonProgress{
+    top:182px!important;
+    width:60vw!important;
+    left:50%!important;
+  }
+}
+
+/* Extra narrow phones */
+@media (max-width:430px){
+  .schoolIdentity strong{font-size:9px!important}
+  .teacherModeBtn,.homeBtn{font-size:9px!important}
+  .voicePanel button{min-width:108px;font-size:9px!important}
+  .brand b{font-size:14px!important}
+  .brand small{display:none!important}
+  .humanSexSelector button{font-size:10px!important;padding:7px 10px!important}
+  .journeyBanner{top:344px!important}
+  .organPicker,.plantPicker,.atlasBox{top:414px!important}
+}
+
+
+/* V28.2 — TRUE MOBILE STACKED LAYOUT
+   Phone layout is vertically separated rather than layered. */
+@media (max-width:700px){
+  html,body{
+    height:auto!important;
+    min-height:100%!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+  }
+  body{background:#020711!important}
+  #app{
+    height:1320px!important;
+    min-height:1320px!important;
+    overflow:visible!important;
+  }
+
+  /* Hide low-value duplicated header pieces on phones. */
+  .bahrain-mark{display:none!important}
+  .top{
+    top:132px!important;
+    left:10px!important;
+    right:10px!important;
+    height:58px!important;
+  }
+  .brand{
+    width:100%!important;
+    max-width:none!important;
+    text-align:center!important;
+    padding:9px 12px!important;
+  }
+  .brand b{font-size:15px!important}
+  .brand small{display:none!important}
+  .badge{display:none!important}
+
+  /* Fixed top controls occupy independent rows. */
+  .schoolIdentity{
+    top:8px!important;left:50%!important;right:auto!important;
+    transform:translateX(-50%)!important;
+  }
+  .teacherModeBtn{
+    top:52px!important;left:8px!important;right:auto!important;
+  }
+  .homeBtn{
+    top:90px!important;left:8px!important;right:auto!important;
+  }
+  .voicePanel{
+    top:52px!important;right:8px!important;left:auto!important;
+    flex-direction:column!important;gap:5px!important;
+  }
+  .voicePanel button{min-width:116px!important;font-size:10px!important;padding:7px 9px!important}
+  .narrationStatus{display:none!important}
+
+  /* Human reference controls. */
+  .humanSexSelector{
+    top:204px!important;
+    left:50%!important;
+    transform:translateX(-50%)!important;
+  }
+  .humanBadge{
+    top:252px!important;
+    left:50%!important;
+    transform:translateX(-50%)!important;
+    white-space:nowrap!important;
+  }
+
+  /* Stages form a full-width horizontal strip. */
+  .steps{
+    top:300px!important;left:8px!important;right:8px!important;
+    transform:none!important;width:auto!important;max-width:none!important;
+    overflow-x:auto!important;justify-content:flex-start!important;
+  }
+  .steps button{flex:0 0 auto!important;font-size:10px!important;padding:8px 10px!important}
+
+  /* Route banner becomes a compact row. */
+  .journeyBanner{
+    top:354px!important;left:10px!important;right:10px!important;
+    transform:none!important;width:auto!important;max-width:none!important;
+    padding:8px 10px!important;
+  }
+  .journeyBanner b{font-size:12px!important;margin-bottom:2px!important}
+  .journeyBanner span{font-size:9px!important;line-height:1.45!important}
+
+  /* Selectors are FULL WIDTH and no longer sit beside the atlas. */
+  .organPicker,.plantPicker{
+    top:420px!important;
+    left:10px!important;right:10px!important;
+    width:auto!important;max-width:none!important;
+    padding:11px!important;
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:7px!important;
+  }
+  .organPicker b,.plantPicker b{
+    grid-column:1/-1!important;
+    text-align:center!important;
+    font-size:14px!important;
+    margin-bottom:2px!important;
+  }
+  .organPicker button,.plantPicker button{
+    width:100%!important;margin:0!important;text-align:center!important;
+    padding:9px 6px!important;font-size:12px!important;
+  }
+  .plantPicker small{grid-column:1/-1!important;font-size:9px!important;text-align:center!important}
+
+  /* A dedicated visualization zone. */
+  #scene{
+    top:590px!important;
+    left:10px!important;right:10px!important;
+    bottom:auto!important;
+    height:330px!important;
+    border-radius:20px!important;
+    overflow:hidden!important;
+    border:1px solid #78dfff33!important;
+  }
+  .atlasBox{
+    top:590px!important;
+    left:10px!important;right:10px!important;
+    bottom:auto!important;
+    height:330px!important;
+    width:auto!important;
+    border-radius:20px!important;
+  }
+  .atlasOpen{
+    left:10px!important;right:10px!important;bottom:10px!important;
+    text-align:center!important;
+  }
+  .atlasOpen a{
+    display:inline-block!important;
+    font-size:11px!important;padding:8px 10px!important;
+  }
+
+  /* Description card has its own row below visualization. */
+  .panel{
+    position:absolute!important;
+    top:940px!important;left:10px!important;right:10px!important;
+    bottom:auto!important;width:auto!important;max-width:none!important;
+    padding:14px!important;
+  }
+  .panel h2{font-size:22px!important;margin-bottom:6px!important}
+  .panel p{font-size:13px!important;line-height:1.7!important}
+  .controls{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:7px!important;
+  }
+  .controls button{font-size:11px!important;padding:9px 6px!important}
+
+  /* Student progress gets its own row, never overlays the panel. */
+  .studentTrail{
+    position:absolute!important;
+    top:1190px!important;bottom:auto!important;
+    left:10px!important;right:10px!important;
+    transform:none!important;
+    width:auto!important;max-width:none!important;
+    padding:9px!important;
+  }
+
+  /* Quiz stays above page bottom, but doesn't cover lesson text. */
+  .quizBtn{
+    position:absolute!important;
+    top:1250px!important;
+    bottom:auto!important;
+  }
+
+  /* Classroom controls become horizontally scrollable at bottom of long page. */
+  .teacherBar{
+    position:absolute!important;
+    top:1250px!important;
+    bottom:auto!important;
+    max-width:96vw!important;
+    overflow-x:auto!important;
+  }
+  .lessonProgress{
+    top:198px!important;
+    width:56vw!important;
+  }
+
+  /* Scientific labels remain inside visualization area. */
+  .scienceLabels{pointer-events:none!important}
+  .scienceTag{font-size:10px!important;padding:5px 7px!important}
+
+  /* When selector is hidden by project logic, visualization still retains its clean row. */
+  .organPicker[style*="display: none"],
+  .plantPicker[style*="display: none"]{display:none!important}
+
+  /* Prevent large comparison overlay from covering everything. */
+  .chromosomeCompare{
+    position:absolute!important;
+    top:590px!important;left:10px!important;right:10px!important;
+    bottom:auto!important;width:auto!important;
+    max-height:320px!important;overflow:auto!important;
+  }
+
+  /* Full-screen modal questions remain full-screen and readable. */
+  .classQuestionModal{position:fixed!important}
+
+  body.teacherMode .schoolIdentity{top:8px!important}
+  body.teacherMode .voicePanel{top:52px!important}
+  body.teacherMode .homeBtn{top:90px!important}
+  body.teacherMode .top{top:132px!important}
+  body.teacherMode .humanSexSelector{top:204px!important}
+  body.teacherMode .steps{top:300px!important}
+  body.teacherMode .journeyBanner{top:354px!important}
+  body.teacherMode .studentTrail{top:1190px!important;bottom:auto!important}
+}
+
+/* Narrow iPhones */
+@media (max-width:430px){
+  #app{height:1360px!important;min-height:1360px!important}
+  .schoolIdentity{min-width:150px!important}
+  .teacherModeBtn,.homeBtn{font-size:9px!important;padding:7px 8px!important}
+  .voicePanel button{min-width:108px!important;font-size:9px!important}
+  .organPicker,.plantPicker{top:425px!important}
+  #scene,.atlasBox{top:600px!important;height:320px!important}
+  .panel{top:940px!important}
+  .studentTrail{top:1200px!important}
+  .quizBtn,.teacherBar{top:1270px!important}
+}
+
+
+/* V28.3 — stable 3D organelle callouts */
+.scienceTag{will-change:left,top;transition:opacity .12s ease,background .18s,transform .18s}
+.leaderLines line{vector-effect:non-scaling-stroke}
+@media(max-width:700px){
+  .scienceLabels,.leaderLines{
+    position:absolute!important;
+    inset:0!important;
+  }
+  .scienceTag{
+    max-width:132px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    font-size:10px!important;
+  }
+}
+
+
+/* V28.4 — labels bound to real organelle meshes */
+.scienceTag[data-bound="1"]{
+  border-color:#fff8;
+  box-shadow:0 4px 18px #0008,0 0 0 1px #ffffff10 inset;
+}
+.leaderLines circle{filter:drop-shadow(0 0 3px #fff)}
+
+
+/* V28.5 additions */
+@media(max-width:700px){
+  .organPicker{grid-template-columns:1fr 1fr!important}
+  .organPicker button{min-height:48px!important}
+  .schoolIdentity{max-width:82vw!important}
+  .schoolIdentity strong{white-space:normal!important;line-height:1.35!important;text-align:center!important}
+}
+
+
+/* V28.6: richer skin labels + organ preview */
+@media(max-width:700px){
+  .scienceTag{max-width:145px!important;white-space:normal!important;line-height:1.25!important}
+  .organPicker b{grid-column:1/-1}
+}
+
+
+.humanCellTypeSelector{
+ position:absolute;z-index:17;top:140px;left:50%;transform:translateX(-50%);
+ display:none;gap:7px;background:#07131cdb;border:1px solid #ffffff25;
+ padding:6px;border-radius:22px
+}
+.humanCellTypeSelector button{
+ border:0;background:#ffffff0e;color:#fff;padding:8px 14px;border-radius:16px;
+ font-family:inherit;font-weight:800;cursor:pointer;white-space:nowrap
+}
+.humanCellTypeSelector button.active{background:#b5162e}
+@media(max-width:700px){
+ .humanCellTypeSelector{top:255px!important;max-width:92vw!important}
+ .humanCellTypeSelector button{font-size:10px!important;padding:7px 10px!important}
+ body.teacherMode .humanCellTypeSelector{top:255px!important}
+}
+.scienceTag{
+ transform:translate(-50%,-50%)!important;
+ min-width:82px;text-align:center
+}
+@media(max-width:700px){
+ .scienceTag{font-size:9.5px!important;max-width:126px!important;min-width:74px!important}
+}
+
+
+.guidedChoice{
+ position:fixed;inset:0;z-index:240;background:#02070ce8;display:none;
+ align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(10px)
+}
+.guidedChoice.show{display:flex}
+.guidedCard{
+ width:min(760px,94vw);max-height:92vh;overflow:auto;
+ background:linear-gradient(180deg,#0d222d,#07131b);
+ border:1px solid #ffffff2c;border-radius:28px;padding:22px;
+ box-shadow:0 28px 90px #000d;color:#fff
+}
+.guidedHeader{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px}
+.guidedHeader h2{margin:2px 0 0;font-size:clamp(22px,4vw,32px)}
+.guidedHeader small{color:#a9c4cf}
+.guidedBack,.guidedClose{
+ border:1px solid #ffffff24;background:#ffffff0a;color:#fff;border-radius:16px;
+ padding:8px 12px;font-family:inherit;cursor:pointer
+}
+.guidedClose{font-size:22px;padding:4px 12px}
+.guidedProgress{display:flex;gap:6px;margin:18px 0}
+.guidedProgress span{height:5px;flex:1;background:#ffffff1c;border-radius:4px}
+.guidedProgress span.on{background:#b5162e}
+.guidedBody{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.guidedOption{
+ min-height:88px;border:1px solid #ffffff24;background:#ffffff08;color:#fff;
+ border-radius:20px;padding:15px;font-family:inherit;cursor:pointer;text-align:center
+}
+.guidedOption:hover,.guidedOption.selected{background:#ffffff14;border-color:#d6b56c}
+.guidedOption b{display:block;font-size:18px;margin-bottom:5px}
+.guidedOption small{display:block;color:#b9ced7;line-height:1.5}
+.guidedSummary{
+ grid-column:1/-1;background:#ffffff07;border:1px solid #ffffff1d;border-radius:18px;
+ padding:15px;line-height:1.9
+}
+.guidedStart{
+ grid-column:1/-1;border:0;background:linear-gradient(135deg,#b5162e,#871123);
+ color:#fff;border-radius:20px;padding:13px 18px;font-family:inherit;font-size:16px;
+ font-weight:900;cursor:pointer
+}
+.guidedFooter{
+ margin-top:18px;padding-top:13px;border-top:1px solid #ffffff16;
+ display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+ color:#9fb5bf;font-size:10px
+}
+.copyrightFooter{
+ position:relative;z-index:30;margin:28px auto 18px;width:min(760px,92vw);
+ padding:12px 16px;text-align:center;color:#93aab5;font-size:11px;
+ border-top:1px solid #ffffff16;line-height:1.9
+}
+.copyrightFooter span{display:block;color:#c9d8de}
+@media(max-width:700px){
+ .guidedCard{padding:16px;border-radius:22px}
+ .guidedBody{grid-template-columns:1fr}
+ .guidedSummary,.guidedStart{grid-column:1}
+ .guidedOption{min-height:74px;padding:12px}
+ .guidedOption b{font-size:16px}
+ .guidedFooter{justify-content:center;text-align:center}
+ .copyrightFooter{font-size:10px}
+}
+
+
+/* V29.1 guided-flow stability */
+.guidedChoice.show ~ #choice,
+body.guidedActive #choice{visibility:hidden!important}
+
+
+/* V29.3 mobile focus */
+@media(max-width:700px){
+ #scene,.atlasBox{scroll-margin-top:110px;scroll-margin-bottom:120px}
+}
+
+
+.languageToggle{
+ position:fixed;z-index:320;top:max(10px,env(safe-area-inset-top));right:12px;
+ display:flex;align-items:center;gap:4px;background:#07131ee8;border:1px solid #ffffff35;
+ border-radius:18px;padding:4px 6px;box-shadow:0 8px 24px #0007;backdrop-filter:blur(8px)
+}
+.languageToggle button{
+ border:0;background:transparent;color:#bcd0da;font-family:inherit;font-weight:1000;
+ min-width:28px;height:28px;border-radius:12px;cursor:pointer
+}
+.languageToggle button.active{background:#b5162e;color:#fff}
+.languageToggle span{color:#ffffff55;font-size:11px}
+html[dir="ltr"] body{text-align:left}
+html[dir="ltr"] .guidedCard,
+html[dir="ltr"] .panel,
+html[dir="ltr"] .card{direction:ltr}
+@media(max-width:700px){
+ .languageToggle{top:max(7px,env(safe-area-inset-top));right:7px;transform:scale(.92);transform-origin:top right}
+}
+
+
+.atlasLanguageBadge{
+ position:absolute;right:12px;top:10px;z-index:7;background:#07131ce8;color:#fff;
+ border:1px solid #ffffff30;padding:6px 9px;border-radius:13px;font-size:10px;
+ pointer-events:none
+}
+
+
+.skinTheory{display:none;margin:12px 0;padding:12px;border-radius:17px;background:#ffffff08;border:1px solid #ffffff18}
+.skinTheory h3{margin:0 0 9px;font-size:15px}
+.skinLayerRow{display:grid;grid-template-columns:14px auto 1fr;gap:7px;align-items:center;padding:5px 0;font-size:11px}
+.skinLayerRow span{color:#b9ccd4}
+.layerDot{width:11px;height:11px;border-radius:3px;display:block}
+.corneumDot{background:#f4dccd}.epidermisDot{background:#e7ad94}.papillaryDot{background:#d98c7c}.reticularDot{background:#bf735f}.fatDot{background:#f1d46b}
+.skinTheoryNote{font-size:10px;color:#adc2cc;line-height:1.7;margin:8px 0 0}
+@media(max-width:700px){.skinLayerRow{grid-template-columns:14px 1fr}.skinLayerRow span{grid-column:2;font-size:10px}.skinTheory h3{font-size:14px}}
+
+</style>
+</head>
+<body>
+
+<div id="languageToggle" class="languageToggle" title="Language / اللغة">
+  <button id="langEnBtn" onclick="setLabLanguage('en')">E</button>
+  <span>|</span>
+  <button id="langArBtn" class="active" onclick="setLabLanguage('ar')">ع</button>
+</div>
+
+
+<div id="schoolWelcome" class="schoolWelcome">
+ <div class="welcomePattern"></div>
+ <div class="welcomeCard">
+   <div class="bahrainRibbon"><span></span><span></span><span></span><span></span><span></span></div>
+   <div class="welcomeSchool">
+     <div class="welcomeSchoolIcon">🏫</div>
+     <div><small>مدرسة</small><strong>حليمة السعدية الابتدائية الإعدادية للبنات</strong></div>
+   </div>
+   <div class="welcomeDivider"></div>
+   <div class="welcomePearl">◉</div>
+   <h1>إعداد أ. غفران هاني</h1>
+   <p class="welcomeSubtitle">مختبر العلوم الافتراضي</p><div class="studentGreeting">مرحبًا بكِ في رحلة علمية تبدأ من الكائن الحي وتصل إلى داخل الخلية وDNA.<br><b>اختاري مسارك وابدئي الاستكشاف.</b></div>
+   <p class="welcomeIdentity">البحرين 🇧🇭 • دلمون • اللؤلؤ • العلم</p>
+   <div class="welcomeChoices">
+     <button onclick="startGuidedChoice('human')"><span class="welcomeModel humanMini"><i></i></span><b>الإنسان</b><small>ابدئي باختيار الجنس ثم نوع الخلايا</small></button>
+     <button onclick="startGuidedChoice('plant')"><span class="welcomeModel plantMini"><i></i></span><b>النبات</b><small>ابدئي باختيار نوع النبات</small></button>
+   </div>
+   <div class="welcomeFooter">رحلة علمية تفاعلية ثلاثية الأبعاد</div>
+ </div>
+</div>
+
+
+
+<div id="guidedChoice" class="guidedChoice" aria-hidden="true">
+  <div class="guidedCard">
+    <div class="guidedHeader">
+      <button class="guidedBack" onclick="guidedBack()">‹ رجوع</button>
+      <div>
+        <small id="guidedStepNumber">الخطوة 1</small>
+        <h2 id="guidedTitle">اختاري المسار</h2>
+      </div>
+      <button class="guidedClose" onclick="closeGuidedChoice()">×</button>
+    </div>
+    <div id="guidedProgress" class="guidedProgress"></div>
+    <div id="guidedBody" class="guidedBody"></div>
+    <div class="guidedFooter">
+      <span>إعداد أ. غفران هاني</span>
+      <span>Ghufranhan@gmail.com</span>
+    </div>
+  </div>
+</div>
+
+<div class="schoolIdentity">
+  <span class="schoolIcon">🏫</span>
+  <div><small>مدرسة</small><strong>حليمة السعدية الابتدائية الإعدادية للبنات</strong></div>
+</div>
+
+<div id="app">
+<div class="bh-ribbon"></div>
+<div class="bahrain-mark"><span class="bahrain-map"></span><span class="pearl"></span><span>مختبر علوم بحريني • دلمون واللؤلؤ ونباتات البحرين</span></div>
+<div id="choice" class="labLobby">
+  <div class="labCeiling"><span></span><span></span><span></span></div>
+  <div class="labBack"><div class="labDoor"></div>
+    <div class="labSign"><b>إعداد أ. غفران هاني</b><small>مختبر العلوم الافتراضي • البحرين 🇧🇭</small></div>
+    <div class="pearlDisplay"><span class="bigPearl"></span><small>دلمون • اللؤلؤ • العلم</small></div>
+  </div>
+  <div class="labFloor"></div>
+  <div class="station stationHuman" onclick="choosePath('human')">
+    <div class="stationGlow"></div>
+    <div class="holo humanModel" aria-label="مجسم إنسان">
+      <span class="hmHead"></span><span class="hmBody"></span><span class="hmArm a1"></span><span class="hmArm a2"></span><span class="hmLeg l1"></span><span class="hmLeg l2"></span>
+    </div>
+    <b>محطة جسم الإنسان</b>
+    <small>ادخلي إلى الجسم ثم العضو والنسيج والخلية وصولًا إلى DNA</small>
+    <button>ابدئي الرحلة</button>
+  </div>
+  <div class="station stationPlant" onclick="choosePath('plant')">
+    <div class="stationGlow"></div>
+    <div class="holo palmModel" aria-label="مجسم نخلة">
+      <span class="pmTrunk"></span><span class="pmCrown"></span>
+      <i class="fr f1"></i><i class="fr f2"></i><i class="fr f3"></i><i class="fr f4"></i><i class="fr f5"></i><i class="fr f6"></i>
+    </div>
+    <b>محطة نباتات البحرين</b>
+    <small>استكشفي النخيل والقرم والسدر ثم ادخلي إلى الخلية النباتية</small>
+    <button>ابدئي الرحلة</button>
+  </div>
+  <div class="lobbyHelp">اختاري إحدى المحطتين لبدء رحلة التكبير ثلاثية الأبعاد</div>
+</div>
+<div id="scene"></div>
+
+<div id="atlasBox" class="atlasBox">
+  <div id="atlasLanguageBadge" class="atlasLanguageBadge">الأطلس: العربية</div>
+  <iframe id="humanAtlasFrame" src="https://atlas.taim.best/?lang=ar" title="Human Atlas"></iframe>
+  <div class="atlasOpen"><a id="atlasOpenLink" href="https://atlas.taim.best/?lang=ar" target="_blank" rel="noopener">فتح الأطلس في نافذة مستقلة ↗</a></div>
+</div>
+
+<div class="top">
+  <div class="card brand"><b>إعداد أ. غفران هاني — V29 🇧🇭</b><small>رحلة مجهرية تعليمية تفاعلية في الإنسان أو النبات حتى DNA</small></div>
+  <div class="card badge" id="badge">المستوى: الجسم التشريحي</div>
+</div>
+
+<div class="steps" id="steps"></div>
+
+<div class="card organPicker" id="organPicker">
+  <b>اختاري العضو للخلايا الجسمية</b>
+  <button class="on" data-organ="heart" onclick="selectOrgan('heart')">القلب</button>
+  <button data-organ="lung" onclick="selectOrgan('lung')">الرئة</button>
+  <button data-organ="brain" onclick="selectOrgan('brain')">الدماغ</button>
+  <button data-organ="stomach" onclick="selectOrgan('stomach')">المعدة</button>
+  <button data-organ="skin" onclick="selectOrgan('skin')">الجلد</button>
+  <button data-organ="gamete" onclick="selectOrgan('gamete')" style="display:none">الخلايا الجنسية</button>
+</div>
+
+<div class="card plantPicker" id="plantPicker">
+  <b>اختاري نباتًا بحرينيًا</b>
+  <button class="on" data-plant="palm" onclick="selectPlant('palm')">🌴 نخلة التمر</button>
+  <button data-plant="mangrove" onclick="selectPlant('mangrove')">🌿 القرم</button>
+  <button data-plant="sidr" onclick="selectPlant('sidr')">🍃 السدر</button>
+  <small>تتغير هيئة النبات والوصف البيئي، بينما يبقى المسار الخلوي التعليمي نفسه.</small>
+</div>
+
+<div class="card panel">
+  <h2 id="title"></h2><p id="desc"></p>
+  
+<div id="skinTheory" class="skinTheory">
+ <h3>طبقات الجلد ومكوناته</h3>
+ <div class="skinLayerRow"><i class="layerDot epidermisDot"></i><b>1. البشرة</b><span>الطبقة الخارجية الواقية وتشكل سطح البشرة.</span></div>
+ <div class="skinLayerRow"><i class="layerDot reticularDot"></i><b>2. الأدمة</b><span>تحتوي بصيلات الشعر، الغدد الدهنية والعرقية، الأوعية الدموية والنهايات العصبية.</span></div>
+ <div class="skinLayerRow"><i class="layerDot fatDot"></i><b>3. الطبقة الدهنية</b><span>تقع أسفل الأدمة وتساعد في العزل والحماية.</span></div>
+ <p class="skinTheoryNote">المكونات الموضحة في النموذج: سطح البشرة، الشعر، بصيلة الشعر، الغدة الدهنية، الغدة العرقية، القناة العرقية، النهايات العصبية والأوعية الدموية.</p>
+</div>
+
+<div class="controls">
+    <button onclick="prev()">↩ رجوع</button>
+    <button onclick="next()">تكبير للداخل 🔍</button>
+    <button onclick="resetView()">إعادة زاوية الرؤية</button>
+    <button onclick="autoTour()">▶ رحلة تلقائية</button>
+  </div>
+</div>
+
+<div class="hint" id="hint">اختاري المسار وابدئي رحلة التكبير. صُممت التجربة بهوية بحرينية مع الحفاظ على وضوح المحتوى العلمي.</div>
+<div class="tooltip" id="tooltip"></div>
+<div class="flash" id="flash"></div><div class="vignette" id="vignette"></div>
+<div class="tunnel" id="tunnel"></div><div class="tunnelLabel" id="tunnelLabel">رحلة مجهرية...</div>
+</div>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+
+const organData={
+ heart:{name:"القلب",color:0xcf2e45,desc:"عضو عضلي يضخ الدم إلى أنحاء الجسم.",tissue:"نسيج عضلي قلبي"},
+ lung:{name:"الرئة",color:0xf0a0a4,desc:"عضو مسؤول عن تبادل الأكسجين وثاني أكسيد الكربون.",tissue:"نسيج الرئة والحويصلات الهوائية"},
+ brain:{name:"الدماغ",color:0xf2a7bf,desc:"مركز رئيسي للتحكم في الجهاز العصبي.",tissue:"نسيج عصبي"},
+ stomach:{name:"المعدة",color:0xe78978,desc:"عضو يساعد على هضم الطعام ميكانيكيًا وكيميائيًا.",tissue:"نسيج بطانة المعدة"},
+ skin:{name:"الجلد",color:0xd69a7c,desc:"أكبر أعضاء الجسم، يحمي الأنسجة الداخلية ويساعد في الإحساس وتنظيم الحرارة.",tissue:"نسيج الجلد والبشرة"},
+ gamete:{name:"الخلايا الجنسية",color:0x7bb7d9,desc:"الخلايا الجنسية البشرية هي البويضة والحيوان المنوي، وتحمل كل خلية ناضجة 23 كروموسومًا.",tissue:"الخلايا الجنسية الناضجة"}
+};
+let selected="heart", selectedPlant="palm", current=0, timer=null, transitioning=false, mode=null;
+const plantData={
+ palm:{name:"نخلة التمر",desc:"من أبرز النباتات المرتبطة بالبيئة والتراث في البحرين، وتتحمل الحرارة والجفاف نسبيًا.",color:0x58a85c},
+ mangrove:{name:"القرم",desc:"نبات ساحلي ملحي مهم للموائل البحرية وحماية السواحل ودعم التنوع الحيوي.",color:0x3f9c68},
+ sidr:{name:"السدر",desc:"شجرة محلية معروفة بقدرتها على تحمل الظروف الجافة، ولها قيمة بيئية وتراثية.",color:0x6ea44d}
+};
+const mount=document.getElementById('scene'), atlas=document.getElementById('atlasBox');
+const tunnel=document.getElementById('tunnel'), tunnelLabel=document.getElementById('tunnelLabel');
+const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x020711,.032);
+const camera=new THREE.PerspectiveCamera(44,innerWidth/innerHeight,.1,100);camera.position.set(0,0,6.3);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;mount.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xc8f2ff,0x1b2637,2.5));
+const dl=new THREE.DirectionalLight(0xffffff,3.1);dl.position.set(4,6,5);scene.add(dl);
+const pl=new THREE.PointLight(0x47cfff,28,24);pl.position.set(-4,3,-2);scene.add(pl);
+const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.minDistance=1.6;controls.maxDistance=13;
+let root=new THREE.Group();scene.add(root);const clickable=[];
+
+const humanInfo=[
+["الجسم التشريحي","اختاري عضوًا من القائمة، ثم استكشفي الجسم في الأطلس قبل بدء رحلة الدخول ضمن واجهة بهوية بحرينية."],
+["العضو المختار","سيظهر العضو الذي اخترته، ثم ستتحرك الكاميرا إلى داخله قبل ظهور النسيج."],
+["النسيج","هذا هو النسيج المرتبط بالعضو المختار، ويتكون من خلايا تعمل معًا."],
+["مجموعة الخلايا","مع زيادة التكبير تظهر الخلايا المفردة ونواها بشكل أوضح."],
+["الخلية المتخصصة","تتغير الخلية بحسب العضو المختار. اضغطي على النواة أو الميتوكوندريا لمعرفة وظيفتها."],
+["النواة","النواة تحتوي معظم المادة الوراثية للخلية."],
+["الكروموسومات","الخلايا الجسمية البشرية تحتوي عادة 46 كروموسومًا في 23 زوجًا."],
+["DNA","الـDNA يحمل المعلومات الوراثية اللازمة لعمل الخلية وبناء البروتينات."]
+];
+const plantInfo=[
+ ["النبات البحريني","ابدئي من النبات ثم اختاري النوع: نخلة التمر أو القرم أو السدر."],
+ ["الورقة","اقتربي من الورقة ولاحظي شكلها الخارجي والعروق والحافة."],
+ ["سطح الورقة","تكبير سطح الورقة يكشف طبقة البشرة التي تحمي الأنسجة الداخلية."],
+ ["الثغور","فتحات مجهرية تحيط بها خلايا حارسة، وتشارك في تبادل الغازات وتنظيم فقد الماء."],
+ ["مقطع عرضي في الورقة","ندخل عبر سطح الورقة لرؤية طبقاتها الداخلية بصورة تعليمية مبسطة."],
+ ["النسيج العمادي والإسفنجي","خلايا النسيج العمادي غنية بالبلاستيدات، بينما توجد فراغات هوائية بين خلايا النسيج الإسفنجي."],
+ ["الخلايا النباتية","نقترب أكثر من مجموعة خلايا داخل نسيج الورقة."],
+ ["الخلية النباتية","جدار خلوي وفجوة كبيرة وبلاستيدات خضراء ونواة وعضيات أخرى."],
+ ["البلاستيدة الخضراء","عضية تحتوي أصباغ البناء الضوئي، وتحوّل الطاقة الضوئية إلى طاقة كيميائية."],
+ ["النواة","تحتوي المادة الوراثية DNA المنظمة في كروموسومات."],
+ ["الكروموسومات","تراكيب من DNA وبروتينات تحمل المعلومات الوراثية."],
+ ["DNA","الجزيء الذي يحمل المعلومات الوراثية."]
+]
+let info=humanInfo;
+const steps=document.getElementById('steps');
+function rebuildSteps(){
+ steps.innerHTML='';
+ info.forEach((x,i)=>{let b=document.createElement('button');b.className='step';b.textContent=x[0];b.onclick=()=>!transitioning&&go(i);steps.appendChild(b)});
+}
+
+function mat(c,o=1){return new THREE.MeshPhysicalMaterial({color:c,roughness:.48,metalness:.01,transparent:o<1,opacity:o,clearcoat:.14,side:THREE.DoubleSide})}
+function clear(){clickable.length=0;while(root.children.length){let o=root.children.pop();o.traverse?.(q=>{q.geometry?.dispose();if(q.material)(Array.isArray(q.material)?q.material:[q.material]).forEach(m=>m.dispose())})}}
+function sph(x,y,z,r,c,o=1){let m=new THREE.Mesh(new THREE.SphereGeometry(r,32,24),mat(c,o));m.position.set(x,y,z);root.add(m);return m}
+function tag(o,n,d){o.userData={name:n,desc:d};clickable.push(o);return o}
+
+
+function addScientificAnchor(name,desc,x,y,z){
+ const a=new THREE.Object3D();
+ a.position.set(x,y,z);
+ a.userData={name,desc};
+ root.add(a);
+ return a;
+}
+
+function buildSpermModel(detailed=true){
+ // Orientation: head on the left, tail extends to the right.
+ // This is an educational 3D model of a mature human sperm cell.
+
+ // HEAD — flattened oval, not a round "cell".
+ const headMat=mat(0x8ec9e8,.34);
+ headMat.depthWrite=false;
+ const head=new THREE.Mesh(new THREE.SphereGeometry(1,40,28),headMat);
+ head.scale.set(.54,.72,.28);
+ head.position.set(-1.55,.05,0);
+ head.renderOrder=-2;
+ root.add(head);
+
+ // Nucleus occupies most of the head.
+ const nucleusMat=mat(0x65459a,.96);
+ const nucleus=new THREE.Mesh(new THREE.SphereGeometry(1,36,24),nucleusMat);
+ nucleus.scale.set(.39,.55,.21);
+ nucleus.position.set(-1.48,.03,.03);
+ tag(nucleus,"النواة","تشغل معظم رأس الحيوان المنوي وتحمل 23 كروموسومًا.");
+ nucleus.renderOrder=5;
+ root.add(nucleus);
+
+ // Acrosomal cap over the anterior part of the head.
+ const acroMat=mat(0x61d5e8,.72); acroMat.depthWrite=false;
+ const acro=new THREE.Mesh(new THREE.SphereGeometry(1,34,22),acroMat);
+ acro.scale.set(.26,.59,.235);
+ acro.position.set(-1.83,.08,.015);
+ acro.userData={name:"الأكروسوم",desc:"غطاء في مقدمة الرأس يحتوي إنزيمات تساعد الحيوان المنوي على اختراق أغلفة البويضة."};
+ acro.renderOrder=4;
+ root.add(acro);
+
+ // Neck / connecting piece.
+ const neck=new THREE.Mesh(new THREE.CylinderGeometry(.085,.095,.30,16),mat(0xbad6df,.98));
+ neck.rotation.z=Math.PI/2;
+ neck.position.set(-.93,.02,0);
+ neck.userData={name:"العنق",desc:"منطقة قصيرة تربط الرأس بالقطعة الوسطى."};
+ neck.renderOrder=5;
+ root.add(neck);
+
+ // Midpiece.
+ const midMat=mat(0xe8b36b,.38); midMat.depthWrite=false;
+ const mid=new THREE.Mesh(new THREE.CylinderGeometry(.16,.13,.82,20),midMat);
+ mid.rotation.z=Math.PI/2;
+ mid.position.set(-.37,.02,0);
+ mid.userData={name:"القطعة الوسطى",desc:"منطقة خلف الرأس تحتوي ميتوكوندريا كثيرة لتوفير الطاقة اللازمة للحركة."};
+ mid.renderOrder=1;
+ root.add(mid);
+
+ // Mitochondrial sheath around the midpiece.
+ for(let i=0;i<7;i++){
+   const x=-.68+i*.105;
+   const ring=new THREE.Mesh(new THREE.TorusGeometry(.145,.037,8,24),mat(0xf28a45,.98));
+   ring.rotation.y=Math.PI/2;
+   ring.position.set(x,.02,0);
+   ring.userData={name:"الميتوكوندريا",desc:"تتركز في القطعة الوسطى وتنتج الطاقة اللازمة لحركة السوط."};
+   ring.renderOrder=6;
+   root.add(ring);
+ }
+
+ // Flagellum: principal piece + thinner end piece.
+ const p1=new THREE.CatmullRomCurve3([
+   new THREE.Vector3(.06,.02,0),
+   new THREE.Vector3(.72,.18,.02),
+   new THREE.Vector3(1.45,-.16,-.01),
+   new THREE.Vector3(2.20,.15,.02),
+   new THREE.Vector3(2.90,-.10,0)
+ ]);
+ const tail1=new THREE.Mesh(new THREE.TubeGeometry(p1,72,.052,8,false),mat(0x8bd9ee,.98));
+ tail1.userData={name:"السوط (الذيل)",desc:"سوط طويل يولد حركة تدفع الحيوان المنوي إلى الأمام."};
+ tail1.renderOrder=5;
+ root.add(tail1);
+
+ const p2=new THREE.CatmullRomCurve3([
+   new THREE.Vector3(2.90,-.10,0),
+   new THREE.Vector3(3.35,.07,0),
+   new THREE.Vector3(3.78,-.02,0)
+ ]);
+ const tail2=new THREE.Mesh(new THREE.TubeGeometry(p2,36,.025,7,false),mat(0xb5e8f3,.98));
+ tail2.userData={name:"القطعة النهائية من الذيل",desc:"الجزء النهائي الأرفع من السوط."};
+ tail2.renderOrder=5;
+ root.add(tail2);
+
+ addScientificAnchor("الرأس","يتكون من الأكروسوم والنواة، وتحمل النواة 23 كروموسومًا.",-1.55,.55,.1);
+
+ // Keep all internal sperm structures visible in educational 360° rotation.
+ [nucleus,acro,neck,mid,tail1,tail2].forEach(o=>{
+   if(o.material){o.material.depthWrite=false;}
+ });
+}
+
+function makeEducationalCellTransparent(){
+ // Keep cell organelles visible from all camera angles for teaching.
+ root.traverse(o=>{
+   if(!o.isMesh)return;
+   const n=o.userData?.name||"";
+   const organelleNames=[
+     "النواة","الميتوكوندريا",
+     "البلاستيدة الخضراء","الفجوة العصارية","الأكروسوم","القطعة الوسطى",
+     "السوط (الذيل)","العنق"
+   ];
+   if(organelleNames.includes(n)){
+     o.renderOrder=10;
+     const mats=Array.isArray(o.material)?o.material:[o.material];
+     mats.forEach(m=>{m.depthTest=false;m.depthWrite=false;});
+   }else if(n==="الغشاء الخلوي" || (current===4 && !n)){
+     const mats=Array.isArray(o.material)?o.material:[o.material];
+     mats.forEach(m=>{
+       if(m.transparent){
+         m.opacity=Math.min(m.opacity,0.20);
+         m.depthWrite=false;
+       }
+     });
+     o.renderOrder=-5;
+   }
+ });
+}
+
+function frameCurrentModel(padding=1.32){
+ root.updateMatrixWorld(true);
+ const box=new THREE.Box3().setFromObject(root);
+ if(box.isEmpty())return;
+ const size=box.getSize(new THREE.Vector3());
+ const center=box.getCenter(new THREE.Vector3());
+ const maxDim=Math.max(size.x,size.y,size.z,1);
+ const fov=THREE.MathUtils.degToRad(camera.fov);
+ let dist=(maxDim/2)/Math.tan(fov/2)*padding;
+ dist=Math.max(3.7,Math.min(9.2,dist));
+ camera.position.set(center.x,center.y,center.z+dist);
+ controls.target.copy(center);
+ controls.update();
+}
+
+function scrollToVisualization(){
+ if(!window.matchMedia('(max-width:700px)').matches)return;
+ const sceneEl=document.getElementById('scene') || renderer?.domElement;
+ if(sceneEl){
+   setTimeout(()=>sceneEl.scrollIntoView({behavior:'smooth',block:'center'}),280);
+ }
+}
+
+
+
+function buildGameteBodyOverview(){
+ const grey=mat(0x9aa0a6,.62); grey.depthWrite=false;
+ const highlightFemale=mat(0xf28ca6,.98);
+ const highlightMale=mat(0x8ed8f8,.98);
+
+ // head
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.48,28,20),grey);
+ head.position.y=2.35; root.add(head);
+
+ // neck + torso
+ const neck=new THREE.Mesh(new THREE.CylinderGeometry(.20,.24,.36,18),grey);
+ neck.position.y=1.87; root.add(neck);
+ const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.68,1.45,10,24),grey);
+ torso.position.y=.82; torso.scale.set(1,.95,.42); root.add(torso);
+
+ // pelvis
+ const pelvis=new THREE.Mesh(new THREE.SphereGeometry(1,28,20),grey);
+ pelvis.scale.set(.78,.48,.38); pelvis.position.y=-.35; root.add(pelvis);
+
+ // arms
+ for(const s of [-1,1]){
+   const arm=new THREE.Mesh(new THREE.CapsuleGeometry(.14,1.55,7,14),grey);
+   arm.position.set(.92*s,.82,0); arm.rotation.z=.14*s; root.add(arm);
+   const leg=new THREE.Mesh(new THREE.CapsuleGeometry(.18,1.85,8,16),grey);
+   leg.position.set(.36*s,-1.65,0); leg.rotation.z=.025*s; root.add(leg);
+ }
+
+ if(humanSex==="female"){
+   // uterus + tubes + ovaries, highlighted through semi-transparent grey body
+   const uterus=new THREE.Mesh(new THREE.SphereGeometry(1,30,22),highlightFemale);
+   uterus.scale.set(.28,.34,.13); uterus.position.set(0,-.35,.42); root.add(uterus);
+   for(const s of [-1,1]){
+     const pts=[
+       new THREE.Vector3(.18*s,-.18,.42),
+       new THREE.Vector3(.34*s,-.12,.42),
+       new THREE.Vector3(.48*s,-.22,.42)
+     ];
+     const tube=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),24,.025,7,false),highlightFemale);
+     root.add(tube);
+     const ov=new THREE.Mesh(new THREE.SphereGeometry(.09,18,12),highlightFemale);
+     ov.scale.set(1.35,.8,.7); ov.position.set(.52*s,-.24,.42); root.add(ov);
+   }
+   addScientificAnchor("موقع الجهاز التناسلي الأنثوي","يقع الرحم والمبيضان داخل منطقة الحوض أسفل البطن.",0,-.35,.50);
+ }else{
+   // testes highlighted in light blue
+   for(const s of [-1,1]){
+     const t=new THREE.Mesh(new THREE.SphereGeometry(1,24,18),highlightMale);
+     t.scale.set(.13,.18,.11); t.position.set(.15*s,-.72,.45); root.add(t);
+   }
+   addScientificAnchor("الخصيتان","تقع الخصيتان في كيس الصفن أسفل الحوض.",0,-.72,.52);
+ }
+}
+
+function buildHumanPelvisLocator(){
+ // Neutral torso silhouette with pelvis highlighted. This is an educational location map.
+ const bodyMat=mat(0x9fb8c6,.18); bodyMat.depthWrite=false;
+ const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.75,2.2,10,24),bodyMat);
+ torso.position.y=.35;torso.scale.set(1.05,1,.45);root.add(torso);
+ const pelvis=new THREE.Mesh(new THREE.SphereGeometry(1,32,22),mat(0xc0394b,.70));
+ pelvis.scale.set(1.05,.55,.38);pelvis.position.set(0,-.95,.08);
+ pelvis.userData={name:"منطقة الحوض",desc:"تقع الأعضاء التناسلية الداخلية في منطقة الحوض أسفل البطن."};
+ root.add(pelvis);
+ addScientificAnchor("منطقة الحوض","تقع الأعضاء التناسلية الداخلية في الحوض أسفل البطن.",0,-.95,.45);
+}
+
+function buildFemaleReproductiveSystem(){
+ // Uterus, uterine tubes, ovaries, cervix and upper vagina.
+ const uterineMat=mat(0xd77f93,.94);
+ const uterus=new THREE.Mesh(new THREE.SphereGeometry(1,40,30),uterineMat);
+ uterus.scale.set(.72,.88,.36);uterus.position.set(0,.05,0);
+ uterus.userData={name:"الرحم",desc:"عضو عضلي أجوف في الحوض؛ يستقبل الجنين أثناء الحمل."};
+ root.add(uterus);
+
+ // Fundus slightly broader.
+ const fundus=new THREE.Mesh(new THREE.SphereGeometry(1,32,22),mat(0xe092a5,.92));
+ fundus.scale.set(.78,.38,.38);fundus.position.set(0,.62,0);root.add(fundus);
+
+ // Cervix
+ const cervix=new THREE.Mesh(new THREE.CylinderGeometry(.19,.25,.62,20),mat(0xc96f84,.96));
+ cervix.position.set(0,-.83,0);cervix.userData={name:"عنق الرحم",desc:"الجزء السفلي الضيق من الرحم الذي يفتح نحو المهبل."};root.add(cervix);
+
+ // Vagina
+ const vagina=new THREE.Mesh(new THREE.CylinderGeometry(.17,.24,.85,20),mat(0xb86179,.72));
+ vagina.position.set(0,-1.54,0);vagina.userData={name:"المهبل",desc:"قناة عضلية تمتد من عنق الرحم إلى خارج الجسم."};root.add(vagina);
+
+ // Fallopian tubes + fimbriae + ovaries
+ for(const s of [-1,1]){
+   const pts=[
+     new THREE.Vector3(.48*s,.55,0),
+     new THREE.Vector3(.92*s,.78,.03),
+     new THREE.Vector3(1.35*s,.62,.06),
+     new THREE.Vector3(1.62*s,.38,.08)
+   ];
+   const tube=new THREE.Mesh(
+     new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),42,.055,9,false),
+     mat(0xe5a0ae,.96)
+   );
+   tube.userData={name:"قناة فالوب",desc:"قناة تصل منطقة المبيض بالرحم، ويحدث الإخصاب غالبًا في أحد أجزائها."};
+   root.add(tube);
+
+   const ovary=new THREE.Mesh(new THREE.SphereGeometry(1,30,22),mat(0xf0b26f,.96));
+   ovary.scale.set(.34,.23,.20);ovary.position.set(1.72*s,.33,.08);
+   ovary.userData={name:"المبيض",desc:"عضو تناسلي أنثوي يحتوي جريبات تنضج داخلها البويضات."};
+   root.add(ovary);
+
+   for(let j=0;j<5;j++){
+     const f=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.23,6),mat(0xe8b3bd,.9));
+     f.position.set((1.48+.07*j)*s,.46-.04*j,.08);f.rotation.z=(.7-.12*j)*s;root.add(f);
+   }
+ }
+ addScientificAnchor("قاع الرحم","الجزء العلوي المستدير من الرحم.",0,.62,.42);
+ addScientificAnchor("جسم الرحم","الجزء الرئيسي العضلي من الرحم.",0,.05,.42);
+ addScientificAnchor("عنق الرحم","الجزء السفلي الضيق من الرحم.",0,-.83,.22);
+ addScientificAnchor("قناة فالوب (البوق الرحمي)","تمتد من أعلى الرحم باتجاه المبيض.",1.20,.68,.25);
+ addScientificAnchor("المبيض","يوجد مبيض على كل جانب من الرحم.",1.72,.33,.25);
+}
+
+function buildMaleReproductiveSystem(){
+ // Paired testes shown clearly after zooming from the full-body locator.
+ for(const s of [-1,1]){
+   const shellMat=mat(0x9edcf6,.34); shellMat.depthWrite=false;
+   const testis=new THREE.Mesh(new THREE.SphereGeometry(1,36,26),shellMat);
+   testis.scale.set(.72,1.02,.58); testis.position.set(.90*s,0,.05);
+   testis.userData={name:"الخصية",desc:"عضو تناسلي ذكري تتكون داخله الحيوانات المنوية في الأنابيب المنوية."};
+   root.add(testis);
+
+   // seminiferous tubules visible inside each testis
+   for(let i=0;i<6;i++){
+     const y=-.62+i*.24;
+     const curve=new THREE.CatmullRomCurve3([
+       new THREE.Vector3(.62*s,y,.18),
+       new THREE.Vector3(.88*s,y+.16*(i%2?1:-1),.22),
+       new THREE.Vector3(1.15*s,y,.18)
+     ]);
+     const tub=new THREE.Mesh(new THREE.TubeGeometry(curve,24,.045,7,false),mat(0xf2c3a5,.95));
+     tub.userData={name:"الأنابيب المنوية",desc:"أنابيب دقيقة ملتفة داخل الخصية تبدأ فيها عملية تكوين الحيوانات المنوية."};
+     root.add(tub);
+   }
+
+   const epiCurve=new THREE.CatmullRomCurve3([
+     new THREE.Vector3(1.42*s,.68,.16),
+     new THREE.Vector3(1.52*s,.18,.18),
+     new THREE.Vector3(1.43*s,-.62,.18)
+   ]);
+   const epi=new THREE.Mesh(new THREE.TubeGeometry(epiCurve,32,.075,8,false),mat(0x74b8d8,.96));
+   epi.userData={name:"البربخ",desc:"قناة ملتفة على سطح الخصية تنضج وتُخزن فيها الحيوانات المنوية."};root.add(epi);
+
+   const vasCurve=new THREE.CatmullRomCurve3([
+     new THREE.Vector3(1.43*s,-.58,.18),
+     new THREE.Vector3(1.72*s,-.12,.18),
+     new THREE.Vector3(1.78*s,.90,.18)
+   ]);
+   const vas=new THREE.Mesh(new THREE.TubeGeometry(vasCurve,28,.045,7,false),mat(0x8ed8f8,.96));
+   vas.userData={name:"الأسهر",desc:"قناة تنقل الحيوانات المنوية من البربخ باتجاه القنوات التناسلية."};root.add(vas);
+ }
+ addScientificAnchor("الخصية","تحتوي الأنابيب المنوية.",-.90,0,.40);
+ addScientificAnchor("الأنابيب المنوية","الموقع الذي تبدأ فيه عملية تكوين الحيوانات المنوية.",.90,.12,.40);
+ addScientificAnchor("البربخ","قناة ملتفة على سطح الخصية.",1.48,.20,.40);
+ addScientificAnchor("الأسهر","يمتد من البربخ إلى أعلى.",1.75,.85,.40);
+}
+
+function buildOvaryZoom(){
+ // Ovary cross-section with follicles at several stages.
+ const ovaryMat=mat(0xf1b178,.40);ovaryMat.depthWrite=false;
+ const ov=new THREE.Mesh(new THREE.SphereGeometry(1,42,30),ovaryMat);
+ ov.scale.set(1.75,1.15,.62);root.add(ov);
+
+ const follicles=[
+   [-1.0,.35,.23,.18],[-.55,-.45,.22,.26],[.05,.20,.23,.36],[.72,-.20,.22,.48]
+ ];
+ follicles.forEach(([x,y,z,r],i)=>{
+   const sac=sph(x,y,z,r,0xe28ea5,.40);sac.material.depthWrite=false;
+   const egg=sph(x,y,z+.05,r*.34,0xf9d4b7,.96);
+   egg.userData={name:"بويضة داخل جريب",desc:"تنمو البويضة داخل جريب مبيضي قبل الإباضة."};
+ });
+ addScientificAnchor("جريبات مبيضية","تراكيب داخل المبيض تنمو داخلها الخلايا البيضية بمراحل مختلفة.",-.15,.72,.35);
+ addScientificAnchor("المبيض","مقطع مبسط يوضح الجريبات داخل المبيض.",-1.30,-.70,.35);
+}
+
+function buildTestisZoom(){
+ // Testis cutaway with seminiferous tubules.
+ const shellMat=mat(0xe2ad86,.26);shellMat.depthWrite=false;
+ const shell=new THREE.Mesh(new THREE.SphereGeometry(1,40,28),shellMat);
+ shell.scale.set(1.55,1.25,.75);root.add(shell);
+
+ for(let i=0;i<9;i++){
+   const a=i/9*Math.PI*2;
+   const curve=new THREE.CatmullRomCurve3([
+     new THREE.Vector3(Math.cos(a)*.85,Math.sin(a)*.62,.12),
+     new THREE.Vector3(Math.cos(a+.7)*.42,Math.sin(a+.7)*.32,.16),
+     new THREE.Vector3(Math.cos(a+1.4)*.92,Math.sin(a+1.4)*.68,.12)
+   ]);
+   const tub=new THREE.Mesh(new THREE.TubeGeometry(curve,36,.085,10,false),mat(0xf1c3a1,.95));
+   tub.userData={name:"الأنابيب المنوية",desc:"أنابيب دقيقة داخل الخصية تتكون فيها الخلايا المنوية خلال عملية تكوين الحيوانات المنوية."};
+   root.add(tub);
+ }
+ addScientificAnchor("الأنابيب المنوية","الموقع الأساسي لتكوين الحيوانات المنوية داخل الخصية.",0,.65,.38);
+ addScientificAnchor("الخصية","مقطع تعليمي مبسط داخل الخصية.",-1.15,-.72,.38);
+}
+
+function reproductiveStage(){
+ if(humanSex==="female")buildFemaleReproductiveSystem();
+ else buildMaleReproductiveSystem();
+}
+
+function gonadStage(){
+ if(humanSex==="female")buildOvaryZoom();
+ else buildTestisZoom();
+}
+
+function organ(){
+ const d=organData[selected];
+ if(selected==="gamete"){
+   reproductiveStage();
+   return;
+ }
+ if(selected==="heart"){
+  const a=sph(-.22,.08,0,1.05,d.color,.95),b=sph(.33,.05,.05,.86,d.color,.95);a.scale.set(.85,1.2,.8);b.scale.set(.75,1,.78);
+  const v=new THREE.Mesh(new THREE.CylinderGeometry(.16,.22,.9,24),mat(0xb71c36,.95));v.position.set(.08,1.05,0);root.add(v);
+ } else if(selected==="lung"){
+  const l=sph(-.55,0,0,1.1,d.color,.92),r=sph(.55,0,0,1.1,d.color,.92);l.scale.set(.7,1.25,.55);r.scale.copy(l.scale);
+  const tr=new THREE.Mesh(new THREE.CylinderGeometry(.12,.16,1.6,24),mat(0xe8b1b6,.95));tr.position.y=1.2;root.add(tr);
+ } else if(selected==="brain"){
+  const b=sph(0,0,0,1.5,d.color,.95);b.scale.set(1.15,.9,1);
+  for(let i=0;i<18;i++){let t=new THREE.Mesh(new THREE.TorusGeometry(.4+Math.random()*.6,.045,8,36,Math.PI*1.2),mat(0xd989a6,.8));t.rotation.set(Math.random()*2,Math.random()*2,Math.random()*2);t.position.set((Math.random()-.5)*1.3,(Math.random()-.5)*1,(Math.random()-.5)*.8);root.add(t)}
+ } else if(selected==="skin"){
+  // V34: clearer textbook-style skin cross-section based on the supplied school reference.
+  const W=4.8,D=2.35;
+  // Epidermis: thin outer protective layer with a slightly wavy lower border suggested by cell-like bumps.
+  const epi=new THREE.Mesh(new THREE.BoxGeometry(W,.42,D),mat(0xf0b29d,.99));
+  epi.position.y=1.22; tag(epi,"البشرة","الطبقة الخارجية من الجلد وتكوّن سطحًا واقيًا للجسم."); root.add(epi);
+  for(let i=0;i<12;i++){const x=-2.15+i*.39;const q=sph(x,.96,.58,.16,0xc87379,.92);q.scale.set(1.35,.72,.72)}
+  // Dermis: thick middle layer, visibly distinct from epidermis and fat.
+  const derm=new THREE.Mesh(new THREE.BoxGeometry(W,1.72,D),mat(0xe5a08d,.88));
+  derm.position.y=.10; tag(derm,"الأدمة","الطبقة الوسطى تحت البشرة، وتحتوي بصيلات الشعر والغدد والأوعية الدموية والنهايات العصبية."); root.add(derm);
+  // Subcutaneous fatty layer with obvious lobules.
+  const fat=new THREE.Mesh(new THREE.BoxGeometry(W,.78,D),mat(0xe5bf57,.72));
+  fat.position.y=-1.20; tag(fat,"طبقة دهنية","طبقة دهنية تقع أسفل الأدمة وتساعد في العزل والحماية."); root.add(fat);
+  for(let r=0;r<3;r++)for(let c=0;c<8;c++){const q=sph(-2.08+c*.60,-1.18+r*.19,-.62+r*.52,.20,0xf2d36e,.98);q.scale.set(1.28,.72,1.05)}
+  // Hair shaft and follicle.
+  const hair=new THREE.Mesh(new THREE.CylinderGeometry(.045,.065,3.15,14),mat(0x4b3026,.99));
+  hair.position.set(.78,.82,.38);hair.rotation.z=-.13;tag(hair,"شعر","شعرة تمتد من بصيلة الشعر إلى خارج سطح البشرة.");root.add(hair);
+  const follicle=new THREE.Mesh(new THREE.CapsuleGeometry(.18,.95,8,16),mat(0x8f5a4b,.95));
+  follicle.position.set(.66,-.02,.38);follicle.rotation.z=-.13;tag(follicle,"بصيلة الشعر","تركيب داخل الجلد تنمو منه الشعرة.");root.add(follicle);
+  // Sebaceous gland as clustered lobules attached to follicle.
+  const seb=new THREE.Group(); seb.position.set(.22,.35,.52); seb.userData={name:"غدة دهنية",desc:"غدة مرتبطة ببصيلة الشعر وتفرز مادة دهنية تساعد في ترطيب الجلد والشعر."};root.add(seb);
+  for(let i=0;i<8;i++){let a=i/8*Math.PI*2;let q=new THREE.Mesh(new THREE.SphereGeometry(.13,18,14),mat(0xe78b62,.98));q.position.set(Math.cos(a)*.18,Math.sin(a)*.15,0);seb.add(q)}
+  // Sweat gland: obvious coiled tube + duct reaching the skin surface.
+  const sweat=new THREE.Mesh(new THREE.TorusKnotGeometry(.30,.055,100,10,2,3),mat(0xc88755,.99));
+  sweat.position.set(-1.20,-.38,.48);sweat.scale.set(.88,.88,.60);tag(sweat,"غدة عرقية","غدة ملتفة تنتج العرق وتساعد في تنظيم درجة حرارة الجسم.");root.add(sweat);
+  const ductCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(-1.20,-.18,.48),new THREE.Vector3(-1.12,.34,.48),new THREE.Vector3(-1.04,.90,.48),new THREE.Vector3(-.99,1.46,.48)]);
+  const duct=new THREE.Mesh(new THREE.TubeGeometry(ductCurve,40,.038,8,false),mat(0xb9784f,.99));tag(duct,"قناة عرقية","قناة تنقل العرق من الغدة العرقية إلى سطح البشرة.");root.add(duct);
+  // Nerve endings in yellow, branched upward through the dermis.
+  const nerveAnchor=new THREE.Object3D();nerveAnchor.position.set(1.38,.46,.62);nerveAnchor.userData={name:"نهايات عصبية",desc:"نهايات حسية تستقبل مؤثرات مثل اللمس والضغط والألم والحرارة."};root.add(nerveAnchor);
+  [[1.35,-.65,1.35,.48],[1.35,.48,1.72,.92],[1.35,.48,.98,1.08]].forEach(a=>{const c=new THREE.CatmullRomCurve3([new THREE.Vector3(a[0],a[1],.60),new THREE.Vector3((a[0]+a[2])/2,(a[1]+a[3])/2,.60),new THREE.Vector3(a[2],a[3],.60)]);root.add(new THREE.Mesh(new THREE.TubeGeometry(c,28,.032,7,false),mat(0xf0c52f,.99)))});
+  // Blood vessels: thick red/blue vessels at the deep dermis.
+  const vesselAnchor=new THREE.Object3D();vesselAnchor.position.set(.30,-.68,.66);vesselAnchor.userData={name:"أوعية دموية",desc:"أوعية داخل الأدمة تنقل الدم وتساعد في تغذية الأنسجة وتنظيم الحرارة."};root.add(vesselAnchor);
+  [-.60,-.78].forEach((yy,i)=>{const c=new THREE.CatmullRomCurve3([new THREE.Vector3(-2.1,yy,.64),new THREE.Vector3(-.9,yy+.10,.64),new THREE.Vector3(.35,yy-.04,.64),new THREE.Vector3(2.05,yy+.06,.64)]);root.add(new THREE.Mesh(new THREE.TubeGeometry(c,44,.065,9,false),mat(i?0x357fc4:0xd53f4b,.98)))});
+  addScientificAnchor("سطح البشرة","السطح الخارجي للجلد.",1.55,1.46,.78);
+ } else if(selected==="gamete"){
+  if(humanSex==="female"){
+    const ov=sph(0,0,0,1.45,0xf2b7c9,.72);
+    ov.material.roughness=.28;
+    tag(sph(0,0,.15,.42,0x7650a8,.95),"النواة","نواة البويضة الناضجة تحمل 23 كروموسومًا.");
+    for(let i=0;i<26;i++){let a=i/26*Math.PI*2;sph(Math.cos(a)*1.58,Math.sin(a)*1.58,0,.055,0xf7d9e5,.72)}
+  }else{
+    buildSpermModel(true);
+  }
+ } else {
+  // More recognizable stomach silhouette.
+  const body=sph(.12,-.05,0,1.15,d.color,.94);
+  body.scale.set(.85,1.22,.72);
+  const upper=sph(-.40,.62,.02,.58,0xe78978,.94);upper.scale.set(.85,1.05,.72);
+  const esophagus=new THREE.Mesh(new THREE.CylinderGeometry(.15,.20,1.25,20),mat(0xdd7d70,.95));
+  esophagus.position.set(-.55,1.35,0);esophagus.rotation.z=-.12;root.add(esophagus);
+  const pylorus=new THREE.Mesh(new THREE.TorusGeometry(.62,.16,14,42,Math.PI*.9),mat(0xdb7669,.95));
+  pylorus.position.set(.72,-.55,0);pylorus.rotation.z=-.75;root.add(pylorus);
+ }
+}
+function tissue(){
+ if(selected==="gamete"){
+   gonadStage();
+   return;
+ }
+ const d=organData[selected];
+ if(selected==="heart"){
+   // Cardiac muscle: elongated, branching fibers with central nuclei and visible cross bands.
+   for(let row=-4;row<=4;row++){
+     for(let col=-5;col<=5;col++){
+       let x=col*.43+(row%2)*.16, y=row*.34, z=(Math.random()-.5)*.12;
+       let fiber=new THREE.Mesh(new THREE.CapsuleGeometry(.105,.48,5,14),mat(0xc94c5d,.92));
+       fiber.position.set(x,y,z);fiber.rotation.z=Math.PI/2+(Math.random()-.5)*.12;root.add(fiber);
+       sph(x,y,z+.12,.055,0x6f3e8f,.96);
+       if((col+row)%3===0){
+         let band=new THREE.Mesh(new THREE.BoxGeometry(.025,.27,.12),mat(0x8d273a,.85));
+         band.position.set(x+.13,y,z+.03);band.rotation.z=(Math.random()-.5)*.08;root.add(band);
+       }
+     }
+   }
+ } else if(selected==="lung"){
+   // Lung: clusters of thin-walled alveoli.
+   for(let i=0;i<62;i++){
+     let a=Math.random()*Math.PI*2,r=Math.sqrt(Math.random())*2.25;
+     let x=Math.cos(a)*r,y=Math.sin(a)*r*.7,z=(Math.random()-.5)*.4;
+     let alveolus=sph(x,y,z,.20+Math.random()*.07,0xf3b4b8,.25);
+     alveolus.material.roughness=.25;
+     sph(x+.06,y+.03,z+.08,.035,0x75509b,.92);
+   }
+   for(let i=0;i<14;i++){
+     let c=new THREE.CatmullRomCurve3([
+       new THREE.Vector3(-2.4+i*.35,-1.25+(i%3)*.2,.25),
+       new THREE.Vector3(-1.0+i*.16,(Math.random()-.5)*.8,.35),
+       new THREE.Vector3(.8+i*.08,(Math.random()-.5)*.9,.25)
+     ]);
+     root.add(new THREE.Mesh(new THREE.TubeGeometry(c,28,.025,6,false),mat(0xd84d68,.75)));
+   }
+ } else if(selected==="brain"){
+   // Nervous tissue: neuron cell bodies with branching dendrites/axons.
+   for(let i=0;i<17;i++){
+     let x=(Math.random()-.5)*4.2,y=(Math.random()-.5)*2.5,z=(Math.random()-.5)*.45;
+     sph(x,y,z,.13,0xe9a0ba,.96);sph(x+.02,y+.01,z+.09,.045,0x714b9d,.98);
+     let arms=5+Math.floor(Math.random()*3);
+     for(let j=0;j<arms;j++){
+       let ang=j/arms*Math.PI*2+Math.random()*.5;
+       let pts=[new THREE.Vector3(x,y,z),
+         new THREE.Vector3(x+Math.cos(ang)*.28,y+Math.sin(ang)*.28,z+(Math.random()-.5)*.1),
+         new THREE.Vector3(x+Math.cos(ang)*(.55+Math.random()*.35),y+Math.sin(ang)*(.55+Math.random()*.35),z+(Math.random()-.5)*.18)];
+       let c=new THREE.CatmullRomCurve3(pts);
+       root.add(new THREE.Mesh(new THREE.TubeGeometry(c,16,.025,5,false),mat(0xd47fa1,.9)));
+     }
+   }
+ } else if(selected==="skin"){
+   // Skin tissue: stratified epidermis over dermis.
+   const epiAnchor=new THREE.Object3D();epiAnchor.position.set(0,.55,.2);epiAnchor.userData={name:"خلايا البشرة",desc:"خلايا متراصة تكوّن حاجزًا واقيًا."};root.add(epiAnchor);
+   const dermAnchor=new THREE.Object3D();dermAnchor.position.set(0,-.65,.2);dermAnchor.userData={name:"الأدمة",desc:"نسيج داعم أسفل البشرة."};root.add(dermAnchor);
+   for(let row=0;row<6;row++){
+     for(let col=-10;col<=10;col++){
+       let x=col*.22+(row%2)*.10,y=.75-row*.20,z=(Math.random()-.5)*.15;
+       let c=sph(x,y,z,.105,row<2?0xe8b39b:0xd99075,.92);
+       c.scale.set(1.1,.72,.7);
+       sph(x,y,z+.09,.036,0x74509b,.95);
+     }
+   }
+   for(let i=0;i<18;i++){
+     let c=new THREE.CatmullRomCurve3([
+       new THREE.Vector3(-2.1+i*.24,-.55,.1),
+       new THREE.Vector3(-1.0+i*.12,-.8+(i%3)*.15,.15),
+       new THREE.Vector3(.9+i*.05,-.65+(i%4)*.12,.1)
+     ]);
+     root.add(new THREE.Mesh(new THREE.TubeGeometry(c,22,.018,5,false),mat(0xf0c2aa,.55)));
+   }
+ } else if(selected==="gamete"){
+   // Educational field of mature gametes.
+   if(humanSex==="female"){
+     for(let i=0;i<7;i++){
+       let a=i/7*Math.PI*2,r=i===0?0:1.35;
+       let x=Math.cos(a)*r,y=Math.sin(a)*r*.6;
+       sph(x,y,0,.34,0xf2b7c9,.75);sph(x,y,.08,.11,0x7650a8,.96);
+     }
+   }else{
+     for(let i=0;i<18;i++){
+       let y=-1.2+(i%6)*.48,x=-1.6+Math.floor(i/6)*1.25;
+       let h=sph(x,y,0,.13,0x7fb9df,.9);h.scale.set(.7,1.0,.5);
+       let curve=new THREE.CatmullRomCurve3([
+         new THREE.Vector3(x+.10,y,0),new THREE.Vector3(x+.38,y+.08,0),
+         new THREE.Vector3(x+.68,y-.06,0)
+       ]);
+       root.add(new THREE.Mesh(new THREE.TubeGeometry(curve,16,.018,5,false),mat(0x8fd5e8,.9)));
+     }
+   }
+ } else {
+   // Stomach lining: tightly packed columnar epithelial cells and gland-like pits.
+   for(let col=-7;col<=7;col++){
+     for(let row=-3;row<=3;row++){
+       let x=col*.30,y=row*.40,z=Math.sin(col*.55)*.10;
+       let cell=new THREE.Mesh(new THREE.CapsuleGeometry(.09,.27,5,12),mat(0xe88c79,.9));
+       cell.position.set(x,y,z);root.add(cell);
+       sph(x,y-.03,z+.12,.045,0x71499a,.96);
+     }
+   }
+   for(let col=-6;col<=6;col+=3){
+     let pit=new THREE.Mesh(new THREE.TorusGeometry(.18,.045,8,24),mat(0xb95f61,.9));
+     pit.position.set(col*.30,.05,.25);pit.rotation.x=Math.PI/2;root.add(pit);
+   }
+ }
+}
+function cells(){
+ if(selected==="skin"){
+   const anchor=new THREE.Object3D();anchor.position.set(0,.1,.2);anchor.userData={name:"خلايا البشرة",desc:"خلايا حيوانية متخصصة تكوّن حاجز الجلد."};root.add(anchor);
+   // Layer of epidermal cells, then choose one cell to zoom into.
+   for(let row=-3;row<=3;row++)for(let col=-6;col<=6;col++){
+     const x=col*.36+(row%2)*.16,y=row*.34,z=(Math.random()-.5)*.18;
+     const c=sph(x,y,z,.23,row>1?0xecc0a9:0xd9987c,.58);
+     c.scale.set(1.15,.72,.8);
+     sph(x,y,z+.09,.075,0x7448af,.94);
+   }
+ }else if(selected==="gamete"){
+   if(humanSex==="female"){
+     // Ovulated egg surrounded by corona radiata-like cells.
+     const egg=sph(0,0,0,1.10,0xf3c4b6,.34);egg.material.depthWrite=false;
+     const zona=new THREE.Mesh(new THREE.SphereGeometry(1.22,40,28),mat(0xf7e0bf,.22));zona.material.depthWrite=false;root.add(zona);
+     tag(sph(0,0,.16,.36,0x7448af,.96),"النواة","نواة البويضة الناضجة تحمل 23 كروموسومًا.");
+     for(let i=0;i<28;i++){
+       const a=i/28*Math.PI*2;
+       const c=sph(Math.cos(a)*1.38,Math.sin(a)*1.38,.02,.10,0xf0b5c3,.78);
+       c.scale.set(1.0,.8,.65);
+     }
+     addScientificAnchor("البويضة","خلية جنسية أنثوية كبيرة نسبيًا، تحمل 23 كروموسومًا في حالتها الناضجة.",0,0,.62);
+   }else{
+     // Multiple sperm approaching from the seminiferous-tubule context.
+     for(let i=0;i<8;i++){
+       const g=new THREE.Group();root.add(g);
+       const ox=-2.1+(i%4)*1.25, oy=-.9+Math.floor(i/4)*1.6;
+       const head=new THREE.Mesh(new THREE.SphereGeometry(1,20,14),mat(0x8ec9e8,.72));
+       head.scale.set(.18,.26,.10);head.position.set(ox,oy,0);root.add(head);
+       const tailCurve=new THREE.CatmullRomCurve3([
+         new THREE.Vector3(ox+.18,oy,0),new THREE.Vector3(ox+.50,oy+.10,0),new THREE.Vector3(ox+.92,oy-.08,0)
+       ]);
+       root.add(new THREE.Mesh(new THREE.TubeGeometry(tailCurve,20,.02,5,false),mat(0x9edfee,.9)));
+     }
+     addScientificAnchor("حيوانات منوية","خلايا جنسية ذكرية ناضجة، يحمل كل منها 23 كروموسومًا.",0,.95,.25);
+   }
+ }else{
+   for(let i=0;i<44;i++){let a=Math.random()*Math.PI*2,r=Math.sqrt(Math.random())*2.25;let m=sph(Math.cos(a)*r,Math.sin(a)*r*.68,(Math.random()-.5)*.55,.27,0x71cad9,.56);sph(m.position.x,m.position.y,m.position.z+.08,.083,0x7147a2,.95)}
+ }
+}
+function addMito(x,y,z,rot=0){
+ let m=new THREE.Mesh(new THREE.CapsuleGeometry(.11,.30,6,14),mat(0xf08b49,.96));
+ m.position.set(x,y,z);m.rotation.z=rot;tag(m,"الميتوكوندريا","تحوّل الطاقة الكيميائية في الغذاء إلى صورة تستخدمها الخلية.");root.add(m);
+}
+function cell(){
+ if(selected==="heart"){
+   // Simplified cardiomyocyte: elongated contractile cell with central nucleus.
+   let body=new THREE.Mesh(new THREE.CapsuleGeometry(.55,2.45,10,28),mat(0xd94f61,.42));
+   body.rotation.z=Math.PI/2;root.add(body);
+   tag(sph(0,0,.05,.38,0x7448af,.92),"النواة","النواة المركزية تحتوي معظم المادة الوراثية للخلية العضلية القلبية.");
+   for(let i=-5;i<=5;i++){let band=new THREE.Mesh(new THREE.BoxGeometry(.035,1.0,.22),mat(i%2?0xf3a0aa:0xb83248,.72));band.position.set(i*.22,0,.08);root.add(band)}
+   for(let i=0;i<10;i++)addMito(-1.0+i*.22,(i%2?-.32:.32),.18,Math.PI/2);
+ } else if(selected==="brain"){
+   // Simplified neuron: soma + dendrites + long axon.
+   let soma=sph(-.45,.05,0,.62,0xe69bb7,.76);
+   tag(sph(-.45,.05,.13,.27,0x7448af,.94),"النواة","تحتوي المادة الوراثية داخل جسم الخلية العصبية.");
+   for(let j=0;j<7;j++){
+     let a=j/7*Math.PI*2;
+     let c=new THREE.CatmullRomCurve3([
+       new THREE.Vector3(-.45,.05,0),
+       new THREE.Vector3(-.45+Math.cos(a)*.7,.05+Math.sin(a)*.55,0),
+       new THREE.Vector3(-.45+Math.cos(a)*1.25,.05+Math.sin(a)*1.05,(Math.random()-.5)*.3)
+     ]);
+     root.add(new THREE.Mesh(new THREE.TubeGeometry(c,22,.045,7,false),mat(0xd982a4,.88)));
+   }
+   let ax=new THREE.CatmullRomCurve3([new THREE.Vector3(.05,0,0),new THREE.Vector3(1.0,-.15,.05),new THREE.Vector3(2.25,.05,0)]);
+   root.add(new THREE.Mesh(new THREE.TubeGeometry(ax,36,.07,8,false),mat(0xd982a4,.9)));
+   for(let i=0;i<6;i++)addMito(-.8+i*.18,-.15+(i%2)*.25,.22,i*.4);
+ } else if(selected==="lung"){
+   // Simplified thin alveolar epithelial cell.
+   let body=sph(0,0,0,1.75,0xf0a0a4,.28);body.scale.set(1.35,.42,.72);
+   tag(sph(-.15,0,.12,.34,0x7448af,.92),"النواة","النواة في الخلية الطلائية الرئوية تحتوي المادة الوراثية.");
+   for(let i=0;i<7;i++)addMito(-1.0+i*.32,(i%2?-.18:.18),.18,i*.5);
+   let membrane=new THREE.Mesh(new THREE.TorusGeometry(1.45,.035,10,64),mat(0xf6d3d5,.92));membrane.scale.y=.32;root.add(membrane);
+ } else if(selected==="skin"){
+   // V34 animal/skin cell: explicit membrane, cytoplasm, nucleus, mitochondria and small vacuoles.
+   // Cytoplasm is the inner translucent cell volume.
+   let cyt=sph(0,0,0,1.48,0xd99a7d,.34);cyt.scale.set(1.28,.75,.82);
+   cyt.userData={name:"السيتوبلازم",desc:"مادة هلامية تملأ داخل الخلية وتوجد فيها العضيات."};
+   // A separate thin shell is the cell membrane, so its pointer cannot land in the cell centre.
+   let membrane=sph(0,0,0,1.53,0xf4c2b2,.18);membrane.scale.set(1.28,.75,.82);
+   membrane.userData={name:"الغشاء الخلوي",desc:"غشاء رقيق يحيط بالخلية وينظم دخول المواد وخروجها."};
+   tag(sph(0,.05,.18,.38,0x7448af,.97),"النواة","نواة خلية حيوانية تحتوي معظم المادة الوراثية.");
+   for(let i=0;i<6;i++)addMito(-.90+i*.32,(i%2?-.28:.28),.20,i*.35);
+   // Small animal-cell vacuoles/vesicles, deliberately much smaller than the plant central vacuole.
+   const vacAnchor=new THREE.Object3D();vacAnchor.position.set(.78,-.28,.30);vacAnchor.userData={name:"فجوات عصارية صغيرة",desc:"حويصلات أو فجوات صغيرة تساعد في تخزين ونقل بعض المواد داخل الخلية الحيوانية."};root.add(vacAnchor);
+   [[.78,-.28,.30],[.98,.12,.16],[-.72,.34,.24]].forEach(v=>{const q=sph(v[0],v[1],v[2],.13,0x8fd8e8,.48);q.scale.set(1.0,.82,.9)});
+ } else if(selected==="gamete"){
+   if(humanSex==="female"){
+     let body=sph(0,0,0,1.6,0xf2b7c9,.34);
+     tag(sph(0,0,.16,.44,0x7448af,.95),"النواة","نواة البويضة الناضجة تحمل 23 كروموسومًا.");
+     for(let i=0;i<7;i++)addMito(-.8+i*.26,(i%2?-.35:.35),.15,i*.4);
+   }else{
+     buildSpermModel(true);
+   }
+ } else {
+   // Simplified gastric epithelial cell: tall columnar form.
+   let body=new THREE.Mesh(new THREE.CapsuleGeometry(.72,1.45,10,28),mat(0xe88c79,.38));body.rotation.z=0;root.add(body);
+   tag(sph(0,-.55,.12,.32,0x7448af,.93),"النواة","النواة في خلية بطانة المعدة تحتوي معظم المادة الوراثية.");
+   for(let i=0;i<8;i++)addMito(-.42+(i%4)*.28,-.05+Math.floor(i/4)*.38,.2,i*.3);
+   for(let i=-4;i<=4;i++){let mv=new THREE.Mesh(new THREE.CylinderGeometry(.025,.035,.25,8),mat(0xf3b4a5,.95));mv.position.set(i*.13,1.12,.05);root.add(mv)}
+ }
+ if(current===4)makeEducationalCellTransparent();
+}
+function nucleus(){sph(0,0,0,2,0x7550a8,.26);for(let i=0;i<20;i++){let pts=Array.from({length:7},()=>new THREE.Vector3((Math.random()-.5)*2.4,(Math.random()-.5)*2.4,(Math.random()-.5)*1.2));let c=new THREE.CatmullRomCurve3(pts);root.add(new THREE.Mesh(new THREE.TubeGeometry(c,42,.025,6,false),mat(i%2?0xffc85a:0x85d6ff,.95)))}}
+function chromosomes(){for(let i=0;i<23;i++){let x=(i%8-3.5)*.48,y=(Math.floor(i/8)-1)*.85;for(let p=0;p<2;p++){let g=new THREE.Group();for(let q of [-1,1]){let c=new THREE.CatmullRomCurve3([new THREE.Vector3(q*.12,.32,0),new THREE.Vector3(0,0,0),new THREE.Vector3(q*.12,-.32,0)]);g.add(new THREE.Mesh(new THREE.TubeGeometry(c,18,.055,8,false),mat(p?0x6bc7ff:0xf08bc1,.98)))}g.position.set(x+p*.18,y,0);root.add(g)}}}
+function dna(){for(let i=0;i<150;i++){let t=i*.13,y=(i-75)*.035,x=Math.cos(t)*.65,z=Math.sin(t)*.65;sph(x,y,z,.055,0x6ed6ff,.98);sph(-x,y,-z,.055,0xf18eb6,.98);if(i%5===0){let geo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,y,z),new THREE.Vector3(-x,y,-z)]);root.add(new THREE.Line(geo,new THREE.LineBasicMaterial({color:0xf3e7a1})))}}}
+
+function plantWhole(){
+ const pd=plantData[selectedPlant];
+
+ function branchBetween(a,b,r1,r2,color){
+   const dir=new THREE.Vector3().subVectors(b,a),len=dir.length(),mid=new THREE.Vector3().addVectors(a,b).multiplyScalar(.5);
+   const mesh=new THREE.Mesh(new THREE.CylinderGeometry(r2,r1,len,12),mat(color,.96));
+   mesh.position.copy(mid);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.clone().normalize());root.add(mesh);return mesh;
+ }
+ function leafEllipsoid(x,y,z,sx,sy,sz,color,ry=0,rz=0){
+   const l=new THREE.Mesh(new THREE.SphereGeometry(1,18,12),new THREE.MeshPhysicalMaterial({color,roughness:.62,clearcoat:.05}));
+   l.scale.set(sx,sy,sz);l.position.set(x,y,z);l.rotation.y=ry;l.rotation.z=rz;root.add(l);return l;
+ }
+ function soil(){
+   const g=new THREE.Mesh(new THREE.CylinderGeometry(2.35,2.55,.16,56),mat(0x70563a,.62));g.position.y=-2.05;root.add(g);
+ }
+
+ soil();
+
+ if(selectedPlant==="palm"){
+   // Tapered, segmented trunk
+   const segments=14;
+   for(let i=0;i<segments;i++){
+     const y=-1.82+i*.23;
+     const r=.27-i*.007;
+     const seg=new THREE.Mesh(new THREE.CylinderGeometry(r*.92,r,.25,14),mat(i%2?0x91683f:0x805a37,.98));
+     seg.position.set(.03*Math.sin(i*.7),y,.02*Math.cos(i*.5));seg.rotation.z=.012*Math.sin(i);root.add(seg);
+   }
+   const crownY=1.45;
+   // curved fronds with many leaflets
+   for(let f=0;f<14;f++){
+     const a=f/14*Math.PI*2;
+     const len=1.75+(f%3)*.12;
+     const pts=[];
+     for(let j=0;j<=14;j++){
+       const t=j/14;
+       pts.push(new THREE.Vector3(Math.cos(a)*len*t,crownY+.12-.42*t*t,Math.sin(a)*len*t));
+     }
+     const rachis=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),32,.035,7,false),mat(0x6f9d43,.98));
+     root.add(rachis);
+     for(let j=3;j<=13;j++){
+       const t=j/14,p=pts[j];
+       const tangent=pts[Math.min(14,j+1)].clone().sub(pts[Math.max(0,j-1)]).normalize();
+       const side=new THREE.Vector3(-Math.sin(a),0,Math.cos(a));
+       for(const s of [-1,1]){
+         const leaflet=leafEllipsoid(p.x+side.x*.22*s,p.y+.02,p.z+side.z*.22*s,.42,.055,.025,0x3f8e49,a,-.10*s);
+         leaflet.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0),tangent.clone().add(side.multiplyScalar(.38*s)).normalize());
+       }
+     }
+   }
+   // dates
+   for(let i=0;i<28;i++){
+     const a=Math.random()*Math.PI*2,r=.18+Math.random()*.32;
+     sph(Math.cos(a)*r,.85-Math.random()*.45,Math.sin(a)*r,.055+Math.random()*.025,0xb98236,.98);
+   }
+
+ }else if(selectedPlant==="mangrove"){
+   const trunkColor=0x6f5138;
+   branchBetween(new THREE.Vector3(0,-1.7,0),new THREE.Vector3(0,.65,0),.24,.14,trunkColor);
+   const branchEnds=[];
+   for(let i=0;i<9;i++){
+     const a=i/9*Math.PI*2,base=new THREE.Vector3(0,.15+Math.random()*.55,0);
+     const end=new THREE.Vector3(Math.cos(a)*(1.0+Math.random()*.45),.85+Math.random()*.65,Math.sin(a)*(.65+Math.random()*.35));
+     branchBetween(base,end,.10,.04,trunkColor);branchEnds.push(end);
+     for(let j=0;j<4;j++){
+       const p=end.clone().add(new THREE.Vector3((Math.random()-.5)*.45,(Math.random()-.5)*.35,(Math.random()-.5)*.35));
+       leafEllipsoid(p.x,p.y,p.z,.30,.13,.055,0x347f50,a,(Math.random()-.5)*.5);
+     }
+   }
+   // arching prop roots
+   for(let i=0;i<18;i++){
+     const a=i/18*Math.PI*2;
+     const curve=new THREE.CatmullRomCurve3([
+       new THREE.Vector3(0,-.72,0),
+       new THREE.Vector3(Math.cos(a)*.55,-1.15,Math.sin(a)*.45),
+       new THREE.Vector3(Math.cos(a)*1.25,-1.95,Math.sin(a)*.9)
+     ]);
+     root.add(new THREE.Mesh(new THREE.TubeGeometry(curve,26,.045,7,false),mat(0x654832,.96)));
+   }
+   // pneumatophores
+   for(let i=0;i<20;i++){
+     const a=Math.random()*Math.PI*2,r=.6+Math.random()*1.3;
+     const h=.18+Math.random()*.4;
+     const pr=new THREE.Mesh(new THREE.ConeGeometry(.035,h,8),mat(0x5c4532,.9));pr.position.set(Math.cos(a)*r,-1.92+h/2,Math.sin(a)*r*.7);root.add(pr);
+   }
+
+ }else{
+   // Sidr tree: gnarled trunk, branches, dense rounded canopy with small oval leaves.
+   const trunkColor=0x705238;
+   branchBetween(new THREE.Vector3(0,-1.9,0),new THREE.Vector3(0,.55,0),.28,.15,trunkColor);
+   const ends=[];
+   for(let i=0;i<11;i++){
+     const a=i/11*Math.PI*2;
+     const base=new THREE.Vector3(0,.05+Math.random()*.65,0);
+     const end=new THREE.Vector3(Math.cos(a)*(1.0+Math.random()*.65),.75+Math.random()*.9,Math.sin(a)*(.65+Math.random()*.55));
+     branchBetween(base,end,.11,.035,trunkColor);ends.push(end);
+     for(let j=0;j<7;j++){
+       const p=end.clone().add(new THREE.Vector3((Math.random()-.5)*.75,(Math.random()-.5)*.55,(Math.random()-.5)*.55));
+       leafEllipsoid(p.x,p.y,p.z,.22,.11,.045,0x5f9c43,a,(Math.random()-.5)*.7);
+     }
+   }
+   // small sidr fruits
+   for(let i=0;i<16;i++){
+     const e=ends[Math.floor(Math.random()*ends.length)];
+     sph(e.x+(Math.random()-.5)*.45,e.y-.15+Math.random()*.35,e.z+(Math.random()-.5)*.35,.055,0xb38d3d,.95);
+   }
+ }
+}
+function plantLeaf(){
+ const pd=plantData[selectedPlant];
+
+ function tube(points,color,width=.012,opacity=.85){
+   const curve=new THREE.CatmullRomCurve3(points);
+   return new THREE.Mesh(
+     new THREE.TubeGeometry(curve,28,width,6,false),
+     mat(color,opacity)
+   );
+ }
+
+ function makeLeafBlade(opts){
+   const {
+     length=3.2,width=1.5,color=0x5a9f54,depth=.09,
+     tip=.85,base=.86,serr=.0,asym=.0,segments=120,
+     rough=.55,clear=.08,curl=.12
+   }=opts;
+
+   const shape=new THREE.Shape();
+   const top=[], bot=[];
+   for(let i=0;i<=segments;i++){
+     const t=i/segments;
+     const x=-length/2 + t*length;
+     const normalized=(x/(length/2));
+     const profile=Math.max(0,1-Math.pow(Math.abs(normalized),1.75));
+     const tipFactor=(t<.5 ? Math.pow(t*2,base) : Math.pow((1-t)*2,tip));
+     const serration=1 + serr*Math.sin(t*Math.PI*segments/4);
+     const localW=(width/2)*Math.pow(profile,.55)*Math.pow(Math.max(.001,tipFactor),.18)*serration;
+     const skew=asym*Math.sin(t*Math.PI);
+     top.push([x, localW*(1+skew)]);
+     bot.push([x,-localW*(1-skew)]);
+   }
+   shape.moveTo(top[0][0],top[0][1]);
+   for(const p of top.slice(1))shape.lineTo(p[0],p[1]);
+   for(const p of bot.reverse())shape.lineTo(p[0],p[1]);
+   shape.closePath();
+
+   const geo=new THREE.ExtrudeGeometry(shape,{
+     depth,bevelEnabled:true,bevelSize:.024,bevelThickness:.018,bevelSegments:3,curveSegments:48
+   });
+   geo.rotateX(-.05);
+   // Slight bend/camber across blade for a more organic appearance.
+   const pos=geo.attributes.position;
+   for(let i=0;i<pos.count;i++){
+     const x=pos.getX(i), y=pos.getY(i), z=pos.getZ(i);
+     const nx=x/(length/2);
+     const bend=curl*(1-nx*nx) + .035*Math.sin(nx*Math.PI);
+     pos.setZ(i,z+bend);
+   }
+   pos.needsUpdate=true;
+   geo.computeVertexNormals();
+
+   return new THREE.Mesh(
+     geo,
+     new THREE.MeshPhysicalMaterial({
+       color,roughness:rough,metalness:0,
+       clearcoat:clear,clearcoatRoughness:.6,
+       transparent:true,opacity:.975,side:THREE.DoubleSide
+     })
+   );
+ }
+
+ if(selectedPlant==="palm"){
+   // Date palm frond: bowed rachis + many long narrow leaflets, alternating slightly in angle and length.
+   const rachisPts=[];
+   for(let i=0;i<=22;i++){
+     const t=i/22;
+     rachisPts.push(new THREE.Vector3(
+       -2.25+t*4.5,
+       -.14 + .52*t + .14*Math.sin(t*Math.PI),
+       .08*Math.sin(t*Math.PI*1.2)
+     ));
+   }
+   root.add(tube(rachisPts,0x746b3d,.052,.98));
+
+   const count=42;
+   for(let i=0;i<count;i++){
+     const t=i/(count-1);
+     const x=-2.05+t*4.1;
+     const baseY=-.08+.48*t+.12*Math.sin(t*Math.PI);
+     const edgeFade=Math.sin(t*Math.PI);
+     const len=.54+.34*edgeFade;
+     const angleBias=(i%2===0?1:-1)*.035;
+
+     for(const side of [-1,1]){
+       const leaflet=makeLeafBlade({
+         length:len*1.9,width:.10,color:(i%3===0?0x4b984a:0x55a950),
+         depth:.028,tip:1.35,base:1.0,serr:.004,asym:.025,segments:52,
+         rough:.62,clear:.03,curl:.045
+       });
+       leaflet.position.set(x,baseY,0);
+       leaflet.rotation.z=(side>0?1:-1)*(1.10+.11*Math.cos(t*Math.PI))+angleBias;
+       leaflet.rotation.y=(side>0?-.10:.10);
+       leaflet.scale.set(1,1,.8);
+       root.add(leaflet);
+     }
+   }
+
+ } else if(selectedPlant==="mangrove"){
+   // Grey mangrove-like blade: leathery, elliptic to lanceolate, smoother margin, visible pinnate venation.
+   const leaf=makeLeafBlade({
+     length:3.45,width:1.35,color:0x4f956a,depth:.105,
+     tip:1.15,base:.95,serr:0,asym:.04,segments:140,
+     rough:.48,clear:.16,curl:.14
+   });
+   leaf.rotation.z=.02; leaf.rotation.x=-.03;
+   root.add(leaf);
+
+   // Midrib
+   root.add(tube([
+     new THREE.Vector3(-1.60,0,.18),
+     new THREE.Vector3(-.75,.01,.21),
+     new THREE.Vector3(.15,.00,.22),
+     new THREE.Vector3(.95,-.01,.19),
+     new THREE.Vector3(1.52,0,.16)
+   ],0x2d6547,.022,.96));
+
+   // Dense, gently curved lateral veins.
+   for(let i=-6;i<=6;i++){
+     if(i===0)continue;
+     const x=i*.215;
+     const maxY=.58*(1-Math.min(1,Math.abs(x)/1.55));
+     if(maxY<=.04) continue;
+     for(const side of [-1,1]){
+       const y=maxY*side;
+       root.add(tube([
+         new THREE.Vector3(x,0,.17),
+         new THREE.Vector3(x+.16,y*.33,.19),
+         new THREE.Vector3(x+.33,y*.70,.17),
+         new THREE.Vector3(x+.46,y,.14)
+       ],0x72b28b,.0085,.55));
+     }
+   }
+
+ } else {
+   // Sidr: broad ovate blade, subtly wavy/serrulate edge, three strong basal veins.
+   const leaf=makeLeafBlade({
+     length:3.15,width:1.80,color:0x719c49,depth:.10,
+     tip:1.05,base:.90,serr:.018,asym:.055,segments:150,
+     rough:.58,clear:.06,curl:.105
+   });
+   leaf.rotation.z=-.035; leaf.rotation.x=.025;
+   root.add(leaf);
+
+   // Main central vein
+   root.add(tube([
+     new THREE.Vector3(-1.40,0,.18),
+     new THREE.Vector3(-.55,.015,.21),
+     new THREE.Vector3(.35,.01,.20),
+     new THREE.Vector3(1.28,0,.16)
+   ],0x466837,.023,.97));
+
+   // Two strong basal veins typical of the visual appearance of sidr leaves.
+   root.add(tube([
+     new THREE.Vector3(-1.34,.02,.18),
+     new THREE.Vector3(-.88,.28,.20),
+     new THREE.Vector3(-.12,.52,.18),
+     new THREE.Vector3(.78,.72,.14)
+   ],0x55763d,.016,.88));
+   root.add(tube([
+     new THREE.Vector3(-1.34,-.02,.18),
+     new THREE.Vector3(-.88,-.28,.20),
+     new THREE.Vector3(-.12,-.52,.18),
+     new THREE.Vector3(.78,-.72,.14)
+   ],0x55763d,.016,.88));
+
+   // Secondary network from the central and basal veins
+   for(let i=-5;i<=5;i++){
+     const x=-.68+i*.22;
+     const maxY=.70*(1-Math.min(1,Math.abs(x)/1.45));
+     if(maxY<.07)continue;
+     for(const side of [-1,1]){
+       root.add(tube([
+         new THREE.Vector3(x,0,.17),
+         new THREE.Vector3(x+.13,side*maxY*.30,.18),
+         new THREE.Vector3(x+.27,side*maxY*.62,.16),
+         new THREE.Vector3(x+.39,side*maxY*.92,.13)
+       ],0x7f9f60,.008,.48));
+     }
+   }
+ }
+}
+function leafSurface(){
+ // Educational magnified epidermis: irregular pavement cells on a gently curved green surface.
+ const base=new THREE.Mesh(
+   new THREE.BoxGeometry(4.6,3.0,.18,22,16,1),
+   new THREE.MeshPhysicalMaterial({color:0x78a85c,roughness:.72,clearcoat:.04,side:THREE.DoubleSide})
+ );
+ const p=base.geometry.attributes.position;
+ for(let i=0;i<p.count;i++){
+   const x=p.getX(i),y=p.getY(i),z=p.getZ(i);
+   p.setZ(i,z+.06*Math.sin(x*1.5)*Math.cos(y*1.7));
+ }
+ p.needsUpdate=true;base.geometry.computeVertexNormals();root.add(base);
+
+ for(let y=-1.15;y<=1.15;y+=.46){
+   for(let x=-1.9;x<=1.9;x+=.62){
+     const pts=[];
+     const sides=7;
+     for(let k=0;k<sides;k++){
+       const a=Math.PI*2*k/sides;
+       const r=.25*(1+.12*Math.sin(k*2.7+x*2));
+       pts.push(new THREE.Vector3(x+Math.cos(a)*r,y+Math.sin(a)*r*.75,.14));
+     }
+     pts.push(pts[0].clone());
+     root.add(new THREE.Line(
+       new THREE.BufferGeometry().setFromPoints(pts),
+       new THREE.LineBasicMaterial({color:0x4e713d,transparent:true,opacity:.58})
+     ));
+   }
+ }
+ // a few stomata previews
+ for(const [x,y] of [[-.9,.25],[.8,-.45],[1.35,.7]]){
+   let g1=new THREE.Mesh(new THREE.CapsuleGeometry(.10,.32,8,16),mat(0x4b8b55,.95));
+   let g2=g1.clone();g1.position.set(x-.11,y,.24);g2.position.set(x+.11,y,.24);
+   g1.rotation.z=.18;g2.rotation.z=-.18;root.add(g1,g2);
+ }
+}
+
+function stomataStage(){
+ // Large stoma: two kidney-like guard cells surrounding a pore.
+ const pore=new THREE.Mesh(new THREE.CapsuleGeometry(.23,1.18,12,28),
+   new THREE.MeshBasicMaterial({color:0x07100b,transparent:true,opacity:.92}));
+ pore.rotation.z=Math.PI/2; pore.scale.set(.5,1,1); root.add(pore);
+
+ for(const side of [-1,1]){
+   const guard=new THREE.Mesh(
+     new THREE.TorusGeometry(.82,.25,18,48,Math.PI*1.38),
+     new THREE.MeshPhysicalMaterial({color:0x62ad5f,roughness:.52,clearcoat:.08})
+   );
+   guard.position.x=side*.55;
+   guard.rotation.z=side>0?.75:-2.39;
+   guard.scale.set(.75,1.15,.45);
+   root.add(guard);
+   // chloroplast dots in guard cells
+   for(let i=0;i<6;i++){
+     const a=-1.2+i*.48;
+     const c=new THREE.Mesh(new THREE.SphereGeometry(.07,10,8),mat(0x247b36,.95));
+     c.position.set(side*.70 + side*.18*Math.cos(a), .58*Math.sin(a), .18);
+     root.add(c);
+   }
+ }
+}
+
+function leafCrossSection(){
+ // Layers: cuticle/upper epidermis, palisade, spongy mesophyll, lower epidermis.
+ const W=4.7;
+ const top=new THREE.Mesh(new THREE.BoxGeometry(W,.18,.72),mat(0x9acb70,.96));top.position.y=1.35;root.add(top);
+ for(let x=-2.05;x<=2.05;x+=.38){
+   let c=new THREE.Mesh(new THREE.CapsuleGeometry(.12,.62,6,12),mat(0x54a94f,.94));
+   c.position.set(x,.62,0);root.add(c);
+   for(let j=0;j<3;j++){
+     let ch=new THREE.Mesh(new THREE.SphereGeometry(.045,8,6),mat(0x207a32,.96));
+     ch.position.set(x-.07+j*.07,.55+(j%2)*.18,.14);root.add(ch);
+   }
+ }
+ // spongy cells with air gaps
+ for(let row=0;row<3;row++){
+   for(let i=0;i<7;i++){
+     let x=-1.9+i*.62+(row%2)*.22,y=-.05-row*.36;
+     let s=new THREE.Mesh(new THREE.SphereGeometry(.22+(i%2)*.04,12,10),mat(0x75b95d,.86));
+     s.scale.set(1.2,.72,.75);s.position.set(x,y,0);root.add(s);
+   }
+ }
+ const low=new THREE.Mesh(new THREE.BoxGeometry(W,.20,.72),mat(0x8fbe6a,.96));low.position.y=-1.32;root.add(low);
+}
+
+function mesophyllStage(){
+ // Palisade on one side, irregular spongy cells with visible intercellular spaces.
+ for(let i=-5;i<=5;i++){
+   const c=new THREE.Mesh(new THREE.CapsuleGeometry(.16,.85,8,14),mat(0x55a94f,.95));
+   c.position.set(i*.38,.72,0);root.add(c);
+   for(let j=0;j<4;j++){
+     const ch=new THREE.Mesh(new THREE.SphereGeometry(.055,8,7),mat(0x1e7630,.96));
+     ch.position.set(i*.38-.07+(j%2)*.14,.48+Math.floor(j/2)*.28,.15);root.add(ch);
+   }
+ }
+ for(let i=0;i<15;i++){
+   const a=i*.91,r=.35+(.12*(i%3));
+   const s=new THREE.Mesh(new THREE.SphereGeometry(r,12,10),mat(0x78b961,.88));
+   s.scale.set(1.15,.72,.8);
+   s.position.set(-1.75+(i%6)*.7,-.35-Math.floor(i/6)*.58,(i%2)*.12);
+   root.add(s);
+ }
+}
+
+function chloroplastStage(){
+ // Chloroplast with simplified double envelope, grana stacks and stroma lamellae.
+ const outer=new THREE.Mesh(
+   new THREE.SphereGeometry(1.65,48,28),
+   new THREE.MeshPhysicalMaterial({color:0x4d9c45,roughness:.5,transparent:true,opacity:.62,side:THREE.DoubleSide})
+ );
+ outer.scale.set(1.55,.72,.62);root.add(outer);
+ const inner=new THREE.Mesh(
+   new THREE.SphereGeometry(1.48,42,24),
+   new THREE.MeshPhysicalMaterial({color:0x8dc866,roughness:.65,transparent:true,opacity:.28,side:THREE.DoubleSide})
+ );
+ inner.scale.set(1.55,.72,.62);root.add(inner);
+
+ for(let g=-2;g<=2;g++){
+   const gx=g*.58;
+   for(let j=0;j<6;j++){
+     const disk=new THREE.Mesh(new THREE.CylinderGeometry(.28,.28,.055,24),mat(0x277f36,.96));
+     disk.rotation.x=Math.PI/2;disk.position.set(gx,-.15+j*.075,.12*Math.sin(g));root.add(disk);
+   }
+ }
+ for(let i=-2;i<2;i++){
+   const line=new THREE.Mesh(new THREE.BoxGeometry(.55,.035,.18),mat(0x3c9445,.88));
+   line.position.set(i*.58+.29,.04,.02);root.add(line);
+ }
+}
+function plantTissue(){
+ for(let y=-4;y<=4;y++)for(let x=-6;x<=6;x++){
+   let wall=new THREE.Mesh(new THREE.BoxGeometry(.34,.30,.16),new THREE.MeshPhysicalMaterial({color:0x7acb70,transparent:true,opacity:.22,roughness:.4,side:THREE.DoubleSide}));
+   wall.position.set(x*.34,y*.30,0);root.add(wall);
+   let vac=new THREE.Mesh(new THREE.BoxGeometry(.24,.19,.10),mat(0x8ad5e8,.18));vac.position.copy(wall.position);root.add(vac);
+   sph(x*.34-.08,y*.30,.08,.038,0x7150a0,.95);
+ }
+}
+function plantCells(){
+ for(let y=-3;y<=3;y++)for(let x=-5;x<=5;x++){
+   let g=new THREE.Group();
+   let wall=new THREE.Mesh(new THREE.BoxGeometry(.40,.34,.18),new THREE.MeshPhysicalMaterial({color:0x79c96f,transparent:true,opacity:.24,roughness:.4,side:THREE.DoubleSide}));
+   wall.position.set(x*.42,y*.36,(Math.random()-.5)*.12);root.add(wall);
+   sph(wall.position.x-.09,wall.position.y,wall.position.z+.08,.045,0x704a9c,.95);
+ }
+}
+function plantCell(){
+ // Plant cell for Grade 1 Intermediate: ONLY the six requested structures.
+ // Each science label has one unique 3D target to prevent two names pointing to one organelle.
+ const wall=new THREE.Mesh(
+   new THREE.BoxGeometry(4.0,2.8,1.4),
+   new THREE.MeshPhysicalMaterial({color:0x64b95f,transparent:true,opacity:.20,roughness:.4,side:THREE.DoubleSide,depthWrite:false})
+ );
+ root.add(wall);
+ const wallAnchor=new THREE.Object3D();
+ wallAnchor.position.set(1.96,.95,.70);
+ wallAnchor.userData={name:"الجدار الخلوي",desc:"طبقة قوية خارج الغشاء الخلوي تدعم الخلية النباتية وتحافظ على شكلها."};
+ root.add(wallAnchor);
+
+ const membrane=new THREE.Mesh(
+   new THREE.BoxGeometry(3.72,2.52,1.18),
+   new THREE.MeshPhysicalMaterial({color:0x62c8dc,transparent:true,opacity:.16,roughness:.25,side:THREE.DoubleSide,depthWrite:false})
+ );
+ root.add(membrane);
+ const membraneAnchor=new THREE.Object3D();
+ membraneAnchor.position.set(-1.82,1.03,.58);
+ membraneAnchor.userData={name:"الغشاء الخلوي",desc:"غشاء رقيق يقع مباشرة داخل الجدار الخلوي وينظم مرور المواد من الخلية وإليها."};
+ root.add(membraneAnchor);
+
+ // Cytoplasm is represented by a thin translucent volume around the vacuole.
+ const cytoplasm=new THREE.Mesh(
+   new THREE.BoxGeometry(3.48,2.28,.98),
+   new THREE.MeshPhysicalMaterial({color:0xd8f1b5,transparent:true,opacity:.11,roughness:.3,side:THREE.DoubleSide,depthWrite:false})
+ );
+ root.add(cytoplasm);
+ const cytAnchor=new THREE.Object3D();
+ cytAnchor.position.set(1.58,.98,.46);
+ cytAnchor.userData={name:"السيتوبلازم",desc:"مادة هلامية تملأ الحيز داخل الغشاء الخلوي وتوجد فيها مكونات الخلية."};
+ root.add(cytAnchor);
+
+ // Large central vacuole.
+ const vacuole=new THREE.Mesh(
+   new THREE.BoxGeometry(2.38,1.48,.72),
+   new THREE.MeshPhysicalMaterial({color:0x8bdced,transparent:true,opacity:.42,roughness:.18,side:THREE.DoubleSide,depthWrite:false})
+ );
+ vacuole.position.set(.20,.04,-.02);
+ vacuole.userData={name:"الفجوة العصارية",desc:"فجوة مركزية كبيرة تخزن الماء والمواد الذائبة وتساعد في الحفاظ على ضغط الامتلاء ودعم الخلية."};
+ root.add(vacuole);
+
+ // Nucleus is displaced to the side by the large central vacuole.
+ const nucleusMesh=sph(-1.28,-.55,.30,.34,0x7448af,.98);
+ nucleusMesh.userData={name:"النواة",desc:"تحتوي معظم المادة الوراثية وتساعد في تنظيم أنشطة الخلية النباتية."};
+ clickable.push(nucleusMesh);
+
+ // Chloroplasts: several are visible, but ONLY ONE designated chloroplast is the label target.
+ // This prevents the callout from jumping between identical chloroplast meshes during rotation.
+ const chloroplastPositions=[
+   [-1.28,.55,.28,-.65],[-.72,.90,.26,.15],[.15,.94,.25,.30],[1.02,.72,.28,.65],
+   [1.42,.15,.26,1.25],[1.28,-.62,.27,1.85],[.45,-.92,.26,2.45],[-.55,-.92,.25,2.85]
+ ];
+ chloroplastPositions.forEach((q,i)=>{
+   const c=new THREE.Mesh(new THREE.CapsuleGeometry(.12,.30,6,14),mat(0x35ad4c,.98));
+   c.position.set(q[0],q[1],q[2]);c.rotation.z=q[3];
+   if(i===0){
+     c.userData={name:"البلاستيدة الخضراء",desc:"عضية تحتوي الكلوروفيل وتقوم بعملية البناء الضوئي."};
+     clickable.push(c);
+   }
+   root.add(c);
+ });
+}
+const humanBuilders=[null,organ,tissue,cells,cell,nucleus,chromosomes,dna];
+const plantBuilders=[plantWhole,plantLeaf,leafSurface,stomataStage,leafCrossSection,mesophyllStage,plantCells,plantCell,chloroplastStage,nucleus,chromosomes,dna];
+
+function build(){
+ clear();
+ const gameteOverview=(mode==='human'&&selected==='gamete'&&current===0);
+ const useAtlas=(mode==='human'&&current===0&&!gameteOverview);
+ atlas.style.display=useAtlas?'block':'none';
+ renderer.domElement.style.display=useAtlas?'none':'block';
+ document.getElementById('organPicker').style.display=(mode==='human'&&current===0&&humanCellType==='somatic')?'grid':'none';
+ document.getElementById('plantPicker').style.display=(mode==='plant'&&current===0)?'block':'none';
+
+ if(gameteOverview){
+   buildGameteBodyOverview();
+   camera.position.set(0,0,7.2);
+   controls.target.set(0,0,0);controls.update();
+ }else if(mode==='plant'&&current===0){
+   plantBuilders[0]();
+   camera.position.set(0,.15,6.4);
+   controls.target.set(0,-.10,0);controls.update();
+ }else if(current>0){
+   (mode==='plant'?plantBuilders:humanBuilders)[current]();
+   camera.position.set(0,0,6.2);controls.target.set(0,0,0);controls.update();
+ }
+}
+function update(){
+ let d=organData[selected];
+ document.getElementById('title').textContent=(mode==='human'&&current===1)?d.name:info[current][0];
+ let extra="";
+ if(mode==='human'&&current===0)extra=` العضو المختار الآن: ${d.name}.`;
+ if(mode==='human'&&current===1)extra=` ${d.desc}`;
+ if(mode==='human'&&current===2){
+   const visual={
+     heart:" لاحظي الألياف العضلية القلبية المتفرعة والنوى المركزية.",
+     lung:" لاحظي الحويصلات الهوائية الرقيقة المتجمعة حول شبكة وعائية مبسطة.",
+     brain:" لاحظي أجسام الخلايا العصبية وامتداداتها المتفرعة.",
+     stomach:" لاحظي خلايا بطانة المعدة المتراصة والحفر الغدية المبسطة.",
+     skin:" لاحظي طبقات البشرة والأدمة والخلايا المتراصة التي تكوّن حاجزًا واقيًا.",
+     gamete:" لاحظي الشكل المتخصص للخلايا الجنسية، وأن الخلية الجنسية الناضجة تحمل 23 كروموسومًا."
+   };
+   extra=` نوع النسيج المعروض: ${d.tissue}.${visual[selected]}`;
+ }
+ if(mode==='human'&&current===4){
+   const cellText={
+     heart:" خلية عضلية قلبية مبسطة: طويلة، قابلة للانقباض، وبها نواة مركزية.",
+     lung:" خلية طلائية رئوية مبسطة: رقيقة لتناسب منطقة تبادل الغازات.",
+     brain:" خلية عصبية مبسطة: جسم خلوي مع تغصنات ومحور عصبي طويل.",
+     stomach:" خلية من بطانة المعدة مبسطة: طويلة ومتراصة لحماية البطانة والمساهمة في وظائفها.",
+     skin:" خلية جلدية مبسطة من البشرة، تشارك في تكوين حاجز واقٍ للجسم.",
+     gamete:(humanSex==="female"?" بويضة بشرية مبسطة تحمل 23 كروموسومًا في النواة.":" حيوان منوي بشري مبسط يحمل 23 كروموسومًا في النواة.")
+   };
+   extra=` ${cellText[selected]}`;
+ }
+ if(mode==='plant'){
+   const pd=plantData[selectedPlant];
+   if(current===0) extra=` النبات المختار: ${pd.name}. ${pd.desc}`;
+   if(current===1){
+   const leafDesc={
+    palm:" سعفة نخيل طويلة مقوسة ذات محور وسطي قوي ووريقات ضيقة كثيرة تتوزع على جانبيه بزوايا مختلفة.",
+    mangrove:" ورقة قرم جلدية المظهر، بسيطة وبيضاوية مائلة للشكل الرمحي، بحافة ملساء نسبيًا وعروق ريشية واضحة.",
+    sidr:" ورقة سدر عريضة بيضاوية مع تموج/تسنن دقيق عند الحافة وثلاثة عروق رئيسية بارزة تبدأ قرب قاعدة الورقة."
+   };
+   extra=` ${pd.name}: ${leafDesc[selectedPlant]}`;
+ } else if(current===2) extra=" نحن الآن على سطح الورقة ونشاهد البشرة بصورة مكبرة.";
+ else if(current===3) extra=" الثغر يفتح مسارًا لتبادل الغازات، والخلايا الحارسة تتحكم في فتحة الثغر.";
+ else if(current===4) extra=" المقطع يوضح ترتيب طبقات الورقة من البشرة إلى الأنسجة الداخلية.";
+ else if(current===5) extra=" لاحظي كثافة الخلايا العمادية والفراغات الهوائية في النسيج الإسفنجي.";
+ else if(current===8) extra=" الآن دخلنا إلى البلاستيدة الخضراء ونشاهد نموذجًا مبسطًا لأكوام الثايلاكويد (الجرانا).";
+   if(current===2) extra=' تظهر الجدر الخلوية بوضوح لأن الخلايا النباتية محاطة بجدار خلوي.';
+   if(current===4) extra=' لاحظي الجدار الخلوي والغشاء الخلوي والسيتوبلازم والفجوة العصارية والنواة والبلاستيدات الخضراء.';
+ }
+ document.getElementById('desc').textContent=info[current][1]+extra;
+ document.getElementById('badge').textContent='المستوى: '+((mode==='human'&&current===1)?d.name:info[current][0]);
+ [...steps.children].forEach((b,i)=>b.classList.toggle('active',i===current));
+}
+function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
+function camTo(pos,look,dur,done=()=>{}){
+ transitioning=true;controls.enabled=false;
+ const sp=camera.position.clone(), sl=controls.target.clone(), t0=performance.now();
+ function f(now){
+  let p=Math.min(1,(now-t0)/dur),e=ease(p);
+  camera.position.lerpVectors(sp,pos,e);controls.target.lerpVectors(sl,look,e);camera.lookAt(controls.target);
+  document.getElementById('vignette').style.opacity=String(.14+.48*e);
+  if(p<1)requestAnimationFrame(f);else{transitioning=false;controls.enabled=true;done()}
+ } requestAnimationFrame(f)
+}
+function microscopicTunnel(nextStage){
+ const tunnelLabel=document.querySelector('#tunnel b')||document.querySelector('#tunnel strong')||document.querySelector('#tunnel span');
+ if(tunnelLabel) tunnelLabel.textContent=(mode==='plant'?'نقترب الآن من المستوى المجهري داخل الورقة...':'ندخل الآن إلى داخل العضو...');
+
+ transitioning=true;controls.enabled=false;
+ tunnel.classList.add('on');tunnelLabel.classList.add('on');
+ const start=performance.now(), dur=1200;
+ function fly(now){
+   let p=Math.min(1,(now-start)/dur);
+   camera.position.z=3.0-2.1*p;
+   root.scale.setScalar(1+3.2*p);
+   root.rotation.z+=.01;
+   if(p<1){requestAnimationFrame(fly)}
+   else{
+     const flash=document.getElementById('flash');flash.style.opacity=.75;
+     setTimeout(()=>{
+       current=nextStage;build();update();
+       root.scale.setScalar(1);
+       camera.position.set(0,0,7.0);
+       tunnel.classList.remove('on');tunnelLabel.classList.remove('on');flash.style.opacity=0;
+       camTo(new THREE.Vector3(0,0,5.25),new THREE.Vector3(0,0,0),650,()=>{document.getElementById('vignette').style.opacity=.14});
+     },180);
+   }
+ } requestAnimationFrame(fly)
+}
+
+function plantMicroTransition(target,label){
+ const tunnel=document.getElementById('tunnel');
+ const labelEl=tunnel.querySelector('b')||tunnel.querySelector('strong')||tunnel.querySelector('span');
+ if(labelEl) labelEl.textContent=label;
+ tunnel.style.display='flex'; tunnel.style.opacity='0';
+ tunnel.style.transition='opacity .28s';
+ requestAnimationFrame(()=>tunnel.style.opacity='1');
+
+ const start=camera.position.clone();
+ const end=new THREE.Vector3(0,0,1.25);
+ const t0=performance.now(), dur=1050;
+ function dive(now){
+   const q=Math.min(1,(now-t0)/dur);
+   const e=q*q*(3-2*q);
+   camera.position.lerpVectors(start,end,e);
+   if(root){root.scale.setScalar(1+e*.55);root.rotation.z+=.0018;}
+   if(q<1) requestAnimationFrame(dive);
+   else{
+     current=target; build(); update();
+     camera.position.set(0,0,1.45);
+     if(root)root.scale.setScalar(.84);
+     const t1=performance.now();
+     function reveal(n){
+       const q2=Math.min(1,(n-t1)/800),e2=1-Math.pow(1-q2,3);
+       camera.position.z=1.45+(6.3-1.45)*e2;
+       if(root)root.scale.setScalar(.84+.16*e2);
+       if(q2<1)requestAnimationFrame(reveal);
+       else camera.position.set(0,0,6.3);
+     }
+     requestAnimationFrame(reveal);
+     tunnel.style.opacity='0';
+     setTimeout(()=>tunnel.style.display='none',320);
+   }
+ }
+ requestAnimationFrame(dive);
+}
+
+function cinematicNext(){
+ if(mode==='plant'){
+   if(current===1){plantMicroTransition(2,'نقترب من سطح الورقة حتى يملأ مجال الرؤية...');return;}
+   if(current===2){plantMicroTransition(3,'نقترب من إحدى فتحات الثغور على بشرة الورقة...');return;}
+   if(current===3){plantMicroTransition(4,'نعبر إلى داخل الورقة لرؤية طبقاتها الداخلية...');return;}
+   if(current===4){plantMicroTransition(5,'نقترب من النسيج العمادي والإسفنجي...');return;}
+   if(current===7){plantMicroTransition(8,'ندخل إلى البلاستيدة الخضراء...');return;}
+ }
+
+ if(transitioning||current>=7)return;
+ if(current===0){
+   if(mode==='human'){atlas.style.display='none';renderer.domElement.style.display='block';document.getElementById('organPicker').style.display='none';
+document.getElementById('plantPicker').style.display='none';}
+   current=1;build();update();camera.position.set(0,0,8.5);
+   camTo(new THREE.Vector3(0,0,3.1),new THREE.Vector3(0,0,0),1100);
+   return;
+ }
+ if(current===1){
+   tunnelLabel.textContent=mode==='human'?'رحلة مجهرية...':'نقترب الآن من سطح الورقة إلى المستوى المجهري...';
+   microscopicTunnel(2);return
+ }
+ const target=current+1;
+ camTo(new THREE.Vector3(0,0,2.45),new THREE.Vector3(0,0,0),650,()=>{
+   const flash=document.getElementById('flash');flash.style.opacity=.5;
+   setTimeout(()=>{
+    current=target;build();update();camera.position.set(0,0,7.3);flash.style.opacity=0;
+    camTo(new THREE.Vector3(0,0,5.35),new THREE.Vector3(0,0,0),600,()=>{document.getElementById('vignette').style.opacity=.14});
+   },160)
+ })
+}
+function go(i){
+ if(transitioning)return;
+ current=Math.max(0,Math.min(7,i));
+ let f=document.getElementById('flash');f.style.opacity=.4;
+ setTimeout(()=>{
+   build();update();
+   if(current===1){
+     root.rotation.set(0,0,0);
+     frameCurrentModel(1.34);
+     scrollToVisualization();
+   }else if(current===4){
+     makeEducationalCellTransparent();
+     frameCurrentModel(1.28);
+   }
+   f.style.opacity=0;
+   document.getElementById('vignette').style.opacity=.14;
+ },220)
+}
+
+function choosePath(which){
+ const lobby=document.getElementById('choice');
+ lobby.style.transition='opacity .45s, transform .45s';
+ lobby.style.opacity='0';lobby.style.transform='scale(1.08)';
+ setTimeout(()=>{
+  mode=which;
+  info=(mode==='human'?humanInfo:plantInfo);
+  current=0;
+  lobby.style.display='none';
+  document.getElementById('steps').style.display='flex';
+  document.querySelector('.top').style.display='flex';
+  document.querySelector('.panel').style.display='block';
+  document.getElementById('hint').style.display='block';
+  rebuildSteps();
+  build();update();
+  if(mode==='plant'){renderer.domElement.style.display='block';camera.position.set(0,0,6.3);}
+ },420);
+}
+window.choosePath=choosePath;
+
+window.next=cinematicNext;
+window.prev=()=>{if(!transitioning)go(current-1)};
+window.resetView=()=>{if(current>0&&!transitioning)build()};
+window.selectPlant=k=>{
+ selectedPlant=k;
+ document.querySelectorAll('#plantPicker button').forEach(b=>b.classList.toggle('on',b.dataset.plant===k));
+ if(mode==='plant'&&current===0){build();update()}
+};
+window.selectOrgan=k=>{
+ selected=k;
+ document.querySelectorAll('#organPicker button').forEach(b=>b.classList.toggle('on',b.dataset.organ===k));
+ refreshHumanJourneyText();
+ rebuildSteps();
+ update();
+
+ if(mode==='human'&&current===0){
+   setTimeout(()=>{
+     go(1);
+     setTimeout(()=>{frameCurrentModel(1.34);scrollToVisualization();},420);
+   },100);
+ }else if(mode==='human'){
+   build();update();
+   if(current===1)frameCurrentModel(1.34);
+   if(current===4)makeEducationalCellTransparent();
+   requestAnimationFrame(renderScienceLabels);
+   scrollToVisualization();
+ }
+};
+window.autoTour=()=>{if(timer){clearInterval(timer);timer=null;return}go(0);timer=setInterval(()=>{if(!transitioning&&current<7)cinematicNext();if(current>=7){clearInterval(timer);timer=null}},5000)};
+
+const ray=new THREE.Raycaster(),mouse=new THREE.Vector2(),tip=document.getElementById('tooltip');
+function hit(e){if(current!==4)return null;let r=renderer.domElement.getBoundingClientRect();mouse.x=((e.clientX-r.left)/r.width)*2-1;mouse.y=-((e.clientY-r.top)/r.height)*2+1;ray.setFromCamera(mouse,camera);return ray.intersectObjects(clickable,true).find(h=>h.object.userData?.name)}
+renderer.domElement.addEventListener('click',e=>{let h=hit(e);if(h){document.getElementById('title').textContent=h.object.userData.name;document.getElementById('desc').textContent=h.object.userData.desc}});
+renderer.domElement.addEventListener('mousemove',e=>{let h=hit(e);if(h){tip.style.display='block';tip.textContent=h.object.userData.name;tip.style.left=e.clientX+12+'px';tip.style.top=e.clientY+12+'px'}else tip.style.display='none'});
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+let activeScienceTags=[];
+
+function animate(){
+ requestAnimationFrame(animate);
+ controls.update();
+
+ // Automatic rotation caused scientific labels to drift/flicker.
+ // Keep automatic motion only for unlabeled overview stages.
+ const hasLabels=activeScienceTags && activeScienceTags.length>0;
+ if(current>0 && !transitioning && !hasLabels)root.rotation.y+=.0008;
+
+ // Labels follow the camera/object continuously during manual 360° rotation.
+ if(hasLabels)updateScienceLabelPositions();
+
+ renderer.render(scene,camera);
+}
+document.getElementById('steps').style.display='none';
+document.querySelector('.top').style.display='none';
+document.querySelector('.panel').style.display='none';
+document.getElementById('hint').style.display='none';
+document.getElementById('organPicker').style.display='none';
+atlas.style.display='none';
+renderer.domElement.style.display='none';
+animate();
+
+
+const plantStageLabels={
+ 2:[
+  {n:"البشرة",f:"طبقة خارجية تساعد على حماية الورقة وتقليل فقد الماء.",p:[0,1.0,.25]},
+  {n:"خلايا البشرة",f:"خلايا متراصة تكوّن الغطاء الخارجي للورقة.",p:[-1.25,.15,.25]},
+  {n:"ثغر",f:"فتحة مجهرية تسمح بتبادل الغازات وتشارك في تنظيم فقد الماء.",p:[1.18,-.45,.28]}
+ ],
+ 3:[
+  {n:"فتحة الثغر",f:"الممر الذي يتحرك عبره ثاني أكسيد الكربون والأكسجين وبخار الماء.",p:[0,0,.25]},
+  {n:"خلية حارسة",f:"إحدى الخليتين اللتين تتحكمان في اتساع فتحة الثغر وإغلاقها.",p:[-.68,.05,.3]},
+  {n:"بلاستيدات الخلايا الحارسة",f:"توجد بلاستيدات خضراء في الخلايا الحارسة وتساهم في نشاطها الأيضي.",p:[.78,.55,.3]}
+ ],
+ 4:[
+  {n:"البشرة العليا",f:"طبقة واقية على السطح العلوي للورقة.",p:[0,1.35,.1]},
+  {n:"النسيج العمادي",f:"خلايا متراصة وغنية بالبلاستيدات الخضراء، لذلك يعد موقعًا مهمًا للبناء الضوئي.",p:[-1.15,.62,.18]},
+  {n:"النسيج الإسفنجي",f:"خلايا أقل تراصًا وبينها فراغات هوائية تسهّل انتشار الغازات داخل الورقة.",p:[1.15,-.5,.18]},
+  {n:"البشرة السفلى",f:"الطبقة السفلية من البشرة، وتوجد فيها الثغور في كثير من النباتات.",p:[0,-1.32,.1]}
+ ],
+ 5:[
+  {n:"خلايا عمادية",f:"خلايا طويلة نسبيًا ومتقاربة تحتوي عددًا كبيرًا من البلاستيدات الخضراء.",p:[-1.1,.75,.2]},
+  {n:"خلايا إسفنجية",f:"خلايا غير منتظمة نسبيًا وتوجد بينها فراغات هوائية.",p:[1.2,-.5,.18]},
+  {n:"فراغ هوائي",f:"فراغ بين الخلايا يسمح بانتشار الغازات داخل الورقة.",p:[0,-.7,.15]}
+ ],
+ 7:[
+  {n:"الجدار الخلوي",f:"طبقة قوية خارج الغشاء الخلوي تدعم الخلية النباتية وتحافظ على شكلها.",p:[1.96,.95,.70]},
+  {n:"الغشاء الخلوي",f:"غشاء رقيق داخل الجدار الخلوي ينظم مرور المواد من الخلية وإليها.",p:[-1.82,1.03,.58]},
+  {n:"السيتوبلازم",f:"مادة هلامية تملأ الحيز داخل الغشاء وتوجد فيها مكونات الخلية.",p:[1.58,.98,.46]},
+  {n:"الفجوة العصارية",f:"فجوة مركزية كبيرة تخزن الماء والمواد الذائبة وتساعد في الحفاظ على ضغط الامتلاء.",p:[.20,.04,-.02]},
+  {n:"النواة",f:"تحتوي معظم المادة الوراثية وتساعد في تنظيم أنشطة الخلية.",p:[-1.28,-.55,.30]},
+  {n:"البلاستيدة الخضراء",f:"تحتوي الكلوروفيل ويتم فيها البناء الضوئي.",p:[-1.28,.55,.28]}
+ ],
+ 8:[
+  {n:"الغلاف",f:"غشاءان يحيطان بالبلاستيدة الخضراء ويفصلان داخلها عن السيتوبلازم.",p:[-1.45,.15,.12]},
+  {n:"الجرانا",f:"أكوام من أغشية الثايلاكويد؛ توجد عليها مكونات التفاعلات الضوئية للبناء الضوئي.",p:[0,.15,.15]},
+  {n:"الستروما",f:"السائل الداخلي المحيط بالجرانا، وتحدث فيه تفاعلات تثبيت الكربون.",p:[1.15,-.35,.15]},
+  {n:"صفائح الستروما",f:"أغشية تربط بعض أكوام الثايلاكويد ببعضها.",p:[.45,.55,.12]}
+ ],
+ 9:[
+  {n:"النواة",f:"تحتوي DNA المنظم في كروموسومات.",p:[0,.15,.1]},
+  {n:"المادة الوراثية",f:"تعليمات وراثية مخزنة أساسًا في DNA.",p:[.85,-.55,.08]}
+ ],
+ 10:[
+  {n:"كروموسوم",f:"تركيب من DNA وبروتينات يحمل المعلومات الوراثية.",p:[-.55,.25,.15]},
+  {n:"DNA",f:"المادة الوراثية التي تكوّن الجزء الأساسي من الكروموسومات.",p:[.9,-.4,.15]}
+ ],
+ 11:[
+  {n:"DNA",f:"جزيء ذو لولب مزدوج يحمل المعلومات الوراثية.",p:[0,0,.15]}
+ ]
+};
+
+/* activeScienceTags initialized earlier before animation starts */
+
+function clearScienceLabels(){
+ const box=document.getElementById('scienceLabels');
+ if(box)box.innerHTML='';
+ const lines=document.getElementById('leaderLines');
+ if(lines)lines.innerHTML='';
+ const card=document.getElementById('scienceCard');
+ if(card)card.classList.remove('show');
+}
+function showScienceCard(name,func){
+ document.getElementById('sciencePart').textContent=name;
+ document.getElementById('scienceFunction').textContent=func;
+ document.getElementById('scienceCard').classList.remove('show');
+ void document.getElementById('scienceCard').offsetWidth;
+ document.getElementById('scienceCard').classList.add('show');
+}
+
+function renderScienceLabels(){
+ clearScienceLabels();
+ activeScienceTags=[];
+ if(mode==='human'){renderHumanLabels();return;}
+ if(mode!=='plant')return;
+ const data=plantStageLabels[current];
+ if(!data)return;
+ const box=document.getElementById('scienceLabels');
+ data.forEach(item=>{
+   const b=document.createElement('button');
+   b.className='scienceTag'; b.textContent=item.n;
+   b.onclick=(ev)=>{ev.stopPropagation();showScienceCard(item.n,item.f)};
+   box.appendChild(b);
+   {
+     const target=chooseTaggedObjectForLabel(item);
+     // On the plant-cell stage, never show a misleading approximate callout.
+     if(current===7 && !target){b.style.display='none';return;}
+     activeScienceTags.push({el:b,item,target}); if(target)b.dataset.bound='1';
+   }
+ });
+ scene.updateMatrixWorld(true);camera.updateMatrixWorld(true);updateScienceLabelPositions();
+}
+function updateScienceLabelPositions(){
+ if(!activeScienceTags.length || !camera || !renderer)return;
+
+ const canvasRect=renderer.domElement.getBoundingClientRect();
+ const labelBox=document.getElementById('scienceLabels');
+ const boxRect=labelBox?labelBox.getBoundingClientRect():canvasRect;
+ const svg=document.getElementById('leaderLines');
+
+ const bw=Math.max(1,boxRect.width), bh=Math.max(1,boxRect.height);
+ if(svg){
+   svg.setAttribute('viewBox',`0 0 ${bw} ${bh}`);
+   svg.setAttribute('preserveAspectRatio','none');
+   svg.innerHTML='';
+ }
+
+ const ns='http://www.w3.org/2000/svg';
+ const cLeft=canvasRect.left-boxRect.left;
+ const cTop=canvasRect.top-boxRect.top;
+ const cRight=cLeft+canvasRect.width;
+ const cBottom=cTop+canvasRect.height;
+ const cCenter=cLeft+canvasRect.width/2;
+
+ const visible=[];
+ activeScienceTags.forEach(({el,item,target},idx)=>{
+   const world=new THREE.Vector3();
+   const mustBeExact=(mode==='human'&&current===4)||(mode==='plant'&&current===7);
+
+   if(target && target.parent){
+     target.getWorldPosition(world);
+   }else if(!mustBeExact){
+     world.set(item.p[0],item.p[1],item.p[2]);
+     if(root)root.localToWorld(world);
+   }else{
+     el.style.display='none';
+     return;
+   }
+
+   const camSpace=world.clone().applyMatrix4(camera.matrixWorldInverse);
+   const projected=world.clone().project(camera);
+   const ax=(projected.x*.5+.5)*canvasRect.width+cLeft;
+   const ay=(-projected.y*.5+.5)*canvasRect.height+cTop;
+
+   const exactCellTarget=((mode==='human'&&current===4)||(mode==='plant'&&current===7)) && target;
+   // For labelled cell models, keep the callout stable throughout 360° rotation.
+   // The point follows the real 3D organelle; it is clamped to the viewport instead of flickering off/on.
+   const inDepth=exactCellTarget ? (projected.z>-1.5 && projected.z<1.5) : (camSpace.z<-.02 && projected.z>-1.08 && projected.z<1.08);
+   if(!inDepth){el.style.display='none';return;}
+   const safeAx=Math.max(cLeft+8,Math.min(cRight-8,ax));
+   const safeAy=Math.max(cTop+8,Math.min(cBottom-8,ay));
+   visible.push({el,item,target,ax:safeAx,ay:safeAy,side:exactCellTarget ? ((item.p?.[0]||0)<0?'left':'right') : (safeAx<cCenter?'left':'right'),idx});
+ });
+
+ const left=visible.filter(v=>v.side==='left').sort((a,b)=>a.ay-b.ay);
+ const right=visible.filter(v=>v.side==='right').sort((a,b)=>a.ay-b.ay);
+
+ function layoutSide(arr,side){
+   if(!arr.length)return;
+   const top=cTop+36,bottom=cBottom-36;
+   const available=Math.max(1,bottom-top);
+   const minGap=38;
+   const step=arr.length===1?0:Math.max(minGap,Math.min(58,available/(arr.length-1)));
+   let startY=arr.reduce((s,v)=>s+v.ay,0)/arr.length-step*(arr.length-1)/2;
+   startY=Math.max(top,Math.min(bottom-step*(arr.length-1),startY));
+
+   arr.forEach((v,i)=>{
+     const el=v.el;
+     el.style.display='block';el.style.opacity='1';
+     const halfW=Math.max(46,(el.offsetWidth||92)/2);
+     const halfH=Math.max(15,(el.offsetHeight||30)/2);
+     const lx=side==='left'?cLeft+halfW+12:cRight-halfW-12;
+     const ly=Math.max(cTop+halfH+8,Math.min(cBottom-halfH-8,startY+i*step));
+     el.style.left=lx+'px';el.style.top=ly+'px';
+
+     if(svg){
+       const vx=lx-v.ax,vy=ly-v.ay;
+       const len=Math.max(1,Math.hypot(vx,vy));
+       const ux=vx/len,uy=vy/len;
+       const edgeX=lx-ux*(halfW*.88),edgeY=ly-uy*(halfH*.78);
+
+       const line=document.createElementNS(ns,'line');
+       line.setAttribute('x1',v.ax.toFixed(1));line.setAttribute('y1',v.ay.toFixed(1));
+       line.setAttribute('x2',edgeX.toFixed(1));line.setAttribute('y2',edgeY.toFixed(1));
+       svg.appendChild(line);
+
+       const dot=document.createElementNS(ns,'circle');
+       dot.setAttribute('cx',v.ax.toFixed(1));dot.setAttribute('cy',v.ay.toFixed(1));dot.setAttribute('r','3.5');
+       svg.appendChild(dot);
+     }
+   });
+ }
+ layoutSide(left,'left');
+ layoutSide(right,'right');
+}
+document.getElementById('scienceClose').onclick=()=>document.getElementById('scienceCard').classList.remove('show');
+
+
+const _originalUpdate=update;
+update=function(){
+ _originalUpdate();
+ requestAnimationFrame(renderScienceLabels);
+ const qb=document.getElementById('quizBtn');
+ const hs=document.getElementById('humanSexSelector');
+ const hc=document.getElementById('humanCellTypeSelector');
+ const hb=document.getElementById('humanBadge');
+ const cc=document.getElementById('chromosomeCompare');
+ if(hs)hs.style.display=(mode==='human'&&current===0)?'flex':'none';
+ if(hc)hc.style.display=(mode==='human')?'flex':'none';
+ if(hb){hb.style.display=(mode==='human'&&current===0)?'block':'none';hb.textContent=humanSex==='female'?'♀ النموذج المرجعي: أنثى':'♂ النموذج المرجعي: ذكر';}
+ if(cc)cc.style.display=(mode==='human'&&current===6)?'block':'none';
+ if(qb){
+   qb.style.display=((mode==='plant'&&current>=8)||(mode==='human'&&current>=6))?'block':'none';
+   qb.onclick=(mode==='human')?openHumanQuiz:openQuiz;
+ }
+};
+
+
+const quizQuestions=[
+ {q:"ما وظيفة الثغور في الورقة؟",a:["إنتاج DNA","تبادل الغازات وتنظيم فقد الماء","تكوين الجدار الخلوي","تخزين الغذاء فقط"],c:1},
+ {q:"أي نسيج يحتوي عادةً عددًا كبيرًا من البلاستيدات الخضراء؟",a:["النسيج العمادي","البشرة فقط","النسيج الوعائي فقط","الجدار الخلوي"],c:0},
+ {q:"ما أهمية الفراغات بين خلايا النسيج الإسفنجي؟",a:["منع دخول الضوء","تسهيل انتشار الغازات","تكوين الكروموسومات","زيادة سمك الجدار"],c:1},
+ {q:"أين توجد الجرانا؟",a:["داخل النواة","داخل الميتوكوندريا","داخل البلاستيدة الخضراء","داخل الفجوة العصارية"],c:2},
+ {q:"ما وظيفة النواة؟",a:["تنظيم أنشطة الخلية واحتواء المادة الوراثية","البناء الضوئي فقط","تخزين الهواء","إنتاج الجدار الخلوي"],c:0}
+];
+let quizIndex=0,quizScore=0,quizLocked=false;
+function openQuiz(){
+ quizIndex=0;quizScore=0;quizLocked=false;
+ document.getElementById('quizModal').classList.add('show');
+ showQuizQuestion();
+}
+function showQuizQuestion(){
+ const q=quizQuestions[quizIndex];
+ document.getElementById('quizResult').innerHTML='';
+ document.getElementById('quizProgress').textContent=`السؤال ${quizIndex+1} من ${quizQuestions.length}`;
+ document.getElementById('quizQuestion').textContent=q.q;
+ const box=document.getElementById('quizAnswers');box.innerHTML='';
+ q.a.forEach((ans,i)=>{
+   const b=document.createElement('button');b.className='quizAnswer';b.textContent=ans;
+   b.onclick=()=>answerQuiz(i,b);
+   box.appendChild(b);
+ });
+ quizLocked=false;
+}
+function answerQuiz(i,btn){
+ if(quizLocked)return;quizLocked=true;
+ const q=quizQuestions[quizIndex];
+ const all=[...document.querySelectorAll('.quizAnswer')];
+ all[q.c].classList.add('correct');
+ if(i===q.c)quizScore++; else btn.classList.add('wrong');
+ setTimeout(()=>{
+   quizIndex++;
+   if(quizIndex<quizQuestions.length)showQuizQuestion();
+   else finishQuiz();
+ },750);
+}
+function finishQuiz(){
+ document.getElementById('quizQuestion').textContent='';
+ document.getElementById('quizAnswers').innerHTML='';
+ document.getElementById('quizProgress').textContent='اكتمل الاختبار';
+ const pct=Math.round(quizScore/quizQuestions.length*100);
+ let msg=pct===100?'ممتاز جدًا!':pct>=80?'أداء ممتاز':pct>=60?'جيد جدًا':'راجعي التسميات ثم حاولي مرة أخرى';
+ document.getElementById('quizResult').innerHTML=`${msg}<br>${quizScore} / ${quizQuestions.length} — ${pct}%<br><button class="quizAnswer" style="margin-top:12px" onclick="openQuiz()">إعادة الاختبار</button>`;
+}
+document.getElementById('quizBtn').onclick=openQuiz;
+document.getElementById('quizClose').onclick=()=>document.getElementById('quizModal').classList.remove('show');
+
+// Keep labels visually attached to their 3D anchors during rotation, zoom and camera movement.
+function scienceOverlayLoop(){
+ updateScienceLabelPositions();
+ requestAnimationFrame(scienceOverlayLoop);
+}
+requestAnimationFrame(scienceOverlayLoop);
+
+
+let humanSex='female';
+let humanCellType='somatic';
+let humanChromosomeType='somatic';
+
+const skinStageLabels={
+ 1:[
+  {n:"سطح البشرة",f:"السطح الخارجي للجلد.",p:[1.55,1.46,.72]},
+  {n:"البشرة",f:"الطبقة الخارجية الواقية من الجلد.",p:[-1.9,1.18,.65]},
+  {n:"الأدمة",f:"تقع أسفل البشرة وتحتوي الغدد وبصيلات الشعر والأوعية والنهايات العصبية.",p:[1.95,.08,.65]},
+  {n:"طبقة دهنية",f:"طبقة غنية بالخلايا الدهنية أسفل الأدمة تساعد في العزل والحماية.",p:[-1.8,-1.18,.65]},
+  {n:"شعر",f:"يمتد من بصيلة الشعر إلى خارج سطح البشرة.",p:[.82,1.65,.28]},
+  {n:"بصيلة الشعر",f:"تركيب داخل الجلد تنمو منه الشعرة.",p:[.70,-.02,.28]},
+  {n:"غدة دهنية",f:"تفرز مادة دهنية تساعد في ترطيب الجلد والشعر.",p:[.25,.30,.40]},
+  {n:"غدة عرقية",f:"تنتج العرق وتساعد في تنظيم حرارة الجسم.",p:[-1.18,-.38,.30]},
+  {n:"قناة عرقية",f:"تنقل العرق من الغدة إلى سطح البشرة.",p:[-1.02,.88,.30]},
+  {n:"نهايات عصبية",f:"تستقبل اللمس والضغط والألم والحرارة.",p:[1.38,.42,.45]},
+  {n:"أوعية دموية",f:"تنقل الدم داخل الأدمة وتساعد في التغذية وتنظيم الحرارة.",p:[.25,-.67,.48]}
+ ],
+ 2:[
+  {n:"خلايا البشرة",f:"خلايا متراصة تكوّن حاجزًا واقيًا في الطبقة الخارجية.",p:[0,.35,.2]},
+  {n:"الأدمة",f:"نسيج داعم يحتوي أوعية دموية وتراكيب جلدية.",p:[0,-.55,.2]}
+ ],
+ 3:[{n:"خلايا البشرة",f:"خلايا حيوانية متخصصة تكوّن الطبقة الواقية من الجلد.",p:[0,.1,.2]}],
+ 4:[
+  {n:"الغشاء الخلوي",f:"غشاء رقيق يحيط بالخلية وينظم مرور المواد.",p:[1.90,0,.05]},
+  {n:"السيتوبلازم",f:"مادة هلامية تملأ داخل الخلية وتوجد فيها العضيات.",p:[.72,.25,.12]},
+  {n:"النواة",f:"تحتوي معظم المادة الوراثية.",p:[0,.05,.18]},
+  {n:"الميتوكوندريا",f:"تشارك في إنتاج الطاقة القابلة للاستخدام.",p:[-.8,-.25,.2]},
+  {n:"فجوات عصارية صغيرة",f:"فجوات صغيرة تساعد في تخزين ونقل بعض المواد داخل الخلية الحيوانية.",p:[.78,-.28,.30]}
+ ]
+};
+
+const gameteStageLabels={
+ 1:{
+   female:[
+    {n:"جسم الرحم",f:"الجزء الرئيسي العضلي من الرحم.",p:[0,.05,.42]},
+    {n:"المبيض",f:"عضو يحتوي الجريبات التي تنمو داخلها الخلايا البيضية.",p:[1.72,.33,.08]},
+    {n:"قناة فالوب (البوق الرحمي)",f:"تمتد من أعلى الرحم باتجاه المبيض، ويحدث الإخصاب غالبًا في الجزء المتسع منها.",p:[1.20,.68,.25]},
+    {n:"عنق الرحم",f:"الجزء السفلي الضيق من الرحم.",p:[0,-.83,.1]}
+   ],
+   male:[
+    {n:"الخصية",f:"العضو الذي تتكون فيه الحيوانات المنوية داخل الأنابيب المنوية.",p:[.48,-1.20,.12]},
+    {n:"البربخ",f:"قناة ملتفة تنضج وتُخزن فيها الحيوانات المنوية.",p:[.54,-1.18,.25]},
+    {n:"الأسهر",f:"قناة تنقل الحيوانات المنوية من البربخ.",p:[.65,-.25,.12]},
+    {n:"غدة البروستاتا",f:"غدة تقع أسفل المثانة وتضيف سوائل إلى السائل المنوي.",p:[0,.26,.1]},
+    {n:"الإحليل",f:"قناة يمر عبرها السائل المنوي إلى خارج الجسم.",p:[.45,-.45,.1]}
+   ]
+ },
+ 2:{
+   female:[
+    {n:"المبيض",f:"مقطع مبسط للمبيض.",p:[-1.30,-.70,.35]},
+    {n:"جريبات مبيضية",f:"تراكيب تنمو داخلها الخلايا البيضية بمراحل مختلفة.",p:[-.15,.72,.35]},
+    {n:"بويضة داخل جريب",f:"خلية بيضية تنمو داخل جريب مبيضي.",p:[.72,-.20,.27]}
+   ],
+   male:[
+    {n:"الخصية",f:"مقطع تعليمي داخل الخصية.",p:[-1.15,-.72,.38]},
+    {n:"الأنابيب المنوية",f:"الموقع الأساسي لتكوين الحيوانات المنوية داخل الخصية.",p:[0,.65,.38]}
+   ]
+ },
+ 3:{
+   female:[
+    {n:"البويضة",f:"خلية جنسية أنثوية تحمل 23 كروموسومًا عند النضج.",p:[0,0,.62]}
+   ],
+   male:[
+    {n:"حيوانات منوية",f:"خلايا جنسية ذكرية ناضجة يحمل كل منها 23 كروموسومًا.",p:[0,.95,.25]}
+   ]
+ },
+ 4:{
+   male:[
+    {n:"الأكروسوم",f:"غطاء أمامي يحتوي إنزيمات تساعد في اختراق أغلفة البويضة.",p:[-1.83,.08,.02]},
+    {n:"النواة",f:"تحمل 23 كروموسومًا.",p:[-1.48,.03,.03]},
+    {n:"العنق",f:"يربط الرأس بالقطعة الوسطى.",p:[-.93,.02,0]},
+    {n:"القطعة الوسطى",f:"غنية بالميتوكوندريا المنتجة للطاقة.",p:[-.37,.02,0]},
+    {n:"الميتوكوندريا",f:"توفر الطاقة اللازمة لحركة السوط.",p:[-.35,.15,.08]},
+    {n:"السوط (الذيل)",f:"يدفع الحيوان المنوي إلى الأمام.",p:[1.7,0,0]}
+   ],
+   female:[
+    {n:"النواة",f:"تحمل 23 كروموسومًا في البويضة الناضجة.",p:[0,0,.15]}
+   ]
+ }
+};
+const humanStageLabels={
+ 1:[
+  {n:"العضو",f:"مجموعة من أنسجة مختلفة تعمل معًا لأداء وظيفة محددة.",p:[0,.3,.2]}
+ ],
+ 2:[
+  {n:"النسيج",f:"مجموعة من الخلايا المتشابهة أو المتعاونة في أداء وظيفة.",p:[0,.45,.2]},
+  {n:"خلية متخصصة",f:"خلية تكيف تركيبها مع الوظيفة التي تؤديها داخل النسيج.",p:[.9,-.35,.2]}
+ ],
+ 3:[
+  {n:"خلايا النسيج",f:"الخلايا هي الوحدات الأساسية لبناء أنسجة الجسم.",p:[0,.2,.15]}
+ ],
+ 4:[
+  {n:"النواة",f:"تحتوي معظم المادة الوراثية في الخلية وتساعد في تنظيم أنشطتها.",p:[.75,.45,.2]},
+  {n:"الميتوكوندريا",f:"عضيات تشارك في إنتاج الطاقة القابلة للاستخدام داخل الخلية.",p:[-.85,-.4,.2]}
+ ],
+ 5:[
+  {n:"النواة",f:"داخل النواة توجد المادة الوراثية منظمة في كروموسومات.",p:[0,.2,.12]},
+  {n:"الكروماتين",f:"DNA مرتبط ببروتينات، ويتكثف ليكوّن كروموسومات واضحة أثناء الانقسام.",p:[.8,-.45,.12]}
+ ],
+ 6:[
+  {n:"كروموسوم",f:"تركيب من DNA وبروتينات يحمل الجينات والمعلومات الوراثية.",p:[-.55,.25,.15]},
+  {n:"زوج متماثل",f:"في الخلايا الجسمية البشرية توجد الكروموسومات في 23 زوجًا.",p:[.85,-.3,.15]}
+ ],
+ 7:[
+  {n:"DNA",f:"جزيء ذو لولب مزدوج يحمل المعلومات الوراثية.",p:[0,0,.15]}
+ ]
+};
+
+function selectHumanSex(sex){
+ humanSex=sex;
+ document.querySelectorAll('#humanSexSelector button').forEach(b=>b.classList.toggle('active',b.dataset.sex===sex));
+ const badge=document.getElementById('humanBadge');
+ badge.textContent=sex==='female'?'♀ النموذج المرجعي: أنثى':'♂ النموذج المرجعي: ذكر';
+ badge.style.display=(mode==='human'&&current===0)?'block':'none';
+
+ if(humanCellType==='gamete'){
+   selected='gamete';
+   refreshHumanJourneyText();
+   rebuildSteps();
+   if(mode==='human'&&current>0){build();update();requestAnimationFrame(renderHumanLabels);}
+ }
+}
+
+function selectHumanCellType(type){
+ humanCellType=type;
+ document.getElementById('somaticTypeBtn').classList.toggle('active',type==='somatic');
+ document.getElementById('sexualTypeBtn').classList.toggle('active',type==='gamete');
+
+ if(type==='gamete'){
+   selected='gamete';
+   humanChromosomeType='gamete';
+   const picker=document.getElementById('organPicker');
+   if(picker)picker.style.display='none';
+   refreshHumanJourneyText();
+   rebuildSteps();
+   if(mode==='human'){
+     if(current===0)setTimeout(()=>go(1),100);
+     else{build();update();requestAnimationFrame(renderHumanLabels);}
+   }
+ }else{
+   humanChromosomeType='somatic';
+   if(selected==='gamete')selected='heart';
+   document.querySelectorAll('#organPicker button').forEach(b=>b.classList.toggle('on',b.dataset.organ===selected));
+   const picker=document.getElementById('organPicker');
+   if(picker && mode==='human'&&current===0)picker.style.display='grid';
+   refreshHumanJourneyText();
+   rebuildSteps();
+   if(mode==='human'&&current>0){build();update();requestAnimationFrame(renderHumanLabels);}
+ }
+}
+function showHumanChromosomeType(type){
+ humanChromosomeType=type;
+ document.getElementById('somaticBtn').classList.toggle('active',type==='somatic');
+ document.getElementById('gameteBtn').classList.toggle('active',type==='gamete');
+ const ex=document.getElementById('chromosomeExplain');
+ if(type==='somatic'){
+   ex.innerHTML='<b>46 كروموسومًا:</b> معظم خلايا الجسم البشرية ثنائية المجموعة الكروموسومية، أي 23 زوجًا.';
+ }else{
+   ex.innerHTML='<b>23 كروموسومًا:</b> البويضة أو الحيوان المنوي الناضج يحمل مجموعة كروموسومية واحدة، وليس 23 زوجًا.';
+ }
+}
+
+function chooseTaggedObjectForLabel(item){
+ // Plant-cell labels are bound to six explicit, uniquely named 3D targets.
+ // No approximate coordinate is used on this stage, preventing crossed/duplicate callouts.
+ if(mode==='plant' && current===7){
+   let exact=null;
+   root.traverse(o=>{if(!exact && o?.userData?.name===item.n)exact=o});
+   return exact;
+ }
+ // Use the ACTUAL rendered organelle whenever one with the same scientific name exists.
+ const matches=[];
+ root.traverse(o=>{if(o && o.userData && o.userData.name===item.n)matches.push(o)});
+ if(!matches.length)return null;
+
+ // When several mitochondria / ER / Golgi pieces exist, choose the piece nearest
+ // the old hint only once. After that the label follows that real mesh forever.
+ if(matches.length===1)return matches[0];
+
+ const hint=new THREE.Vector3(item.p?.[0]||0,item.p?.[1]||0,item.p?.[2]||0);
+ let best=matches[0],bestD=Infinity;
+ matches.forEach(o=>{
+   const w=new THREE.Vector3();
+   o.getWorldPosition(w);
+   const local=root.worldToLocal(w.clone());
+   const d=local.distanceToSquared(hint);
+   if(d<bestD){bestD=d;best=o;}
+ });
+ return best;
+}
+
+function renderHumanLabels(){
+ if(mode!=='human')return;
+ let data;
+ if(selected==="skin" && skinStageLabels[current])data=skinStageLabels[current];
+ else if(selected==="gamete" && gameteStageLabels[current]){
+   data=gameteStageLabels[current][humanSex==="male"?"male":"female"];
+ }else data=humanStageLabels[current];
+ if(!data)return;
+ const box=document.getElementById('scienceLabels');
+ data.forEach(item=>{
+   const b=document.createElement('button');
+   b.className='scienceTag';b.textContent=item.n;
+   b.onclick=(ev)=>{ev.stopPropagation();showScienceCard(item.n,item.f)};
+   box.appendChild(b);
+   const target=chooseTaggedObjectForLabel(item);
+   if(current===4 && !target){b.style.display='none';return;}
+   activeScienceTags.push({el:b,item,target}); if(target)b.dataset.bound='1';
+ });
+ scene.updateMatrixWorld(true);camera.updateMatrixWorld(true);updateScienceLabelPositions();
+}
+
+const humanQuizQuestions=[
+ {q:"كم عدد الكروموسومات في معظم الخلايا الجسمية البشرية؟",a:["23","46","92","44"],c:1},
+ {q:"كم عدد الكروموسومات في البويضة أو الحيوان المنوي الناضج؟",a:["46","23 زوجًا","23","92"],c:2},
+ {q:"أين توجد معظم المادة الوراثية في الخلية البشرية؟",a:["النواة","الغشاء الخلوي","الميتوكوندريا","السيتوبلازم فقط"],c:0},
+ {q:"ما العلاقة بين الأنسجة والأعضاء؟",a:["العضو يتكون من أنسجة تعمل معًا","النسيج يتكون من أعضاء","لا توجد علاقة","العضو خلية واحدة"],c:0},
+ {q:"مم يتكون الكروموسوم أساسًا؟",a:["دهون فقط","DNA وبروتينات","ماء فقط","سكريات فقط"],c:1}
+];
+
+function openHumanQuiz(){
+ const saved=quizQuestions.splice(0,quizQuestions.length,...humanQuizQuestions);
+ openQuiz();
+}
+
+
+const humanJourneyData={
+ heart:{
+   organ:"القلب",
+   tissue:"النسيج العضلي القلبي",
+   cells:"الخلايا العضلية القلبية",
+   cell:"خلية عضلية قلبية",
+   path:"القلب ← النسيج العضلي القلبي ← الخلايا العضلية القلبية ← داخل الخلية ← النواة ← الكروموسومات ← DNA",
+   tissueDesc:"نسيج عضلي متخصص يتكون من خلايا عضلية قلبية مترابطة تعمل معًا لإحداث الانقباض المنتظم.",
+   cellDesc:"خلية عضلية قلبية مبسطة: ممدودة، ذات نواة مركزية، وتحتوي ميتوكوندريا عديدة لدعم حاجتها للطاقة."
+ },
+ lung:{
+   organ:"الرئة",
+   tissue:"نسيج الحويصلات الهوائية",
+   cells:"خلايا الحويصلات الهوائية",
+   cell:"خلية طلائية رئوية",
+   path:"الرئة ← الحويصلات الهوائية ← الخلايا الطلائية الرقيقة ← داخل الخلية ← النواة ← الكروموسومات ← DNA",
+   tissueDesc:"تظهر الحويصلات الهوائية كجيوب رقيقة الجدار تساعد على توفير مساحة كبيرة لتبادل الغازات.",
+   cellDesc:"خلية طلائية رئوية مبسطة ورقيقة، وهو شكل مناسب لسطح تبادل الغازات في الحويصلات."
+ },
+ brain:{
+   organ:"الدماغ",
+   tissue:"النسيج العصبي",
+   cells:"الخلايا العصبية",
+   cell:"عصبون",
+   path:"الدماغ ← النسيج العصبي ← العصبونات ← داخل العصبون ← النواة ← الكروموسومات ← DNA",
+   tissueDesc:"نسيج عصبي يضم عصبونات وخلايا داعمة. يظهر النموذج أجسام خلايا عصبية وامتداداتها بصورة تعليمية.",
+   cellDesc:"عصبون مبسط يتكون من جسم خلية وتغصنات ومحور عصبي، وهي تراكيب تساعده على استقبال الإشارات ونقلها."
+ },
+ stomach:{
+   organ:"المعدة",
+   tissue:"نسيج بطانة المعدة",
+   cells:"خلايا بطانة المعدة",
+   cell:"خلية طلائية معدية",
+   path:"المعدة ← بطانة المعدة ← الخلايا الطلائية ← داخل الخلية ← النواة ← الكروموسومات ← DNA",
+   tissueDesc:"بطانة طلائية تتكون من خلايا متراصة وتظهر فيها تراكيب غدية بصورة مبسطة.",
+   cellDesc:"خلية طلائية معدية مبسطة تمثل إحدى الخلايا المتخصصة الموجودة في بطانة المعدة."
+ },
+ skin:{
+   organ:"الجلد",
+   tissue:"طبقات الجلد",
+   cells:"خلايا البشرة",
+   cell:"خلية جلدية",
+   path:"الجلد ← البشرة والأدمة ← خلايا البشرة ← خلية جلدية ← العضيات ← النواة ← الكروموسومات ← DNA",
+   tissueDesc:"يتكون الجلد من البشرة فوق الأدمة، وتوجد تحته طبقة تحت الجلد. ويحتوي على بصيلات شعر وغدد عرقية ودهنية وأوعية دموية ومستقبلات حسية.",
+   cellDesc:"خلية جلدية مبسطة من البشرة. عند تكبيرها تظهر النواة والميتوكوندريا داخل السيتوبلازم ويحيط بها الغشاء الخلوي."
+ },
+ gamete:{
+   organ:"الخلايا الجنسية",
+   tissue:"الخلايا الجنسية الناضجة",
+   cells:"البويضة والحيوان المنوي",
+   cell:"خلية جنسية",
+   path:"الخلايا الجنسية ← خلية جنسية ناضجة ← داخل الخلية ← النواة ← 23 كروموسومًا ← DNA",
+   tissueDesc:"الخلايا الجنسية خلايا تناسلية متخصصة وليست عضوًا مستقلًا. تحمل البويضة أو الحيوان المنوي الناضج 23 كروموسومًا.",
+   cellDesc:"خلية جنسية بشرية مبسطة؛ تحتوي نواتها على 23 كروموسومًا."
+ }
+};
+
+function refreshHumanJourneyText(){
+ if(mode!=='human') return;
+ const d=humanJourneyData[selected];
+ if(!d) return;
+
+ let dynamic;
+ if(selected==="gamete"){
+   if(humanSex==="female"){
+     dynamic=[
+      ["الجسم التشريحي","نحدد أولًا موقع الجهاز التناسلي الأنثوي في منطقة الحوض."],
+      ["الجهاز التناسلي الأنثوي","نشاهد الرحم وقناتي فالوب والمبيضين داخل الحوض."],
+      ["المبيض","نكبر المبيض لنشاهد الجريبات التي تنمو داخلها الخلايا البيضية."],
+      ["البويضة","نقترب من البويضة ونوضح موقعها بالنسبة إلى المبيض والجهاز التناسلي."],
+      ["بويضة ناضجة","خلية جنسية أنثوية كبيرة نسبيًا، وتحمل في نواتها 23 كروموسومًا."],
+      ["داخل النواة","ندخل إلى نواة البويضة لرؤية المادة الوراثية بصورة مبسطة."],
+      ["23 كروموسومًا","البويضة البشرية الناضجة تحمل مجموعة واحدة من 23 كروموسومًا."],
+      ["DNA","نصل إلى DNA الذي يحمل المعلومات الوراثية."]
+     ];
+   }else{
+     dynamic=[
+      ["الجسم التشريحي","نحدد أولًا موقع الجهاز التناسلي الذكري في منطقة الحوض وكيس الصفن."],
+      ["الجهاز التناسلي الذكري","نشاهد الخصيتين والبربخ والأسهر والبروستاتا والمسار نحو الإحليل بصورة تعليمية مبسطة."],
+      ["الخصية","نكبر الخصية لنشاهد الأنابيب المنوية التي تبدأ فيها عملية تكوين الحيوانات المنوية."],
+      ["الحيوانات المنوية","ننتقل من موقع تكوينها إلى خلايا جنسية ذكرية ناضجة."],
+      ["حيوان منوي ناضج","يتكون من رأس وأكروسوم ونواة وعنق وقطعة وسطى غنية بالميتوكوندريا وسوط للحركة."],
+      ["داخل النواة","ندخل إلى نواة رأس الحيوان المنوي لرؤية المادة الوراثية."],
+      ["23 كروموسومًا","الحيوان المنوي البشري الناضج يحمل مجموعة واحدة من 23 كروموسومًا."],
+      ["DNA","نصل إلى DNA الذي يحمل المعلومات الوراثية."]
+     ];
+   }
+ }else{
+   dynamic=[
+    ["الجسم التشريحي","اختاري العضو ثم ابدئي رحلة التكبير المتصلة من الجسم إلى المستوى الخلوي والجزيئي."],
+    [d.organ,"نقترب من "+d.organ+" ثم نعبر بصريًا إلى داخله."],
+    [d.tissue,d.tissueDesc],
+    [d.cells,"مع زيادة التكبير ننتقل من النسيج إلى الخلايا التي تكوّنه."],
+    [d.cell,d.cellDesc],
+    ["داخل النواة","نقترب من النواة لرؤية تنظيم المادة الوراثية بصورة مبسطة."],
+    ["الكروموسومات","الخلايا الجسمية البشرية تحتوي عادةً 46 كروموسومًا (23 زوجًا)."],
+    ["DNA","نصل إلى مستوى DNA، الجزيء الذي يحمل المعلومات الوراثية."]
+   ];
+ }
+ humanInfo.splice(0,humanInfo.length,...dynamic);
+ info=humanInfo;
+ const jt=document.getElementById('journeyTitle'), jp=document.getElementById('journeyPath'), jb=document.getElementById('journeyBanner');
+ if(jt){
+   jt.textContent=selected==="gamete"
+     ?(humanSex==="female"?"رحلة من الحوض إلى البويضة":"رحلة من الحوض إلى الحيوان المنوي")
+     :"رحلة داخل "+d.organ;
+ }
+ if(jp){
+   jp.textContent=selected==="gamete"
+    ?(humanSex==="female"
+      ?"الجسم ← الحوض ← الرحم والمبيضان ← المبيض ← البويضة ← النواة ← 23 كروموسومًا ← DNA"
+      :"الجسم ← الحوض ← الجهاز التناسلي الذكري ← الخصية ← الحيوان المنوي ← النواة ← 23 كروموسومًا ← DNA")
+    :d.path;
+ }
+ if(jb)jb.style.display=(current>0)?'block':'none';
+}
+
+function humanMicroTransition(target,label){
+ if(transitioning)return;
+ transitioning=true;
+ const tunnel=document.getElementById('tunnel');
+ const tl=document.getElementById('tunnelLabel');
+ if(tl)tl.textContent=label;
+ tunnel.style.display='flex'; tunnel.style.opacity='1';
+ const start=performance.now(), z0=camera.position.z;
+ function dive(t){
+   const q=Math.min(1,(t-start)/900), e=q<.5?2*q*q:1-Math.pow(-2*q+2,2)/2;
+   camera.position.z=z0+(1.18-z0)*e;
+   if(root){root.scale.setScalar(1+1.0*e);root.rotation.y+=.006;}
+   if(q<1)requestAnimationFrame(dive);
+   else{
+     current=target;build();update();
+     camera.position.set(0,0,1.4);
+     if(root)root.scale.setScalar(.82);
+     const s=performance.now();
+     function reveal(tt){
+       const q2=Math.min(1,(tt-s)/820), e2=1-Math.pow(1-q2,3);
+       camera.position.z=1.4+(6.0-1.4)*e2;
+       if(root)root.scale.setScalar(.82+.18*e2);
+       if(q2<1)requestAnimationFrame(reveal);
+       else{camera.position.set(0,0,6.0);transitioning=false;}
+     }
+     requestAnimationFrame(reveal);
+     tunnel.style.opacity='0';setTimeout(()=>tunnel.style.display='none',320);
+   }
+ }
+ requestAnimationFrame(dive);
+}
+
+// A corrected next-step controller: human has 8 stages, plant has 12.
+const _v23CinematicNext=cinematicNext;
+cinematicNext=function(){
+ const max=(mode==='plant'?11:7);
+ if(transitioning||current>=max)return;
+
+ if(mode==='human'){
+   const d=humanJourneyData[selected];
+   if(current===0){
+     atlas.style.display='none';renderer.domElement.style.display='block';
+     document.getElementById('organPicker').style.display='none';
+     document.getElementById('plantPicker').style.display='none';
+     current=1;build();update();camera.position.set(0,0,8.5);
+     camTo(new THREE.Vector3(0,0,3.1),new THREE.Vector3(0,0,0),1050);
+     return;
+   }
+   if(current===1){humanMicroTransition(2,"نعبر إلى داخل "+d.organ+" لرؤية "+d.tissue+"...");return;}
+   if(current===2){humanMicroTransition(3,"نقترب أكثر من النسيج حتى تظهر الخلايا المكوِّنة له...");return;}
+   if(current===3){humanMicroTransition(4,"نختار خلية واحدة ونكبرها لرؤية تركيبها الداخلي...");return;}
+   if(current===4){humanMicroTransition(5,"ندخل إلى النواة لرؤية المادة الوراثية...");return;}
+   if(current===5){humanMicroTransition(6,"تتكثف المادة الوراثية في صورة كروموسومات...");return;}
+   if(current===6){humanMicroTransition(7,"نقترب من الكروموسوم حتى نصل إلى DNA...");return;}
+ }
+ _v23CinematicNext();
+};
+window.next=cinematicNext;
+
+// Correct direct navigation limits for both pathways.
+go=function(i){
+ if(transitioning)return;
+ const max=(mode==='plant'?11:7);
+ current=Math.max(0,Math.min(max,i));
+ let f=document.getElementById('flash');f.style.opacity=.4;
+ setTimeout(()=>{build();update();f.style.opacity=0;document.getElementById('vignette').style.opacity=.14},220);
+};
+window.prev=()=>{if(!transitioning)go(current-1)};
+
+// Correct auto-tour length for both pathways.
+window.autoTour=()=>{
+ if(timer){clearInterval(timer);timer=null;return}
+ go(0);
+ timer=setInterval(()=>{
+   const max=(mode==='plant'?11:7);
+   if(!transitioning&&current<max)cinematicNext();
+   if(current>=max){clearInterval(timer);timer=null}
+ },5000);
+};
+
+// Preserve separate question banks instead of overwriting the plant quiz.
+const plantQuizQuestions=quizQuestions.map(q=>({...q,a:[...q.a]}));
+openQuiz=function(){
+ quizQuestions.splice(0,quizQuestions.length,...plantQuizQuestions.map(q=>({...q,a:[...q.a]})));
+ quizIndex=0;quizScore=0;quizLocked=false;
+ document.getElementById('quizModal').classList.add('show');showQuizQuestion();
+};
+openHumanQuiz=function(){
+ quizQuestions.splice(0,quizQuestions.length,...humanQuizQuestions.map(q=>({...q,a:[...q.a]})));
+ quizIndex=0;quizScore=0;quizLocked=false;
+ document.getElementById('quizModal').classList.add('show');showQuizQuestion();
+};
+
+// Extend the existing update wrapper with organ-specific titles/path.
+const _v24Update=update;
+update=function(){
+ refreshHumanJourneyText();
+ _v24Update();
+ if(mode==='human'){
+   // update panel after dynamic humanInfo changes
+   const t=document.getElementById('title'), dsc=document.getElementById('desc');
+   if(t&&humanInfo[current])t.textContent=humanInfo[current][0];
+   if(dsc&&humanInfo[current])dsc.textContent=humanInfo[current][1];
+   const jb=document.getElementById('journeyBanner');
+   if(jb)jb.style.display=current>0?'block':'none';
+ }
+};
+
+
+let narrationEnabled=false;
+let lastNarratedKey='';
+function narrationText(){
+ let title='',desc='';
+ if(mode==='human' && humanInfo[current]){title=humanInfo[current][0];desc=humanInfo[current][1];}
+ if(mode==='plant' && plantInfo[current]){title=plantInfo[current][0];desc=plantInfo[current][1];}
+ let extra='';
+ if(mode==='human'&&current===6)extra=' الخلايا الجسمية البشرية تحتوي على ستة وأربعين كروموسومًا، أي ثلاثة وعشرين زوجًا. أما الخلايا الجنسية الناضجة فتحمل ثلاثة وعشرين كروموسومًا.';
+ if(mode==='plant'&&current===8)extra=' البلاستيدة الخضراء تحتوي على الجرانا والستروما، وتعد موقعًا أساسيًا لعملية البناء الضوئي.';
+ return `${title}. ${desc}${extra}`;
+}
+function chooseArabicVoice(){
+ const voices=speechSynthesis.getVoices();
+ return voices.find(v=>/^ar(-|_)/i.test(v.lang)&&/Bahrain|Gulf|Saudi|Arabic/i.test(v.name))
+     || voices.find(v=>/^ar(-|_)/i.test(v.lang))
+     || null;
+}
+function speakCurrentStage(force=true){
+ if(!('speechSynthesis' in window))return;
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(narrationText());
+ u.lang='ar-BH';u.rate=.92;u.pitch=1;
+ const voice=chooseArabicVoice();if(voice)u.voice=voice;
+ const st=document.getElementById('narrationStatus');
+ st.style.display='block';st.textContent='🔊 جاري شرح المرحلة...';
+ u.onend=()=>{st.textContent=narrationEnabled?'الشرح الصوتي التلقائي مفعّل':'الشرح الصوتي متوقف';setTimeout(()=>{if(!narrationEnabled)st.style.display='none'},1200)};
+ speechSynthesis.speak(u);
+}
+function toggleNarration(){
+ narrationEnabled=!narrationEnabled;
+ const b=document.getElementById('voiceBtn'),st=document.getElementById('narrationStatus');
+ b.classList.toggle('active',narrationEnabled);
+ b.textContent=narrationEnabled?'🔊 الصوت مفعّل':'🔇 الشرح الصوتي';
+ st.style.display='block';st.textContent=narrationEnabled?'الشرح الصوتي التلقائي مفعّل':'الشرح الصوتي متوقف';
+ if(narrationEnabled){lastNarratedKey='';setTimeout(()=>speakCurrentStage(),120)}
+ else if('speechSynthesis'in window)speechSynthesis.cancel();
+}
+if('speechSynthesis'in window)speechSynthesis.onvoiceschanged=()=>chooseArabicVoice();
+
+function maybeNarrateStage(){
+ if(!narrationEnabled)return;
+ const key=mode+':'+current+':'+(mode==='human'?selected:plantSelected);
+ if(key===lastNarratedKey)return;
+ lastNarratedKey=key;
+ setTimeout(()=>speakCurrentStage(false),350);
+}
+
+// Upgrade the final update wrapper: narration follows the visual stage, not button clicks.
+const _v25Update=update;
+update=function(){
+ _v25Update();
+ requestAnimationFrame(updateScienceLabelPositions);
+ maybeNarrateStage();
+};
+
+// Enhance tunnel wording and perceived motion for every V24 human microscopic entry.
+const _v25HumanMicroTransition=humanMicroTransition;
+humanMicroTransition=function(target,label){
+ const st=document.getElementById('narrationStatus');
+ if(st&&narrationEnabled){st.style.display='block';st.textContent='🔬 ننتقل إلى مستوى تكبير أعلى...';}
+ _v25HumanMicroTransition(target,label);
+};
+
+// Accessibility: stop speech when leaving/reloading page.
+window.addEventListener('beforeunload',()=>{if('speechSynthesis'in window)speechSynthesis.cancel()});
+
+
+let teacherMode=false,lessonStarted=false,classAsked=0,classCorrect=0;
+const classQuestions={
+ human:[
+  {stage:2,q:"ما اسم المستوى الذي نراه بعد الدخول إلى العضو؟",a:["النسيج","DNA","الجهاز العضوي","الكروموسوم"],c:0},
+  {stage:4,q:"أي تركيب يحتوي معظم المادة الوراثية في هذه الخلية؟",a:["الميتوكوندريا","النواة","السيتوبلازم","الغشاء"],c:1},
+  {stage:6,q:"كم عدد الكروموسومات في معظم الخلايا الجسمية البشرية؟",a:["23","46","92","12"],c:1},
+  {stage:7,q:"ما الجزيء الذي يحمل المعلومات الوراثية؟",a:["DNA","الماء","الجلوكوز","الأكسجين"],c:0}
+ ],
+ plant:[
+  {stage:3,q:"ما وظيفة الثغور بصورة أساسية؟",a:["تبادل الغازات وتنظيم فقد الماء","تكوين الجذور","تخزين DNA","إنتاج الأزهار"],c:0},
+  {stage:5,q:"أي نسيج في الورقة غني عادة بالبلاستيدات الخضراء؟",a:["النسيج العمادي","البشرة فقط","الفلين","الجدار الخلوي"],c:0},
+  {stage:8,q:"في أي عضية تتم عملية البناء الضوئي؟",a:["النواة","البلاستيدة الخضراء","الميتوكوندريا","الفجوة"],c:1},
+  {stage:11,q:"ما الجزيء الذي يحمل المعلومات الوراثية؟",a:["DNA","الكلوروفيل","السليلوز","الماء"],c:0}
+ ]
+};
+let activeClassQuestion=null,classLocked=false;
+
+function toggleTeacherMode(){
+ teacherMode=!teacherMode;document.body.classList.toggle('teacherMode',teacherMode);
+ if(!teacherMode){lessonStarted=false;closeClassQuestion();closeLessonSummary();}
+ updateLessonProgress();
+}
+function startLesson(){
+ lessonStarted=true;classAsked=0;classCorrect=0;go(0);
+ if(narrationEnabled===false)toggleNarration();
+ updateLessonProgress();
+}
+function teacherPrev(){if(current>0)go(current-1)}
+function teacherNext(){
+ const max=mode==='plant'?11:7;
+ if(current<max)cinematicNext(); else showLessonSummary();
+}
+function updateLessonProgress(){
+ const p=document.getElementById('lessonProgressFill'),t=document.getElementById('lessonProgressText');
+ if(!p||!t)return;
+ const max=mode==='plant'?11:7;
+ const pct=Math.round((current/max)*100);
+ p.style.width=pct+'%';t.textContent=`المرحلة ${current+1} من ${max+1} • ${pct}%`;
+}
+function getClassQuestion(){
+ const qs=classQuestions[mode]||[];
+ return qs.find(q=>q.stage===current)||qs[Math.min(Math.floor(current/Math.max(1,(mode==='plant'?3:2))),qs.length-1)];
+}
+function showClassQuestion(){
+ const q=getClassQuestion();if(!q)return;
+ activeClassQuestion=q;classLocked=false;classAsked++;
+ document.getElementById('classQuestionText').textContent=q.q;
+ document.getElementById('classQuestionFeedback').textContent='';
+ const box=document.getElementById('classQuestionChoices');box.innerHTML='';
+ q.a.forEach((a,i)=>{
+  const b=document.createElement('button');b.className='classChoice';b.textContent=a;
+  b.onclick=()=>answerClassQuestion(i,b);box.appendChild(b);
+ });
+ document.getElementById('classQuestionModal').classList.add('show');
+ if('speechSynthesis'in window)speechSynthesis.cancel();
+}
+function answerClassQuestion(i,b){
+ if(classLocked)return;classLocked=true;
+ const all=[...document.querySelectorAll('.classChoice')];
+ all[activeClassQuestion.c].classList.add('correct');
+ if(i===activeClassQuestion.c){classCorrect++;document.getElementById('classQuestionFeedback').textContent='إجابة صحيحة ✓'}
+ else{b.classList.add('wrong');document.getElementById('classQuestionFeedback').textContent='الإجابة الصحيحة موضحة باللون الأخضر'}
+}
+function closeClassQuestion(){document.getElementById('classQuestionModal').classList.remove('show')}
+function showLessonSummary(){
+ const max=classAsked||1,pct=Math.round(classCorrect/max*100);
+ document.getElementById('lessonScoreBig').textContent=pct+'%';
+ let msg=pct>=90?'ممتاز — استيعاب قوي جدًا':pct>=70?'جيد جدًا — تحقق معظم أهداف الدرس':pct>=50?'جيد — نراجع بعض المراحل':'نحتاج إلى جولة مراجعة أخرى';
+ document.getElementById('lessonScoreText').innerHTML=`${msg}<br>الإجابات الصحيحة: ${classCorrect} من ${classAsked}<br>تم الوصول إلى المرحلة ${current+1} من ${mode==='plant'?12:8}`;
+ document.getElementById('lessonSummaryModal').classList.add('show');
+}
+function closeLessonSummary(){document.getElementById('lessonSummaryModal').classList.remove('show')}
+
+const _v26Update=update;
+update=function(){
+ _v26Update();updateLessonProgress();
+ // In classroom mode, enlarge and simplify the information display automatically.
+ if(teacherMode){
+   const qb=document.getElementById('quizBtn');if(qb)qb.style.display='none';
+ }
+};
+
+
+window.enterSchoolLab=function(choice){
+ const welcome=document.getElementById('schoolWelcome');
+ if(welcome){
+   welcome.classList.add('hide');
+   welcome.style.pointerEvents='none';
+   setTimeout(()=>{welcome.style.display='none'},420);
+ }
+ // No choice = reveal the original two-station laboratory lobby.
+ if(!choice)return;
+
+ setTimeout(()=>{
+   // Prefer the original project start functions when present.
+   if(choice==='human'){
+     if(typeof window.chooseMode==='function'){window.chooseMode('human');return;}
+     if(typeof window.startMode==='function'){window.startMode('human');return;}
+   }else{
+     if(typeof window.chooseMode==='function'){window.chooseMode('plant');return;}
+     if(typeof window.startMode==='function'){window.startMode('plant');return;}
+   }
+
+   // Fallback: use the ORIGINAL lobby station's "ابدئي الرحلة" button.
+   const buttons=[...document.querySelectorAll('button')].filter(b=>!b.closest('#schoolWelcome'));
+   const starts=buttons.filter(b=>(b.textContent||'').includes('ابدئي الرحلة'));
+   const target=choice==='human'?starts[0]:starts[1];
+   if(target)target.click();
+ },80);
+}
+
+
+Object.assign(window,{
+ toggleTeacherMode,startLesson,teacherPrev,teacherNext,showClassQuestion,
+ showLessonSummary,closeLessonSummary,closeClassQuestion,
+ toggleNarration,speakCurrentStage,selectHumanSex,selectHumanCellType,showHumanChromosomeType
+});
+
+
+function journeyStageNames(){
+ if(mode==='plant')return ["النبات","الورقة","سطح الورقة","الثغور","مقطع الورقة","النسيج","الخلايا","الخلية النباتية","البلاستيدة","النواة","الكروموسومات","DNA"];
+ const d=(typeof humanJourneyData!=='undefined'&&humanJourneyData[selected])?humanJourneyData[selected]:null;
+ return ["الجسم",d?d.organ:"العضو",d?d.tissue:"النسيج","الخلايا",d?d.cell:"الخلية","النواة","الكروموسومات","DNA"];
+}
+function updateStudentTrail(){
+ const holder=document.getElementById('studentTrailDots'),lab=document.getElementById('studentTrailLabel');
+ if(!holder||!lab)return;
+ const names=journeyStageNames();
+ holder.innerHTML='';
+ names.forEach((n,i)=>{
+   const d=document.createElement('span');d.className='trailDot'+(i<current?' done':i===current?' current':'');
+   d.title=n;holder.appendChild(d);
+ });
+ lab.textContent=`${names[current]||''} • المرحلة ${current+1} من ${names.length}`;
+ document.body.classList.toggle('inJourney',document.getElementById('schoolWelcome')?.style.display==='none');
+}
+window.returnToSchoolHome=function(){
+ if('speechSynthesis'in window)speechSynthesis.cancel();
+ narrationEnabled=false;lessonStarted=false;teacherMode=false;
+ document.body.classList.remove('teacherMode','inJourney'); const gc=document.getElementById('guidedChoice');if(gc)gc.classList.remove('show');
+ const w=document.getElementById('schoolWelcome');
+ if(w){w.style.display='flex';w.style.opacity='1';w.style.visibility='visible';w.style.pointerEvents='auto';w.classList.remove('hide');}
+ const q=document.getElementById('quizModal');if(q)q.classList.remove('show');
+ const cq=document.getElementById('classQuestionModal');if(cq)cq.classList.remove('show');
+ const sm=document.getElementById('lessonSummaryModal');if(sm)sm.classList.remove('show');
+ const tb=document.getElementById('teacherBar');if(tb)tb.style.display='';
+ const voice=document.getElementById('voiceBtn');if(voice){voice.classList.remove('active');voice.textContent='🔇 الشرح الصوتي';}
+};
+const _v28Enter=window.enterSchoolLab;
+window.enterSchoolLab=function(choice){
+ _v28Enter(choice);
+ setTimeout(()=>{document.body.classList.add('inJourney');updateStudentTrail()},500);
+};
+const _v28Update=update;
+update=function(){_v28Update();updateStudentTrail();};
+
+
+function applyMobileLayoutFlag(){
+ document.body.classList.toggle('mobileStacked',window.matchMedia('(max-width:700px)').matches);
+}
+window.addEventListener('resize',applyMobileLayoutFlag);
+applyMobileLayoutFlag();
+
+
+let guidedMode=null;
+let guidedStep=0;
+let guidedSelection={sex:'female',cellType:'somatic',organ:'heart',plant:'palm'};
+
+const guidedHumanSteps=['الجنس','نوع الخلايا','العضو','ابدئي الرحلة'];
+const guidedPlantSteps=['نوع النبات','ابدئي الرحلة'];
+
+window.startGuidedChoice=function(kind){
+ guidedMode=kind;guidedStep=0;document.body.classList.add('guidedActive');
+ const w=document.getElementById('schoolWelcome');
+ if(w){w.classList.add('hide');w.style.pointerEvents='none';setTimeout(()=>w.style.display='none',320);}
+ const guided=document.getElementById('guidedChoice');
+ if(!guided)return;
+ guided.classList.add('show');
+ guided.setAttribute('aria-hidden','false');
+ renderGuidedStep();
+};
+
+window.closeGuidedChoice=function(){
+ document.getElementById('guidedChoice').classList.remove('show');
+ document.getElementById('guidedChoice').setAttribute('aria-hidden','true');
+ document.body.classList.remove('guidedActive');
+ const w=document.getElementById('schoolWelcome');
+ if(w){w.style.display='flex';w.style.opacity='1';w.style.visibility='visible';w.style.pointerEvents='auto';w.classList.remove('hide');}
+};
+
+window.guidedBack=function(){
+ if(guidedStep>0){guidedStep--;renderGuidedStep();}
+ else closeGuidedChoice();
+};
+
+function guidedProgressUI(total){
+ const p=document.getElementById('guidedProgress');p.innerHTML='';
+ for(let i=0;i<total;i++){const s=document.createElement('span');if(i<=guidedStep)s.className='on';p.appendChild(s);}
+}
+function optionCard(label,desc,fn,selected=false){
+ return `<button class="guidedOption${selected?' selected':''}" onclick="${fn}"><b>${label}</b><small>${desc||''}</small></button>`;
+}
+function renderGuidedStep(){
+ const body=document.getElementById('guidedBody');
+ const title=document.getElementById('guidedTitle');
+ const num=document.getElementById('guidedStepNumber');
+
+ if(guidedMode==='human'){
+   guidedProgressUI(4);num.textContent=`الخطوة ${guidedStep+1} من 4`;
+   if(guidedStep===0){
+     title.textContent='اختاري الجنس';
+     body.innerHTML=
+       optionCard('أنثى ♀','النموذج المرجعي الأنثوي',"guidedPickSex('female')",guidedSelection.sex==='female')+
+       optionCard('ذكر ♂','النموذج المرجعي الذكري',"guidedPickSex('male')",guidedSelection.sex==='male');
+   }else if(guidedStep===1){
+     title.textContent='اختاري نوع الخلايا';
+     body.innerHTML=
+       optionCard('الخلايا الجسمية','معظم خلايا الجسم — 46 كروموسومًا',"guidedPickCellType('somatic')",guidedSelection.cellType==='somatic')+
+       optionCard('الخلايا الجنسية','بويضة أو حيوان منوي — 23 كروموسومًا',"guidedPickCellType('gamete')",guidedSelection.cellType==='gamete');
+   }else if(guidedStep===2){
+     if(guidedSelection.cellType==='gamete'){guidedStep=3;renderGuidedStep();return;}
+     title.textContent='اختاري العضو';
+     body.innerHTML=
+       optionCard('القلب','النسيج العضلي القلبي',"guidedPickOrgan('heart')",guidedSelection.organ==='heart')+
+       optionCard('الرئة','الحويصلات والخلايا الطلائية',"guidedPickOrgan('lung')",guidedSelection.organ==='lung')+
+       optionCard('الدماغ','النسيج العصبي والعصبونات',"guidedPickOrgan('brain')",guidedSelection.organ==='brain')+
+       optionCard('المعدة','بطانة المعدة والخلايا الطلائية',"guidedPickOrgan('stomach')",guidedSelection.organ==='stomach')+
+       optionCard('الجلد','طبقات الجلد وخلايا البشرة',"guidedPickOrgan('skin')",guidedSelection.organ==='skin');
+   }else{
+     title.textContent='ابدئي الرحلة';
+     const sex=guidedSelection.sex==='female'?'أنثى':'ذكر';
+     const type=guidedSelection.cellType==='somatic'?'خلايا جسمية':'خلايا جنسية';
+     const organ=guidedSelection.cellType==='somatic'?(organData[guidedSelection.organ]?.name||''):(guidedSelection.sex==='female'?'بويضة':'حيوان منوي');
+     body.innerHTML=`<div class="guidedSummary"><b>المسار المختار:</b><br>${sex} ← ${type} ← ${organ}</div>
+       <button class="guidedStart" onclick="launchGuidedHuman()">ابدئي الرحلة العلمية</button>`;
+   }
+ }else{
+   guidedProgressUI(2);num.textContent=`الخطوة ${guidedStep+1} من 2`;
+   if(guidedStep===0){
+     title.textContent='اختاري نوع النبات';
+     body.innerHTML=
+       optionCard('نخلة التمر','نبات بحريني مهم',"guidedPickPlant('palm')",guidedSelection.plant==='palm')+
+       optionCard('القرم','نبات ساحلي متحمل للملوحة',"guidedPickPlant('mangrove')",guidedSelection.plant==='mangrove')+
+       optionCard('السدر','شجرة محلية معروفة',"guidedPickPlant('sidr')",guidedSelection.plant==='sidr');
+   }else{
+     title.textContent='ابدئي الرحلة';
+     const nm=plantData[guidedSelection.plant]?.name||'النبات';
+     body.innerHTML=`<div class="guidedSummary"><b>المسار المختار:</b><br>نبات ← ${nm} ← الورقة ← الخلايا النباتية ← الخلية ← البلاستيدة ← النواة ← DNA</div>
+       <button class="guidedStart" onclick="launchGuidedPlant()">ابدئي الرحلة العلمية</button>`;
+   }
+ }
+}
+
+window.guidedPickSex=function(v){guidedSelection.sex=v;guidedStep=1;renderGuidedStep();}
+window.guidedPickCellType=function(v){
+ guidedSelection.cellType=v;
+ guidedStep=(v==='gamete'?3:2);
+ renderGuidedStep();
+}
+window.guidedPickOrgan=function(v){guidedSelection.organ=v;guidedStep=3;renderGuidedStep();}
+window.guidedPickPlant=function(v){guidedSelection.plant=v;guidedStep=1;renderGuidedStep();}
+
+window.launchGuidedHuman=function(){
+ const guided=document.getElementById('guidedChoice');
+ document.body.classList.remove('guidedActive');
+ guided.classList.remove('show');
+ guided.setAttribute('aria-hidden','true');
+
+ // Store selections first, without invoking legacy navigation.
+ humanSex=guidedSelection.sex;
+ humanCellType=guidedSelection.cellType;
+ humanChromosomeType=(humanCellType==='gamete')?'gamete':'somatic';
+ selected=(humanCellType==='somatic')?guidedSelection.organ:'gamete';
+
+ document.querySelectorAll('#humanSexSelector button').forEach(
+   b=>b.classList.toggle('active',b.dataset.sex===humanSex)
+ );
+ document.getElementById('somaticTypeBtn')?.classList.toggle('active',humanCellType==='somatic');
+ document.getElementById('sexualTypeBtn')?.classList.toggle('active',humanCellType==='gamete');
+ document.querySelectorAll('#organPicker button').forEach(
+   b=>b.classList.toggle('on',b.dataset.organ===selected)
+ );
+
+ // Hide both the welcome and original two-station lobby permanently for this launch.
+ const welcome=document.getElementById('schoolWelcome');
+ if(welcome){welcome.style.display='none';welcome.classList.add('hide');}
+ const lobby=document.getElementById('choice');
+ if(lobby){lobby.style.opacity='1';lobby.style.transform='none';lobby.style.display='flex';}
+
+ // Directly enter the HUMAN path. No text-search fallback, no second Human/Plant question.
+ choosePath('human');
+
+ setTimeout(()=>{
+   refreshHumanJourneyText();
+   rebuildSteps();
+   const hc=document.getElementById('humanCellTypeSelector');
+   if(hc)hc.style.display='flex';
+   if(current===0)go(1);
+   else{build();update();}
+   setTimeout(()=>{frameCurrentModel(1.34);scrollToVisualization();},520);
+ },520);
+};
+
+window.launchGuidedPlant=function(){
+ const guided=document.getElementById('guidedChoice');
+ document.body.classList.remove('guidedActive');
+ guided.classList.remove('show');
+ guided.setAttribute('aria-hidden','true');
+
+ selectedPlant=guidedSelection.plant;
+
+ const welcome=document.getElementById('schoolWelcome');
+ if(welcome){welcome.style.display='none';welcome.classList.add('hide');}
+ const lobby=document.getElementById('choice');
+ if(lobby){lobby.style.opacity='1';lobby.style.transform='none';lobby.style.display='flex';}
+
+ // Directly enter the PLANT path; never return to the Human/Plant question.
+ choosePath('plant');
+
+ setTimeout(()=>{
+   selectedPlant=guidedSelection.plant;
+   document.querySelectorAll('#plantPicker button').forEach(
+     b=>b.classList.toggle('on',b.dataset.plant===selectedPlant)
+   );
+   build();update();
+ },520);
+};
+
+
+let labLanguage=localStorage.getItem('ghufranLabLanguage')||'ar';
+
+const EN={
+ "إعداد أ. غفران هاني":"Prepared by Ms. Ghufran Hani",
+ "مختبر العلوم الافتراضي":"Virtual Science Lab",
+ "مدرسة":"School",
+ "حليمة السعدية الابتدائية الإعدادية للبنات":"Halima Al-Saadia Primary Intermediate School for Girls",
+ "الإنسان":"Human",
+ "النبات":"Plant",
+ "جسم الإنسان":"Human Body",
+ "نباتات البحرين":"Bahrain Plants",
+ "ابدئي باختيار الجنس ثم نوع الخلايا":"Choose sex, then cell type",
+ "ابدئي باختيار نوع النبات":"Choose the plant type",
+ "اختاري الجنس":"Choose sex",
+ "أنثى ♀":"Female ♀","ذكر ♂":"Male ♂",
+ "النموذج المرجعي الأنثوي":"Female reference model","النموذج المرجعي الذكري":"Male reference model",
+ "اختاري نوع الخلايا":"Choose cell type",
+ "الخلايا الجسمية":"Somatic cells","الخلايا الجنسية":"Gametes",
+ "معظم خلايا الجسم — 46 كروموسومًا":"Most body cells — 46 chromosomes",
+ "بويضة أو حيوان منوي — 23 كروموسومًا":"Egg or sperm — 23 chromosomes",
+ "اختاري العضو":"Choose an organ",
+ "اختاري العضو للخلايا الجسمية":"Choose an organ for somatic cells",
+ "القلب":"Heart","الرئة":"Lung","الدماغ":"Brain","المعدة":"Stomach","الجلد":"Skin",
+ "النسيج العضلي القلبي":"Cardiac muscle tissue",
+ "الحويصلات والخلايا الطلائية":"Alveoli and epithelial cells",
+ "النسيج العصبي والعصبونات":"Nervous tissue and neurons",
+ "بطانة المعدة والخلايا الطلائية":"Stomach lining and epithelial cells",
+ "طبقات الجلد وخلايا البشرة":"Skin layers and epidermal cells",
+ "ابدئي الرحلة":"Start journey","ابدئي الرحلة العلمية":"Start the scientific journey",
+ "الخطوة":"Step","رجوع":"Back",
+ "الخلايا":"Cells","النسيج":"Tissue","النواة":"Nucleus","الكروموسومات":"Chromosomes",
+ "العضو":"Organ","خلية جلدية":"Skin cell","خلايا البشرة":"Epidermal cells",
+ "طبقات الجلد":"Skin layers","سطح البشرة":"Skin surface","البشرة":"Epidermis","الأدمة":"Dermis","طبقة دهنية":"Fat layer","شعر":"Hair","بصيلة الشعر":"Hair follicle","غدة دهنية":"Sebaceous gland","غدة عرقية":"Sweat gland","قناة عرقية":"Sweat duct","نهايات عصبية":"Nerve endings","أوعية دموية":"Blood vessels",
+ "الطبقة القرنية":"Stratum corneum","الأدمة الحليمية":"Papillary dermis",
+ "الأدمة الشبكية":"Reticular dermis","طبقة تحت الجلد":"Hypodermis",
+ "بصيلة الشعر":"Hair follicle","ساق الشعرة":"Hair shaft","الغدة العرقية":"Sweat gland",
+ "قناة العرق":"Sweat duct","الغدة الدهنية":"Sebaceous gland",
+ "الأوعية الدموية":"Blood vessels","نهاية عصبية حسية":"Sensory nerve ending",
+ "الغشاء الخلوي":"Cell membrane","السيتوبلازم":"Cytoplasm",
+ "الميتوكوندريا":"Mitochondria","جهاز جولجي":"Golgi apparatus",
+ "الشبكة الإندوبلازمية":"Endoplasmic reticulum",
+ "البلاستيدة الخضراء":"Chloroplast","الفجوة العصارية":"Central vacuole","الجدار الخلوي":"Cell wall",
+ "الرأس":"Head","الأكروسوم":"Acrosome","العنق":"Neck","القطعة الوسطى":"Midpiece",
+ "السوط (الذيل)":"Flagellum (tail)","القطعة النهائية من الذيل":"End piece of tail",
+ "تكبير للداخل 🔍":"Zoom in 🔍","رجوع ↩":"Back ↩","رحلة تلقائية ▶":"Auto tour ▶",
+ "إعادة زاوية الرؤية":"Reset view","الشرح الصوتي":"Narration","اشرح المرحلة":"Explain stage",
+ "وضع المعلمة":"Teacher mode","الواجهة الرئيسية":"Home",
+ "فتح الأطلس في نافذة مستقلة ↗":"Open Atlas in a separate window ↗",
+ "الأطلس: العربية":"Atlas: Arabic","الأطلس: English":"Atlas: English",
+ "اختاري نباتًا بحرينيًا":"Choose a Bahraini plant",
+ "نخلة التمر 🌴":"Date palm 🌴","القرم 🌿":"Mangrove 🌿","السدر 🍃":"Sidr 🍃",
+ "النبات البحريني":"Bahrain plant","الورقة":"Leaf","سطح الورقة":"Leaf surface","الثغور":"Stomata",
+ "مقطع عرضي في الورقة":"Leaf cross-section","النسيج العمادي والإسفنجي":"Palisade and spongy tissue",
+ "الخلايا النباتية":"Plant cells","الخلية النباتية":"Plant cell",
+ "البلاستيدة الخضراء":"Chloroplast",
+ "تركيب الجلد نظريًا":"Theoretical structure of skin",
+ "1. الطبقة القرنية":"1. Stratum corneum",
+ "2. البشرة":"2. Epidermis",
+ "3. الأدمة الحليمية":"3. Papillary dermis",
+ "4. الأدمة الشبكية":"4. Reticular dermis",
+ "5. طبقة تحت الجلد":"5. Hypodermis",
+ "حاجز خارجي من خلايا متقرنة.":"Outer barrier of keratinized cells.",
+ "طبقة واقية متجددة بلا أوعية دموية.":"Renewing protective layer without blood vessels.",
+ "شعيرات دموية ونهايات عصبية.":"Capillaries and sensory nerve endings.",
+ "كولاجين، غدد، بصيلات شعر، أوعية وأعصاب.":"Collagen, glands, hair follicles, vessels and nerves.",
+ "نسيج دهني للعزل والحماية وتخزين الطاقة.":"Fat tissue for insulation, protection and energy storage.",
+ "توجد بصيلات الشعر والغدد العرقية والدهنية والأوعية الدموية ومعظم المستقبلات الحسية أساسًا داخل الأدمة أو تمتد خلالها.":"Hair follicles, sweat and sebaceous glands, blood vessels, and most sensory receptors are mainly located in or extend through the dermis.",
+ "© إعداد أ. غفران هاني — جميع الحقوق محفوظة":"© Prepared by Ms. Ghufran Hani — All rights reserved"
+};
+
+const AR=Object.fromEntries(Object.entries(EN).map(([a,e])=>[e,a]));
+
+function translateExact(s){
+ const t=(s||'').trim();
+ if(!t)return s;
+ if(labLanguage==='en' && EN[t])return s.replace(t,EN[t]);
+ if(labLanguage==='ar' && AR[t])return s.replace(t,AR[t]);
+ return s;
+}
+
+function translateTextNodes(root=document.body){
+ const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+ const nodes=[];
+ while(walker.nextNode())nodes.push(walker.currentNode);
+ nodes.forEach(n=>{
+   if(n.parentElement && ['SCRIPT','STYLE'].includes(n.parentElement.tagName))return;
+   const original=n.nodeValue;
+   const trimmed=original.trim();
+   if(!trimmed)return;
+   const repl=translateExact(trimmed);
+   if(repl!==trimmed)n.nodeValue=original.replace(trimmed,repl);
+ });
+}
+
+function updateAtlasLanguage(){
+ const frame=document.getElementById('humanAtlasFrame');
+ const open=document.getElementById('atlasOpenLink');
+ const badge=document.getElementById('atlasLanguageBadge');
+
+ // Human Atlas is itself bilingual. We reload it with the selected language hint.
+ // If a particular build ignores the query parameter, its own language control remains available.
+ const url=`https://atlas.taim.best/?lang=${labLanguage}`;
+ if(frame && frame.getAttribute('src')!==url)frame.setAttribute('src',url);
+ if(open)open.href=url;
+ if(badge)badge.textContent=labLanguage==='ar'?'الأطلس: العربية':'Atlas: English';
+}
+
+window.setLabLanguage=function(lang){
+ labLanguage=lang==='en'?'en':'ar';
+ localStorage.setItem('ghufranLabLanguage',labLanguage);
+ document.documentElement.lang=labLanguage;
+ document.documentElement.dir=labLanguage==='ar'?'rtl':'ltr';
+
+ document.getElementById('langEnBtn')?.classList.toggle('active',labLanguage==='en');
+ document.getElementById('langArBtn')?.classList.toggle('active',labLanguage==='ar');
+
+ translateTextNodes(document.body);
+ updateAtlasLanguage();
+
+ // Rebuild current dynamic labels/info so newly generated science text follows language.
+ if(typeof update==='function')update();
+ if(typeof clearScienceLabels==='function' && typeof renderScienceLabels==='function'){
+   clearScienceLabels();renderScienceLabels();
+ }
+};
+
+const i18nObserver=new MutationObserver(muts=>{
+ if(!document.body)return;
+ muts.forEach(m=>m.addedNodes.forEach(n=>{
+   if(n.nodeType===Node.TEXT_NODE){
+     const t=n.nodeValue.trim();if(t){const r=translateExact(t);if(r!==t)n.nodeValue=n.nodeValue.replace(t,r)}
+   }else if(n.nodeType===Node.ELEMENT_NODE)translateTextNodes(n);
+ }));
+});
+i18nObserver.observe(document.body,{subtree:true,childList:true});
+
+setTimeout(()=>setLabLanguage(labLanguage),50);
+
+
+const _v30Update=update;
+update=function(){
+ _v30Update();
+ const skinTheory=document.getElementById('skinTheory');
+ if(skinTheory)skinTheory.style.display=(mode==='human'&&selected==='skin'&&(current===1||current===2))?'block':'none';
+};
+
+
+const _v31Update=update;
+update=function(){
+ _v31Update();
+ if(mode==='human'&&selected==='gamete'){
+   const desc=document.getElementById('desc');
+   if(desc){
+     const female=humanSex==='female';
+     const special=[
+       female?"نحدد موقع الجهاز التناسلي الأنثوي في منطقة الحوض قبل التكبير.":"نحدد موقع الجهاز التناسلي الذكري في الحوض وكيس الصفن قبل التكبير.",
+       female?"الجهاز التناسلي الأنثوي: الرحم في المنتصف، وعلى الجانبين قناتا فالوب والمبيضان.":"الجهاز التناسلي الذكري: الخصيتان والبربخ والأسهر والبروستاتا والإحليل بصورة تعليمية مبسطة.",
+       female?"داخل المبيض توجد جريبات مبيضية تنمو داخلها الخلايا البيضية.":"داخل الخصية توجد الأنابيب المنوية التي تبدأ فيها عملية تكوين الحيوانات المنوية.",
+       female?"ننتقل من المبيض إلى البويضة قبل تكبير خلية واحدة.":"ننتقل من الخصية إلى الحيوانات المنوية قبل تكبير خلية واحدة.",
+       female?"البويضة خلية جنسية أنثوية ناضجة تحمل 23 كروموسومًا.":"الحيوان المنوي الناضج يتكون من رأس وأكروسوم ونواة وعنق وقطعة وسطى وسوط، ويحمل 23 كروموسومًا.",
+       "داخل النواة توجد المادة الوراثية.",
+       "الخلايا الجنسية البشرية الناضجة تحمل 23 كروموسومًا.",
+       "DNA يحمل المعلومات الوراثية."
+     ];
+     desc.textContent=special[current]||desc.textContent;
+   }
+ }
+};
+
+
+Object.assign(EN,{
+ "الجهاز التناسلي الأنثوي":"Female reproductive system",
+ "الجهاز التناسلي الذكري":"Male reproductive system",
+ "منطقة الحوض":"Pelvic region",
+ "الرحم":"Uterus","عنق الرحم":"Cervix","المهبل":"Vagina",
+ "المبيض":"Ovary","قناة فالوب":"Uterine tube",
+ "جريبات مبيضية":"Ovarian follicles","بويضة داخل جريب":"Oocyte in follicle","البويضة":"Egg cell",
+ "المثانة البولية":"Urinary bladder","غدة البروستاتا":"Prostate gland",
+ "الخصية":"Testis","الخصيتان":"Testes","البربخ":"Epididymis","الأسهر":"Vas deferens",
+ "الإحليل":"Urethra","الأنابيب المنوية":"Seminiferous tubules","حيوانات منوية":"Sperm cells",
+ "حليمات الأدمة":"Dermal papillae","مستقبل حسي":"Sensory receptor"
+});
+Object.assign(AR,Object.fromEntries(Object.entries(EN).map(([a,e])=>[e,a])));
+
+
+const _v32Update=update;
+update=function(){
+ _v32Update();
+ const sp=document.getElementById('skinOrderPanel');
+ if(sp)sp.style.display=(mode==='human'&&selected==='skin'&&current===1)?'block':'none';
+
+ if(mode==='human'&&selected==='gamete'){
+   const title=document.getElementById('title');
+   const desc=document.getElementById('desc');
+   if(current===0){
+     title.textContent=humanSex==='female'?'جسم الأنثى — موقع الجهاز التناسلي':'جسم الذكر — موقع الخصيتين';
+     desc.textContent=humanSex==='female'
+      ?'يظهر الجسم كاملًا باللون الرمادي، ويُبرز الجهاز التناسلي الأنثوي باللون الزهري داخل الحوض. اضغطي تكبير للانتقال إلى الرحم ومكوناته.'
+      :'يظهر الجسم كاملًا باللون الرمادي، وتظهر الخصيتان باللون الأزرق الفاتح أسفل الحوض. اضغطي تكبير للانتقال إلى تركيب الخصيتين.';
+   }else if(current===1){
+     title.textContent=humanSex==='female'?'الرحم ومكونات الجهاز التناسلي الأنثوي':'الخصيتان ومكوناتهما';
+   }else if(current===2){
+     title.textContent=humanSex==='female'?'داخل المبيض والجريبات':'داخل الخصية والأنابيب المنوية';
+   }else if(current===3){
+     title.textContent=humanSex==='female'?'البويضة':'الخلايا الجنسية الذكرية';
+   }else if(current===4){
+     title.textContent=humanSex==='female'?'تركيب البويضة':'تركيب الحيوان المنوي';
+   }
+ }
+};
+
+
+Object.assign(EN,{
+ "موقع الجهاز التناسلي الأنثوي":"Female reproductive system location",
+ "جسم الأنثى — موقع الجهاز التناسلي":"Female body — reproductive system location",
+ "جسم الذكر — موقع الخصيتين":"Male body — testes location",
+ "قناة فالوب (البوق الرحمي)":"Uterine tube (Fallopian tube)",
+ "قاع الرحم":"Uterine fundus","جسم الرحم":"Uterine body",
+ "الخصيتان ومكوناتهما":"Testes and their structures",
+ "الرحم ومكونات الجهاز التناسلي الأنثوي":"Uterus and female reproductive structures",
+ "داخل المبيض والجريبات":"Inside the ovary and follicles",
+ "داخل الخصية والأنابيب المنوية":"Inside the testis and seminiferous tubules",
+ "تركيب البويضة":"Egg cell structure","تركيب الحيوان المنوي":"Sperm cell structure"
+});
+Object.assign(AR,Object.fromEntries(Object.entries(EN).map(([a,e])=>[e,a])));
+
+</script>
+
+<svg id="leaderLines" class="leaderLines" aria-hidden="true"></svg>
+
+
+<button id="homeBtn" class="homeBtn" onclick="returnToSchoolHome()">⌂ الواجهة الرئيسية</button>
+<div id="studentTrail" class="studentTrail">
+ <div id="studentTrailDots"></div>
+ <div id="studentTrailLabel"></div>
+</div>
+
+<button id="teacherModeBtn" class="teacherModeBtn" onclick="toggleTeacherMode()">👩‍🏫 وضع المعلمة</button>
+<div id="teacherBar" class="teacherBar">
+ <button onclick="startLesson()">▶ ابدئي الدرس</button>
+ <button onclick="teacherPrev()">السابق</button>
+ <button onclick="teacherNext()">التالي</button>
+ <button onclick="showClassQuestion()">❓ سؤال للصف</button>
+ <button onclick="showLessonSummary()">📊 نتيجة الدرس</button>
+ <button onclick="toggleTeacherMode()">✕ إنهاء العرض</button>
+</div>
+<div id="lessonProgress" class="lessonProgress"><div id="lessonProgressFill"></div><span id="lessonProgressText"></span></div>
+<div id="classQuestionModal" class="classQuestionModal">
+ <div class="classQuestionBox">
+  <div class="classQuestionBadge">سؤال للصف</div>
+  <div id="classQuestionText"></div>
+  <div id="classQuestionChoices"></div>
+  <div id="classQuestionFeedback"></div>
+  <button id="classQuestionContinue" onclick="closeClassQuestion()">متابعة الرحلة</button>
+ </div>
+</div>
+<div id="lessonSummaryModal" class="classQuestionModal">
+ <div class="classQuestionBox summaryBox">
+  <div class="classQuestionBadge">نتيجة الدرس</div>
+  <div id="lessonScoreBig"></div>
+  <div id="lessonScoreText"></div>
+  <button onclick="closeLessonSummary()">العودة إلى المختبر</button>
+ </div>
+</div>
+
+<div id="scienceLabels" class="scienceLabels"></div>
+
+<div class="voicePanel">
+ <button id="voiceBtn" onclick="toggleNarration()">🔊 الشرح الصوتي</button>
+ <button id="speakNowBtn" onclick="speakCurrentStage()">▶ اشرح المرحلة</button>
+</div>
+<div id="narrationStatus" class="narrationStatus">الشرح الصوتي متوقف</div>
+
+
+<div id="humanBadge" class="humanBadge"></div>
+
+<div id="journeyBanner" class="journeyBanner">
+ <b id="journeyTitle"></b>
+ <span id="journeyPath"></span>
+</div>
+
+<div id="humanSexSelector" class="humanSexSelector">
+ <button data-sex="female" onclick="selectHumanSex('female')">♀ أنثى</button>
+ <button data-sex="male" onclick="selectHumanSex('male')">♂ ذكر</button>
+</div>
+
+<div id="humanCellTypeSelector" class="humanCellTypeSelector">
+  <button id="somaticTypeBtn" class="active" onclick="selectHumanCellType('somatic')">الخلايا الجسمية</button>
+  <button id="sexualTypeBtn" onclick="selectHumanCellType('gamete')">الخلايا الجنسية</button>
+</div>
+
+<div id="chromosomeCompare" class="chromosomeCompare">
+ <div class="compareTitle">مقارنة عدد الكروموسومات في الإنسان</div>
+ <div class="compareCards">
+  <button onclick="showHumanChromosomeType('somatic')" id="somaticBtn">
+   <b>خلية جسمية</b><strong>46</strong><small>23 زوجًا</small>
+  </button>
+  <button onclick="showHumanChromosomeType('gamete')" id="gameteBtn">
+   <b>خلية جنسية ناضجة</b><strong>23</strong><small>مجموعة واحدة</small>
+  </button>
+ </div>
+ <div id="chromosomeExplain"></div>
+</div>
+
+
+<button id="quizBtn" class="quizBtn">اختبر معلوماتي 🧠</button>
+<div id="quizModal" class="quizModal">
+ <div class="quizBox">
+   <button id="quizClose" class="quizClose">×</button>
+   <div class="quizTitle">اختبر معلوماتي</div>
+   <div id="quizProgress" class="quizProgress"></div>
+   <div id="quizQuestion" class="quizQuestion"></div>
+   <div id="quizAnswers" class="quizAnswers"></div>
+   <div id="quizResult" class="quizResult"></div>
+ </div>
+</div>
+
+<div id="scienceCard" class="scienceCard">
+ <button id="scienceClose" aria-label="إغلاق">×</button>
+ <div id="sciencePart"></div>
+ <small id="scienceFunction"></small>
+</div>
+
+
+<footer id="copyrightFooter" class="copyrightFooter">
+  © إعداد أ. غفران هاني — جميع الحقوق محفوظة
+  <span>Ghufranhan@gmail.com</span>
+</footer>
+
+
+<div id="skinOrderPanel" style="display:none;max-width:980px;margin:12px auto 24px;padding:18px;border:1px solid #315b70;border-radius:22px;background:rgba(3,17,29,.94);direction:rtl">
+ <h3 style="margin:0 0 12px;font-size:24px">طبقات الجلد — من الخارج إلى الداخل</h3>
+ <div style="display:grid;gap:8px">
+  <div><b>1. الطبقة القرنية</b> — خلايا متقرنة ميتة؛ أول حاجز واقٍ.</div>
+  <div><b>2. البشرة</b> — خلايا جلدية متراصة؛ لا تحتوي أوعية دموية.</div>
+  <div><b>3. الأدمة الحليمية</b> — شعيرات دموية ونهايات عصبية وحليمات الأدمة.</div>
+  <div><b>4. الأدمة الشبكية</b> — بصيلات الشعر، الغدد الدهنية والعرقية، أوعية دموية وأعصاب.</div>
+  <div><b>5. طبقة تحت الجلد</b> — نسيج دهني للعزل وامتصاص الصدمات وتخزين الطاقة.</div>
+ </div>
+ <p style="margin:14px 0 0;color:#b9d7e6">المكونات الظاهرة في النموذج: ساق الشعرة، بصيلة الشعر، الغدة الدهنية، الغدة العرقية وقناتها، الأوعية الدموية، المستقبلات والنهايات العصبية.</p>
+</div>
+</body></html>
